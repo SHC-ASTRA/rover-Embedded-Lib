@@ -26,13 +26,9 @@
 #include <SparkFun_u-blox_GNSS_Arduino_Library.h> 
 #include <AS5047P.h> 
 #include <HighPowerStepperDriver.h>
-#include <LSS.h>
 
 
 #define SEALEVELPRESSURE_HPA (1013.25)
-
-//#define LSS_BAUD    (LSS_DefaultBaud)
-//#define LSS_SERIAL    (Serial7)
 
 #define AS5047P_CHIP_SELECT_PORT 10 
 #define AS5047P_CUSTOM_SPI_BUS_SPEED 100000
