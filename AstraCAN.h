@@ -1,3 +1,12 @@
+/**
+ * @file AstraCAN.h
+ * @author Tristan McGinnis (tlm0047@uah.edu)
+ * @brief Provides methods for interfacing with Rev SparkMax motor controllers over CAN
+ * @version 0.1
+ * @date 2024-06-25
+ * 
+ */
+#pragma once
 
 #include <FlexCAN_T4.h>
 //FlexCAN_T4<CAN1, RX_SIZE_256, TX_SIZE_16> Can0;

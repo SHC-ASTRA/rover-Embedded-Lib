@@ -1,6 +1,15 @@
-//Header file for the ASTRA CAN class
-//it is called Amotor so that it dosn't mess with other libraries
+/**
+ * @file AstraMotors.h
+ * @author Tristan McGinnis (tlm0047@uah.edu)
+ * @brief Outlines class for controlling Rev Sparkmax motors
+ * @version 0.1
+ * @date 2024-06-25
+ * 
+ * @copyright Copyright (c) 2024
+ * 
+ */
 #pragma once
+
 #include <Arduino.h>
 #include <iostream>
 #include <string>
