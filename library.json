@@ -1,0 +1,40 @@
+{
+    "name": "rover-embedded-lib",
+    "version": "0.1.0",
+    "description": "ASTRA's library for embedded code",
+    "repository":
+    {
+        "type": "git",
+        "url": "https://github.com/SHC-ASTRA/rover-embedded-lib"
+    },
+    "authors":
+    [
+        {
+            "name": "Tristan McGinnis",
+            "email": "tlm0047@uah.edu"
+        },
+        {
+            "name": "David Sharpe",
+            "email": "ds0196@uah.edu",
+            "maintainer": true
+        },
+        {
+            "name": "Charles Marmann",
+            "email": "cmm0077@uah.edu"
+        },
+        {
+            "name": "Karl"
+        }
+    ],
+    "dependencies": {
+        "external-repo": "https://github.com/tonton81/FlexCAN_T4",
+        "ftrias/TeensyThreads": "^1.0.2",
+        "adafruit/Adafruit NeoPixel": "^1.12.0",
+        "adafruit/Adafruit BMP3XX Library": "^2.1.2",
+        "adafruit/Adafruit BNO055": "^1.6.3",
+        "adafruit/Adafruit Unified Sensor": "^1.1.14",
+        "sparkfun/SparkFun u-blox GNSS Arduino Library": "^2.2.25",
+        "jonas-merkle/AS5047P": "^2.2.1"
+    },
+    "frameworks": "arduino"
+}
