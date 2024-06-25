@@ -4,9 +4,9 @@
  * @brief Implements class for controlling Rev Sparkmax motors
  * @version 0.1
  * @date 2024-06-25
- * 
+ *
  * @copyright Copyright (c) 2024
- * 
+ *
  */
 #pragma once
 
@@ -14,73 +14,72 @@
 
 
 long map(long x, long in_min, long in_max, long out_min, long out_max) {
-  return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
+    return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
 }
 
-AstraMotors::AstraMotors(int setMotorID, int setCtrlMode, bool inv, int setMaxSpeed, float setMaxDuty) {
-    controlMode = setCtrlMode; //0-Speed 1-Duty Cycle
+AstraMotors::AstraMotors(int setMotorID, int setCtrlMode, bool inv, int setMaxSpeed,
+                         float setMaxDuty) {
+    controlMode = setCtrlMode;  // 0-Speed 1-Duty Cycle
 
     currentDutyCycle = 0;
     setDutyCycle = 0;
-    
+
     currentMotorSpeed = 0;
-    setMotorSpeed = 0;   
+    setMotorSpeed = 0;
 
     maxSpeed = setMaxSpeed;
     maxDuty = setMaxDuty;
 
-	dutyCycleAccel = 0.05;
-	
-	motorID = setMotorID;
+    dutyCycleAccel = 0.05;
+
+    motorID = setMotorID;
 
     inverted = inv;
 }
 
-//Add the funky graph
-float AstraMotors::convertControllerValue(float stickValue){
+// Add the funky graph
+float AstraMotors::convertControllerValue(float stickValue) {
     float output = stickValue;
 
-    if(!inverted){
+    if (!inverted) {
         output *= -1;
     }
 
-    if(controlMode == 0)//speed Control mode
+    if (controlMode == 0)  // speed Control mode
     {
-        return 0; //speed control not implemented
-        //output = map(output, -1, 1, (-1 * maxSpeed), maxSpeed);
-    }else{//duty cycle control mode
+        return 0;  // speed control not implemented
+        // output = map(output, -1, 1, (-1 * maxSpeed), maxSpeed);
+    } else {  // duty cycle control mode
         output = map(output, -1, 1, (-1 * maxDuty), maxDuty);
     }
-    
+
     return output;
 }
 
 
-int AstraMotors::getControlMode(){
+int AstraMotors::getControlMode() {
     return controlMode;
 }
 
 
-void AstraMotors::setSpeed(float val){//controller input value
-    if(abs(val) <= 0.02)
-    {
+void AstraMotors::setSpeed(float val) {  // controller input value
+    if (abs(val) <= 0.02) {
         setMotorSpeed = 0;
-    }else{
+    } else {
         setMotorSpeed = convertControllerValue(val);
     }
-    
 }
 
-int AstraMotors::getSpeed(){
+int AstraMotors::getSpeed() {
     return currentMotorSpeed;
 }
 
-int AstraMotors::getID(){
+int AstraMotors::getID() {
     return motorID;
 }
 
 
-void AstraMotors::setDuty(float val){//controller input value
+void AstraMotors::setDuty(float val) {  // controller input value
     currentDutyCycle = val;
     setDutyCycle = val;
     /*if(abs(val) <= 0.02)
@@ -91,16 +90,15 @@ void AstraMotors::setDuty(float val){//controller input value
     }*/
 }
 
-float AstraMotors::getDuty(){
+float AstraMotors::getDuty() {
     return currentDutyCycle;
 }
-float AstraMotors::getSetDuty(){
+float AstraMotors::getSetDuty() {
     return setDutyCycle;
 }
 
 
-void AstraMotors::UpdateForAcceleration(){
-
+void AstraMotors::UpdateForAcceleration() {
     currentDutyCycle = setDutyCycle;
 
     /*
