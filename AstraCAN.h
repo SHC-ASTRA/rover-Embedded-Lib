@@ -9,7 +9,9 @@
 #pragma once
 
 #include <FlexCAN_T4.h>
-//FlexCAN_T4<CAN1, RX_SIZE_256, TX_SIZE_16> Can0;
+
+// Core and FAERIE use CAN1, Arm uses CAN3
+typedef FlexCAN_T4<CAN1, RX_SIZE_256, TX_SIZE_16> AstraFCAN;
 
 
 //Convert float to little endian decimal representation
@@ -27,7 +29,7 @@ inline void Float2LEDec(float x, uint8_t (& buffer_data)[8])
 }
 
 
-inline void identifyDevice(FlexCAN_T4<CAN1, RX_SIZE_256, TX_SIZE_16> &Can0, int can_id)
+inline void identifyDevice(AstraFCAN &Can0, int can_id)
 {
   CAN_message_t msg; 
   msg.flags.extended = 1;
@@ -40,7 +42,7 @@ inline void identifyDevice(FlexCAN_T4<CAN1, RX_SIZE_256, TX_SIZE_16> &Can0, int 
 
 
 
-inline void sendDutyCycle(FlexCAN_T4<CAN1, RX_SIZE_256, TX_SIZE_16> &Can0, int can_id, float duty_cycle)
+inline void sendDutyCycle(AstraFCAN &Can0, int can_id, float duty_cycle)
 {
   CAN_message_t msg; 
   msg.flags.extended = 1;
@@ -50,7 +52,7 @@ inline void sendDutyCycle(FlexCAN_T4<CAN1, RX_SIZE_256, TX_SIZE_16> &Can0, int c
   Can0.write(msg);
 }
 
-inline void sendHeartbeat(FlexCAN_T4<CAN1, RX_SIZE_256, TX_SIZE_16> &Can0, int can_id)
+inline void sendHeartbeat(AstraFCAN &Can0, int can_id)
 {
   CAN_message_t msg; 
   msg.flags.extended = 1;
@@ -62,7 +64,7 @@ inline void sendHeartbeat(FlexCAN_T4<CAN1, RX_SIZE_256, TX_SIZE_16> &Can0, int c
   //Serial.println(msg.id);
 }
 
-inline void setParameter(FlexCAN_T4<CAN1, RX_SIZE_256, TX_SIZE_16> &Can0, int can_id, uint8_t paramID, uint32_t value) {
+inline void setParameter(AstraFCAN &Can0, int can_id, uint8_t paramID, uint32_t value) {
   CAN_message_t msg;
   msg.flags.extended = 1;
   msg.len = 5;
