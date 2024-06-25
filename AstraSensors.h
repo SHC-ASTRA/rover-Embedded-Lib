@@ -1,3 +1,15 @@
+/**
+ * @file AstraSensors.h
+ * @author Tristan McGinnis (tlm0047@uah.edu)
+ * @brief Provides functions for using Astra's sensors
+ * @version 0.1
+ * @date 2024-06-25
+ * 
+ * @copyright Copyright (c) 2024
+ * 
+ */
+#pragma once
+
 #include <Wire.h>
 #include <SPI.h>
 #include <EEPROM.h>
