@@ -30,11 +30,11 @@
 #define COMMS_UART_NUM 4
 
 // USB Serial baud, current Astra standard is 115200 afaik
-#define SERIAL_BAUD 115200;
+#define SERIAL_BAUD 115200
 // UART baud, for comms with Socket board
-#define  COMMS_UART_BAUD 115200;
+#define  COMMS_UART_BAUD 115200
 
 // Servo PWM min mcs
-#define SERVO_MIN 500;
+#define SERVO_MIN 500
 // Servo PWM max mcs
-#define SERVO_MAX 2500;
+#define SERVO_MAX 2500
