@@ -1,11 +1,11 @@
 {
-    "name": "rover-embedded-lib",
+    "name": "rover-Embedded-Lib",
     "version": "0.1.0",
     "description": "ASTRA's library for embedded code",
     "repository":
     {
         "type": "git",
-        "url": "https://github.com/SHC-ASTRA/rover-embedded-lib"
+        "url": "https://github.com/SHC-ASTRA/rover-Embedded-Lib"
     },
     "authors":
     [
