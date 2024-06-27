@@ -6,7 +6,6 @@
  * @date 2024-06-25
  *
  */
-#pragma once
 
 #include <Arduino.h>
 #include <AstraArm.h>
