@@ -10,6 +10,21 @@
 
 
 //------//
+// LIBS //
+//------//
+
+#define FAERIE
+
+#include <Servo.h>  // For SCABBARD servo (unused)
+
+#include "AstraMisc.h"
+#include "AstraCAN.h"
+#include "AstraMotors.h"
+#include "Adafruit_SHT31.h"
+#include "TeensyThreads.h"
+
+
+//------//
 // PINS //
 //------//
 
