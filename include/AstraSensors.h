@@ -8,6 +8,7 @@
  */
 #pragma once
 
+#include <AS5047P.h>
 #include <Adafruit_BNO055.h>
 #include <Adafruit_Sensor.h>
 #include <EEPROM.h>
@@ -24,7 +25,6 @@
 
 
 #define SEALEVELPRESSURE_HPA (1013.25)
-
 
 
 /**************************************************************************/
