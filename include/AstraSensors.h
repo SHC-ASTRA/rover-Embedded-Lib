@@ -8,14 +8,10 @@
  */
 #pragma once
 
-#include <AS5047P.h>
 #include <Adafruit_BNO055.h>
-#include <Adafruit_NeoPixel.h>
 #include <Adafruit_Sensor.h>
 #include <EEPROM.h>
-#include <HighPowerStepperDriver.h>
 #include <SPI.h>
-#include <Servo.h>
 #include <SparkFun_u-blox_GNSS_Arduino_Library.h>
 #include <Wire.h>
 #include <utility/imumaths.h>
@@ -28,9 +24,6 @@
 
 
 #define SEALEVELPRESSURE_HPA (1013.25)
-
-#define AS5047P_CHIP_SELECT_PORT 10
-#define AS5047P_CUSTOM_SPI_BUS_SPEED 100000
 
 
 
