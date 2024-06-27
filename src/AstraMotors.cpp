@@ -44,8 +44,11 @@ float AstraMotors::convertControllerValue(float stickValue) {
 
     if (controlMode == 0)  // speed Control mode
     {
+#ifdef ARM
         return 0;  // speed control not implemented
-        // output = map(output, -1, 1, (-1 * maxSpeed), maxSpeed);
+#else
+        output = map(output, -1, 1, (-1 * maxSpeed), maxSpeed);
+#endif
     } else {  // duty cycle control mode
         output = map(output, -1, 1, (-1 * maxDuty), maxDuty);
     }
@@ -77,14 +80,17 @@ int AstraMotors::getID() {
 
 
 void AstraMotors::setDuty(float val) {  // controller input value
+#ifdef ARM
     currentDutyCycle = val;
     setDutyCycle = val;
-    /*if(abs(val) <= 0.02)
+#else
+    if(abs(val) <= 0.02)
     {
         setDutyCycle = 0;
     }else{
         setDutyCycle = convertControllerValue(val);
-    }*/
+    }
+#endif
 }
 
 float AstraMotors::getDuty() {
@@ -96,9 +102,9 @@ float AstraMotors::getSetDuty() {
 
 
 void AstraMotors::UpdateForAcceleration() {
+#ifdef ARM
     currentDutyCycle = setDutyCycle;
-
-    /*
+#else
 	float dCThreshold = 0.1;
     float cD = currentDutyCycle;
     float sD = setDutyCycle;
@@ -121,7 +127,8 @@ void AstraMotors::UpdateForAcceleration() {
 		}
     }else{//if set 0
         currentDutyCycle = 0;
-    }*/
+    }
 	//}
+#endif
 
 }
