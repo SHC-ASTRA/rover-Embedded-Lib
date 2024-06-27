@@ -12,6 +12,13 @@
 #include <LSS.h>
 
 
+//---------------------//
+// PlatformIO lib_deps //
+//---------------------//
+
+// https://github.com/Lynxmotion/LSS_Library_Arduino
+
+
 //------//
 // PINS //
 //------//
