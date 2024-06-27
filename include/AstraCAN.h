@@ -11,7 +11,11 @@
 #include <FlexCAN_T4.h>
 
 // Core and FAERIE use CAN1, Arm uses CAN3
+#ifdef ARM
+typedef FlexCAN_T4<CAN3, RX_SIZE_256, TX_SIZE_16> AstraFCAN;
+#else
 typedef FlexCAN_T4<CAN1, RX_SIZE_256, TX_SIZE_16> AstraFCAN;
+#endif
 
 
 // Convert float to little endian decimal representation
