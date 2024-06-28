@@ -1,5 +1,5 @@
 /**
- * @file PROJECT_TEMPLATE.h
+ * @file TEMPLATE.h
  * @author your name (you@domain.com)
  * @brief description
  * @version 0.1
@@ -18,6 +18,9 @@
 // LIBS //
 //------//
 
+#define TEMPLATE
+
+#include "AstraMisc.h"
 
 //------//
 // PINS //
@@ -27,3 +30,5 @@
 //-----------//
 // Constants //
 //-----------//
+
+#define SERIAL_BAUD 115200
