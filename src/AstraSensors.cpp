@@ -7,6 +7,9 @@
  * 
  */
 
+#include "ASTRA.h"
+
+#if defined(CORE) || defined(ARM)
 
 #include "AstraSensors.h"
 
@@ -239,3 +242,5 @@ String getUTC(SFE_UBLOX_GNSS &myGNSS) {
     return String(myGNSS.getHour()) + "-" + String(myGNSS.getMinute()) + "-" +
            String(myGNSS.getSecond());
 }
+
+#endif // defined(CORE) || defined(ARM)
