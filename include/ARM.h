@@ -4,7 +4,7 @@
  * @brief Arm
  * @version 0.1
  * @date 2024-06-27
- * 
+ *
  */
 #pragma once
 
@@ -32,9 +32,9 @@
 
 #include <Servo.h>  // Axis 0
 
-#include "AstraMotors.h"
 #include "AstraArm.h"
 #include "AstraCAN.h"
+#include "AstraMotors.h"
 #include "AstraSensors.h"
 #include "TeensyThreads.h"
 

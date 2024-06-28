@@ -4,7 +4,7 @@
  * @brief Pins etc used on CITADEL embedded
  * @version 0.1
  * @date 2024-06-25
- * 
+ *
  */
 #pragma once
 

@@ -27,10 +27,10 @@
 
 #include <Servo.h>  // For SCABBARD servo (unused)
 
-#include "AstraMisc.h"
-#include "AstraCAN.h"
-#include "AstraMotors.h"
 #include "Adafruit_SHT31.h"
+#include "AstraCAN.h"
+#include "AstraMisc.h"
+#include "AstraMotors.h"
 #include "TeensyThreads.h"
 
 
@@ -57,7 +57,7 @@
 // USB Serial baud, current Astra standard is 115200 afaik
 #define SERIAL_BAUD 115200
 // UART baud, for comms with Socket board
-#define  COMMS_UART_BAUD 115200
+#define COMMS_UART_BAUD 115200
 
 // Servo PWM min mcs
 #define SERVO_MIN 500

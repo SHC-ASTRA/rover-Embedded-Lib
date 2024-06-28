@@ -4,7 +4,7 @@
  * @brief Digit
  * @version 0.1
  * @date 2024-06-27
- * 
+ *
  */
 #pragma once
 

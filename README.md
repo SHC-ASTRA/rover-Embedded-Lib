@@ -35,4 +35,4 @@ constants, functions
 
 - `library.json` - PlatformIO stuff
 
-- `README.ms` - this file. Documentation and GitHub front page.
+- `README.md` - this file. Documentation and GitHub front page.

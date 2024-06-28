@@ -4,7 +4,7 @@
  * @brief Core
  * @version 0.1
  * @date 2024-06-27
- * 
+ *
  */
 #pragma once
 
@@ -23,14 +23,15 @@
 // jonas-merkle/AS5047P
 // https://github.com/Lynxmotion/LSS_Library_Arduino
 
+
 //------//
 // LIBS //
 //------//
 
 #define CORE
 
-#include "AstraMotors.h"
 #include "AstraCAN.h"
+#include "AstraMotors.h"
 #include "AstraSensors.h"
 #include "TeensyThreads.h"
 
