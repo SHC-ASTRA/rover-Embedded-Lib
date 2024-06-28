@@ -8,6 +8,23 @@ constants, functions
  1. Place `AstraSELECTOR.h` in `/include/AstraSELECTOR.h`
  2. Uncomment the relevant `#define` statement in the aforementioned file.
 
+## Naming conventions
+
+### In documentation
+
+- **Library files** - Depending on context, either the files generally contained in the library,
+or the main functional C++ files containing functions and classes.
+
+- **Project header** - A header file that corresponds specifically to one or more PlatformIO projects.
+
+- **Project macro** - A macro specific to a single PlatformIO project. Ex: `#define ARM`
+
+### File names
+
+- **Library files** - Camel case with the first letter of all words, including the first, capitalized. Ex: `AstraArm.cpp`
+
+- **Project headers** - All caps. Ex: `CITADEL.h`
+
 ## Files
 
 ### Classes
