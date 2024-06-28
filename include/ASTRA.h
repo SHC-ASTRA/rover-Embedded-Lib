@@ -31,11 +31,10 @@
 #else
 #warning "Please uncomment the relevant `#define` statement in `/include/AstraSELECTOR.h`."
 
-#endif
+#endif  // defined(CORE)
 
 #else  // Project does not have selector header.
-
-#error "Please create `/include/AstraSELECTOR.h` and uncomment the relevant `#define` statement."
-
+// TODO: Why the actual fuck does this run when __has_include() returns true?????
+//#error "Please create `/include/AstraSELECTOR.h` and uncomment the relevant `#define` statement."
 
 #endif  // __has_include("AstraSELECTOR.h")
