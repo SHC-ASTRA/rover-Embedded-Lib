@@ -14,19 +14,19 @@
 #include "AstraSELECTOR.h"
 
 #if defined(CORE)
-#include "CORE.h"
+#include "project/CORE.h"
 
 #elif defined(ARM)
-#include "ARM.h"
+#include "project/ARM.h"
 
 #elif defined(WRIST)
-#include "WRIST.h"
+#include "project/WRIST.h"
 
 #elif defined(FAERIE)
-#include "FAERIE.h"
+#include "project/FAERIE.h"
 
 #elif defined(CITADEL)
-#include "CITADEL.h"
+#include "project/CITADEL.h"
 
 #else
 #warning "Please uncomment the relevant `#define` statement in `/include/AstraSELECTOR.h`."
