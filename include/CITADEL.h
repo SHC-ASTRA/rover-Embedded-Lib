@@ -20,8 +20,6 @@
 // LIBS //
 //------//
 
-#define CITADEL
-
 #include <Arduino.h>
 #include <LSS.h>
 

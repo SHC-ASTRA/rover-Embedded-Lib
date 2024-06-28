@@ -23,8 +23,6 @@
 // LIBS //
 //------//
 
-#define FAERIE
-
 #include <Servo.h>  // For SCABBARD servo (unused)
 
 #include "Adafruit_SHT31.h"

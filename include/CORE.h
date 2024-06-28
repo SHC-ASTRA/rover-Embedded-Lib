@@ -28,8 +28,6 @@
 // LIBS //
 //------//
 
-#define CORE
-
 #include "AstraCAN.h"
 #include "AstraMisc.h"
 #include "AstraMotors.h"

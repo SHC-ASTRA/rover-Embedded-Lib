@@ -18,8 +18,6 @@
 // LIBS //
 //------//
 
-#define TEMPLATE
-
 #include "AstraMisc.h"
 
 

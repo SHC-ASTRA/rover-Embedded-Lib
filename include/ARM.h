@@ -28,8 +28,6 @@
 // LIBS //
 //------//
 
-#define ARM
-
 #include <Servo.h>  // Axis 0
 
 #include "AstraArm.h"
