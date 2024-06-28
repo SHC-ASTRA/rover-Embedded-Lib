@@ -8,6 +8,8 @@
  */
 #pragma once
 
+#if defined(ARM) || defined(WRIST)
+
 #include <Arduino.h>
 // #include <AstraWrist.h>
 #include <FABRIK2D.h>
@@ -71,3 +73,5 @@ class AstraArm {
     int updateJointSpeeds();  // Update the joint speeds such that they'll reach their target angles
                               // together
 };
+
+#endif

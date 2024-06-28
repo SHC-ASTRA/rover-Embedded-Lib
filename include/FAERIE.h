@@ -9,6 +9,31 @@
 #pragma once
 
 
+//---------------------//
+// PlatformIO lib_deps //
+//---------------------//
+
+// ftrias/TeensyThreads
+// https://github.com/tonton81/FlexCAN_T4
+// adafruit/Adafruit Unified Sensor
+// adafruit/Adafruit SHT31 Library
+
+
+//------//
+// LIBS //
+//------//
+
+#define FAERIE
+
+#include <Servo.h>  // For SCABBARD servo (unused)
+
+#include "Adafruit_SHT31.h"
+#include "AstraCAN.h"
+#include "AstraMisc.h"
+#include "AstraMotors.h"
+#include "TeensyThreads.h"
+
+
 //------//
 // PINS //
 //------//
@@ -32,7 +57,7 @@
 // USB Serial baud, current Astra standard is 115200 afaik
 #define SERIAL_BAUD 115200
 // UART baud, for comms with Socket board
-#define  COMMS_UART_BAUD 115200
+#define COMMS_UART_BAUD 115200
 
 // Servo PWM min mcs
 #define SERVO_MIN 500

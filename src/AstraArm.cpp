@@ -7,6 +7,8 @@
  *
  */
 
+#if defined(ARM) || defined(WRIST)
+
 #include <Arduino.h>
 #include <AstraArm.h>
 #include <FABRIK2D.h>
@@ -212,3 +214,5 @@ int AstraArm::updateJointSpeeds()  // Returns 1 if all joints are at their targe
         return 0;
     }
 }
+
+#endif

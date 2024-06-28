@@ -4,14 +4,15 @@
  * @brief Misc functions and definitions used in Astra embedded
  * @version 0.1
  * @date 2024-06-25
- * 
+ *
  */
 #pragma once
 
 #include <Arduino.h>
+
 #include <vector>
 
-// TODO: Maybe loopHeartbeats() can go here? 
+// TODO: Maybe loopHeartbeats() can go here?
 // It could take AstraMotors*[] to address having multiple motors.
 // Using a for loop to iterate through the motors
 

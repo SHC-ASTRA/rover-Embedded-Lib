@@ -4,12 +4,28 @@
  * @brief Pins etc used on CITADEL embedded
  * @version 0.1
  * @date 2024-06-25
- * 
+ *
  */
 #pragma once
 
+
+//---------------------//
+// PlatformIO lib_deps //
+//---------------------//
+
+// https://github.com/Lynxmotion/LSS_Library_Arduino
+
+
+//------//
+// LIBS //
+//------//
+
+#define CITADEL
+
 #include <Arduino.h>
 #include <LSS.h>
+
+#include "AstraMisc.h"
 
 
 //------//

@@ -1,6 +1,6 @@
 {
     "name": "rover-Embedded-Lib",
-    "version": "0.1.0",
+    "version": "0.2.0",
     "description": "ASTRA's library for embedded code",
     "repository":
     {
@@ -26,17 +26,5 @@
             "name": "Karl"
         }
     ],
-    "dependencies": {
-        "FlexCAN_T4": "https://github.com/tonton81/FlexCAN_T4",
-        "ftrias/TeensyThreads": "^1.0.2",
-        "adafruit/Adafruit NeoPixel": "^1.12.0",
-        "adafruit/Adafruit BMP3XX Library": "^2.1.2",
-        "adafruit/Adafruit BNO055": "^1.6.3",
-        "adafruit/Adafruit Unified Sensor": "^1.1.14",
-        "sparkfun/SparkFun u-blox GNSS Arduino Library": "^2.2.25",
-        "jonas-merkle/AS5047P": "^2.2.1",
-        "henriksod/Fabrik2D": "^1.0.6",
-        "Lynxmotion Smart Servo -LSS-": "https://github.com/Lynxmotion/LSS_Library_Arduino"
-    },
     "frameworks": "arduino"
 }
