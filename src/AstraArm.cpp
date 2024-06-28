@@ -7,7 +7,7 @@
  *
  */
 
-#ifdef ARM
+#if defined(ARM) || defined(WRIST)
 
 #include <Arduino.h>
 #include <AstraArm.h>
