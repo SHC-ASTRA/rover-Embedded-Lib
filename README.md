@@ -41,3 +41,19 @@ constants, functions
 - `library.json` - PlatformIO stuff
 
 - `README.md` - this file. Documentation and GitHub front page.
+
+## Theory
+
+- `main.cpp` includes `ASTRA.h`
+- `ASTRA.h` checks if `AstraSELECTOR.h` appears in the include path.
+- `AstraSELECTOR.h` appears in the project directory, outside of the library, so that the project stays selected
+even if the library is updated or removed/re-installed. The goal is to require zero edits to library files.
+- `ASTRA.h` includes `AstraSELECTOR.h` and contains all error handling, as to not convolute other library files.
+- The main goal of `ASTRA.h` is to have one header that all library files can reference to obtain the project macro
+and enable/disable themselves (as to not pollute the project with unneeded PlatformIO libraries).
+- `ASTRA.h` uses the macro from `AstraSELECTOR.h` to include a project header, removing the burden from `main.cpp`
+and making it so that the only configuration required by the user is modifying `AstraSELECTOR.h` instead of finding
+and including the right project header from the library.
+- A bonus of the project headers including library files instead of `main.cpp` is to abstract away the library's
+structure, so the embedded programmer working on their project only has to worry about the functionally of the library,
+not the implementation.
