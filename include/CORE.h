@@ -31,6 +31,7 @@
 #define CORE
 
 #include "AstraCAN.h"
+#include "AstraMisc.h"
 #include "AstraMotors.h"
 #include "AstraSensors.h"
 #include "TeensyThreads.h"

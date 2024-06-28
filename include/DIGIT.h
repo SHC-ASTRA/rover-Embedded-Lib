@@ -23,6 +23,8 @@
 
 #include <Servo.h>  // Mandible     // This name fits perfectly but I hate it soo much
 
+#include "AstraMisc.h"
+
 
 //------//
 // PINS //
