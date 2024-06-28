@@ -31,17 +31,17 @@ or the main functional C++ files containing functions and classes.
 
 ### Classes
 
-- `AstraArm.h/cpp` - Arm
+- `AstraArm.h/.cpp` - Arm
 
-- `AstraMotors.h/cpp` - REV motor
+- `AstraMotors.h/.cpp` - REV motor
 
 ### Misc
 
-- `AstraCAN.h` - ASTRA's implementation of CAN communication with REV motors
+- `AstraCAN.h/.cpp` - ASTRA's implementation of CAN communication with REV motors
 
-- `AstraSensors.h` - functions for sensors
+- `AstraSensors.h/.cpp` - functions for sensors
 
-- `AstraMisc.h` - functions, consts, etc. useful to all ASTRA projects.
+- `AstraMisc.h/.cpp` - functions, consts, etc. useful to all ASTRA projects.
 
 ### Project Headers
 
