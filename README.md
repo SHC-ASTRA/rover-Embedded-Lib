@@ -3,10 +3,12 @@
 ASTRA's libraries for embedded code to interface with motors, sensors, etc, and provide pinouts, misc
 constants, functions
 
-## Implementing into new PlatformIO project
+## Starting a new PlatformIO project
 
- 1. Place `AstraSELECTOR.h` in `/include/AstraSELECTOR.h`
- 2. Uncomment the relevant `#define` statement in the aforementioned file.
+  1. From the `Template` example, copy `Template.cpp` to `/src/` and rename to `Main.cpp`.
+  Copy `AstraSELECTOR.h` to `/include/` and uncomment the correct project macro.
+  2. Consult the corresponding project header for needed PlatformIO libraries.
+  Copy these lines to `/platformio.ini` under `lib_deps`.
 
 ## Naming conventions
 
