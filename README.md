@@ -53,6 +53,7 @@ or the main functional C++ files containing functions and classes.
 
 - One per project.
 - All caps file name, aside from `.h`
+- Found in `include/project/`
 - Includes pinouts (all pinouts important for code, optionally ones not needed for code)
 - Includes constants relating to hardware
 - DOES NOT include constants only relevant to the code
