@@ -75,3 +75,20 @@ and including the right project header from the library.
 - A bonus of the project headers including library files instead of `main.cpp` is to abstract away the library's
 structure, so the embedded programmer working on their project only has to worry about the functionally of the library,
 not the implementation.
+
+## Updating this Repository
+
+When making any update to this repository, before updating `main`, make sure to increment the version number in `library.json`, line 3.
+Without making this change, projects using this library will not update automatically. Instead, they will have to delete the library
+locally and let PlatformIO re-download it.
+
+### Creating a new project header
+
+- Copy `TEMPLATE.h` in `rover-Embedded-Lib/include/project/`.
+- Add a project macro to `rover-Embedded-Lib/examples/Template/AstraSELECTOR.h`.
+- Add the file created with its project macro to `ASTRA.h`.
+
+### Creating a new header file
+
+- Place the header file in `include/` and its implementation `.cpp` in `src/`.
+- Add `#include` statements to the relevant project headers.
