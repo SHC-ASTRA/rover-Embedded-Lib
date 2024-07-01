@@ -3,12 +3,21 @@
 ASTRA's libraries for embedded code to interface with motors, sensors, etc, and provide pinouts, misc
 constants, functions
 
+## Implementing into existing PlatformIO project
+
+ 1. Add the following line to `lib_deps` in your `/platformio.ini`:
+ `[https://github.com/SHC-ASTRA/rover-Embedded-Lib](https://github.com/SHC-ASTRA/rover-Embedded-Lib)`
+ 2. Copy `/.pio/libdeps/[board]/rover-Embedded-Lib/examples/Template/AstraSELECTOR.h` to `/include/`.
+ 3. Uncomment the relevant project macro in the file you just copied.
+ 4. Replace the `#include` statements for hardware and Astra libraries in `Main.cpp` with `#include "ASTRA.h"`.
+ 5. Open the relevant file in `/.pio/libdeps/[board]/rover-Embedded-Lib/project/` and copy the libraries to `/platformio.ini`.
+
 ## Starting a new PlatformIO project
 
-  1. From the `Template` example, copy `Template.cpp` to `/src/` and rename to `Main.cpp`.
-  Copy `AstraSELECTOR.h` to `/include/` and uncomment the correct project macro.
-  2. Consult the corresponding project header for needed PlatformIO libraries.
-  Copy these lines to `/platformio.ini` under `lib_deps`.
+ 1. From the `Template` example, copy `Template.cpp` to `/src/` and rename to `Main.cpp`.
+ Copy `AstraSELECTOR.h` to `/include/` and uncomment the correct project macro.
+ 2. Consult the corresponding project header for needed PlatformIO libraries.
+ Copy these lines to `/platformio.ini` under `lib_deps`.
 
 ## Naming conventions
 
