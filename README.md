@@ -23,15 +23,12 @@ constants, functions
 
 - **Library files** - Depending on context, either the files generally contained in the library,
 or the main functional C++ files containing functions and classes.
-
 - **Project header** - A header file that corresponds specifically to one or more PlatformIO projects.
-
 - **Project macro** - A macro specific to a single PlatformIO project. Ex: `#define ARM`
 
 ### File names
 
 - **Library files** - Camel case with the first letter of all words, including the first, capitalized. Ex: `AstraArm.cpp`
-
 - **Project headers** - All caps. Ex: `CITADEL.h`
 
 ## Files
@@ -39,15 +36,17 @@ or the main functional C++ files containing functions and classes.
 ### Classes
 
 - `AstraArm.h/.cpp` - Arm
-
 - `AstraMotors.h/.cpp` - REV motor
+
+### Library
+
+- `library.json` - PlatformIO stuff
+- `README.md` - this file. Documentation and GitHub front page.
 
 ### Misc
 
 - `AstraCAN.h/.cpp` - ASTRA's implementation of CAN communication with REV motors
-
 - `AstraSensors.h/.cpp` - functions for sensors
-
 - `AstraMisc.h/.cpp` - functions, consts, etc. useful to all ASTRA projects.
 
 ### Project Headers
@@ -56,17 +55,10 @@ or the main functional C++ files containing functions and classes.
 - All caps file name, aside from `.h`
 - Includes pinouts (all pinouts important for code, optionally ones not needed for code)
 - Includes constants relating to hardware
-- Includes project macro for activating relavant library `.cpp` files
 - DOES NOT include constants only relevant to the code
 - DOES NOT include header files only relevant to the code (i.e., `AS5047P.h` goes in project header, `cmath` goes in main.cpp)
 - The goal is too put less work on the embedded programmer, abstracting away electronics
-- The embedded programmer SHOULD NOT have to edit their project's library. In doubt, it goes in `main.cpp`.
-
-### Library
-
-- `library.json` - PlatformIO stuff
-
-- `README.md` - this file. Documentation and GitHub front page.
+- The embedded programmer SHOULD NOT have to edit their project's library. When in doubt, it goes in `main.cpp`.
 
 ## Theory
 
