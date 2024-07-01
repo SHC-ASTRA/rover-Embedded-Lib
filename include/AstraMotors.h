@@ -47,13 +47,13 @@ class AstraMotors {
         float stickvalue);  // Converts the joystick value -1 < 0 < 1 to 1700 < 1500 < 1300
     // void setMotorMultiplier(float val);                 // Set the speedMultiplier variable
     void setSpeed(float val);  // Set the setMotorSpeed variable
-    int getSpeed();            // Get the current speed
-    int getID();               // Get the motor's set CAN ID
+    int getSpeed() const;      // Get the current speed
+    int getID() const;         // Get the motor's set CAN ID
     void setDuty(float val);
-    float getDuty();
-    float getSetDuty();
+    float getDuty() const;
+    float getSetDuty() const;
 
-    int getControlMode();
+    int getControlMode() const;
 
     void UpdateForAcceleration();  // Update the current speed to try and match the setMotorSpeed
                                    // variable
