@@ -6,7 +6,7 @@ constants, functions
 ## Implementing into existing PlatformIO project
 
  1. Add the following line to `lib_deps` in your `/platformio.ini`:
- `[https://github.com/SHC-ASTRA/rover-Embedded-Lib](https://github.com/SHC-ASTRA/rover-Embedded-Lib)`
+ [https://github.com/SHC-ASTRA/rover-Embedded-Lib](https://github.com/SHC-ASTRA/rover-Embedded-Lib)
  2. Copy `/.pio/libdeps/[board]/rover-Embedded-Lib/examples/Template/AstraSELECTOR.h` to `/include/`.
  3. Uncomment the relevant project macro in the file you just copied.
  4. Replace the `#include` statements for hardware and Astra libraries in `Main.cpp` with `#include "ASTRA.h"`.
