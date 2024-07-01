@@ -64,8 +64,8 @@ or the main functional C++ files containing functions and classes.
 
 - `main.cpp` includes `ASTRA.h`
 - `ASTRA.h` checks if `AstraSELECTOR.h` appears in the include path.
-- `AstraSELECTOR.h` appears in the project directory, outside of the library, so that the project stays selected
-even if the library is updated or removed/re-installed. The goal is to require zero edits to library files.
+- `AstraSELECTOR.h` appears in the project directory, outside of the library, so that the project macro stays selected
+even if the library is updated or removed/re-installed. The goal is to require *zero* edits to library files.
 - `ASTRA.h` includes `AstraSELECTOR.h` and contains all error handling, as to not convolute other library files.
 - The main goal of `ASTRA.h` is to have one header that all library files can reference to obtain the project macro
 and enable/disable themselves (as to not pollute the project with unneeded PlatformIO libraries).
