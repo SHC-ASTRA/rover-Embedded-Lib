@@ -7,7 +7,7 @@
  *
  */
 
-#include "TEMPLATE.h"
+#include "ASTRA.h"
 
 #include <Arduino.h>
 

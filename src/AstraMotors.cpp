@@ -57,7 +57,7 @@ float AstraMotors::convertControllerValue(float stickValue) {
 }
 
 
-int AstraMotors::getControlMode() {
+int AstraMotors::getControlMode() const {
     return controlMode;
 }
 
@@ -70,11 +70,11 @@ void AstraMotors::setSpeed(float val) {  // controller input value
     }
 }
 
-int AstraMotors::getSpeed() {
+int AstraMotors::getSpeed() const {
     return currentMotorSpeed;
 }
 
-int AstraMotors::getID() {
+int AstraMotors::getID() const {
     return motorID;
 }
 
@@ -92,10 +92,10 @@ void AstraMotors::setDuty(float val) {  // controller input value
 #endif
 }
 
-float AstraMotors::getDuty() {
+float AstraMotors::getDuty() const {
     return currentDutyCycle;
 }
-float AstraMotors::getSetDuty() {
+float AstraMotors::getSetDuty() const {
     return setDutyCycle;
 }
 

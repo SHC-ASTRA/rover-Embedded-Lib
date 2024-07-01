@@ -8,6 +8,8 @@
  */
 #pragma once
 
+#include "ASTRA.h"
+
 #if defined(ARM) || defined(WRIST)
 
 #include <Arduino.h>

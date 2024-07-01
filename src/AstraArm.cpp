@@ -7,6 +7,8 @@
  *
  */
 
+#include "ASTRA.h"
+
 #if defined(ARM) || defined(WRIST)
 
 #include <Arduino.h>
@@ -215,4 +217,4 @@ int AstraArm::updateJointSpeeds()  // Returns 1 if all joints are at their targe
     }
 }
 
-#endif
+#endif  // defined(ARM) || defined(WRIST)
