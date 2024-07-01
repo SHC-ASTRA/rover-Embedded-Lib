@@ -14,10 +14,8 @@ constants, functions
 
 ## Starting a new PlatformIO project
 
- 1. From the `Template` example, copy `Template.cpp` to `/src/` and rename to `Main.cpp`.
- Copy `AstraSELECTOR.h` to `/include/` and uncomment the correct project macro.
- 2. Consult the corresponding project header for needed PlatformIO libraries.
- Copy these lines to `/platformio.ini` under `lib_deps`.
+ 1. [To be written]
+ 2. [Copy example files from `/.pio/libdeps/teensy40/rover-Embedded-Lib/examples/Template/`, copy template file and fill with stuff you need]
 
 ## Naming conventions
 
