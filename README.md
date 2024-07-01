@@ -85,11 +85,11 @@ locally and let PlatformIO re-download it.
 
 ### Creating a new project header
 
-- Copy `TEMPLATE.h` in `rover-Embedded-Lib/include/project/`.
-- Add a project macro to `rover-Embedded-Lib/examples/Template/AstraSELECTOR.h`.
-- Add the file created with its project macro to `ASTRA.h`.
+ 1. Copy `TEMPLATE.h` in `rover-Embedded-Lib/include/project/`.
+ 2. Add a project macro to `rover-Embedded-Lib/examples/Template/AstraSELECTOR.h`.
+ 3. Add the file created with its project macro to `ASTRA.h`.
 
 ### Creating a new header file
 
-- Place the header file in `include/` and its implementation `.cpp` in `src/`.
-- Add `#include` statements to the relevant project headers.
+ 1. Place the header file in `include/` and its implementation `.cpp` in `src/`.
+ 2. Add `#include` statements to the relevant project headers.
