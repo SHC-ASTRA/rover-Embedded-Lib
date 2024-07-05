@@ -2,8 +2,8 @@
  * @file AstraArm.cpp
  * @author Tristan McGinnis (tlm0047@uah.edu)
  * @brief Implements classes for operating the Astra Arm
- * @version 0.1
- * @date 2024-06-25
+ * @version 0.1.1
+ * @date 2024-07-04
  *
  */
 

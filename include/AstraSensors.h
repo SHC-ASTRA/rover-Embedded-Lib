@@ -2,8 +2,8 @@
  * @file AstraSensors.h
  * @author Tristan McGinnis (tlm0047@uah.edu)
  * @brief Provides functions for using Astra's sensors
- * @version 0.1.1
- * @date 2024-06-25
+ * @version 0.1.2
+ * @date 2024-07-04
  *
  */
 #pragma once

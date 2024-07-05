@@ -2,8 +2,8 @@
  * @file CORE.h
  * @author David Sharpe (ds0196@uah.edu)
  * @brief Core
- * @version 0.1
- * @date 2024-06-27
+ * @version 0.2
+ * @date 2024-07-04
  *
  */
 #pragma once

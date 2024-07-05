@@ -2,8 +2,8 @@
  * @file CITADEL.h
  * @author David Sharpe (ds0196@uah.edu)
  * @brief Pins etc used on CITADEL embedded
- * @version 0.1
- * @date 2024-06-25
+ * @version 0.2
+ * @date 2024-07-04
  *
  */
 #pragma once
