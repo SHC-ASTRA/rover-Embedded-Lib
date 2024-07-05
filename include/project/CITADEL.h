@@ -9,23 +9,6 @@
 #pragma once
 
 
-//---------------------//
-// PlatformIO lib_deps //
-//---------------------//
-
-// https://github.com/Lynxmotion/LSS_Library_Arduino
-
-
-//------//
-// LIBS //
-//------//
-
-#include <Arduino.h>
-#include <LSS.h>
-
-#include "AstraMisc.h"
-
-
 //------//
 // PINS //
 //------//

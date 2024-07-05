@@ -9,21 +9,6 @@
 #pragma once
 
 
-//---------------------//
-// PlatformIO lib_deps //
-//---------------------//
-
-// https://github.com/Lynxmotion/LSS_Library_Arduino
-
-//------//
-// LIBS //
-//------//
-
-#include <Servo.h>  // Mandible     // This name fits perfectly but I hate it soo much
-
-#include "AstraMisc.h"
-
-
 //------//
 // PINS //
 //------//
