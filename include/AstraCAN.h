@@ -8,10 +8,7 @@
  */
 #pragma once
 
-
-#include "ASTRA.h"
-
-#if defined(CORE) || defined(ARM) || defined(FAERIE)
+#if defined(REVMOTOR)
 
 #include <FlexCAN_T4.h>
 
@@ -82,4 +79,4 @@ inline void setParameter(AstraFCAN &Can0, int can_id, uint8_t paramID, uint32_t 
     Can0.write(msg);
 }
 
-#endif
+#endif // defined(REVMOTOR)

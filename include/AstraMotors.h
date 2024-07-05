@@ -8,8 +8,9 @@
  */
 #pragma once
 
+#if defined(REVMOTOR)
+
 #include <AccelStepper.h>
-#include <Arduino.h>
 #include <SPI.h>
 #include <Servo.h>
 #include <Wire.h>
@@ -58,3 +59,5 @@ class AstraMotors {
     void UpdateForAcceleration();  // Update the current speed to try and match the setMotorSpeed
                                    // variable
 };
+
+#endif // defined(REVMOTOR)

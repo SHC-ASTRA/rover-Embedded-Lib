@@ -8,6 +8,8 @@
  */
 #pragma once
 
+#if defined(SENSOR)
+
 #include <AS5047P.h>
 #include <Adafruit_BNO055.h>
 #include <Adafruit_Sensor.h>
@@ -73,3 +75,5 @@ float getBNOOrient(Adafruit_BNO055 &bno);
 void getPosition(SFE_UBLOX_GNSS &myGNSS, float (&gps_data)[3]);
 
 String getUTC(SFE_UBLOX_GNSS &myGNSS);
+
+#endif // defined(SENSOR)

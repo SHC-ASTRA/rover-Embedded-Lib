@@ -10,8 +10,6 @@
 
 #include "ASTRA.h"
 
-#include <Arduino.h>
-
 #include <vector>
 
 

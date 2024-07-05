@@ -8,14 +8,13 @@
  */
 #pragma once
 
-#include "ASTRA.h"
+#if defined(ARM)
 
-#if defined(ARM) || defined(WRIST)
 
-#include <Arduino.h>
 // #include <AstraWrist.h>
 #include <FABRIK2D.h>
 #include <LSS.h>
+
 
 class Objective {
    public:
@@ -76,4 +75,4 @@ class AstraArm {
                               // together
 };
 
-#endif
+#endif // defined(ARM)

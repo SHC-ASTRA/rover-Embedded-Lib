@@ -9,11 +9,7 @@
 
 #include "ASTRA.h"
 
-#if defined(ARM) || defined(WRIST)
-
-#include <Arduino.h>
-#include <AstraArm.h>
-#include <FABRIK2D.h>
+#if defined(ARM)
 
 
 Objective::Objective(){};  // Default constructor
@@ -217,4 +213,4 @@ int AstraArm::updateJointSpeeds()  // Returns 1 if all joints are at their targe
     }
 }
 
-#endif  // defined(ARM) || defined(WRIST)
+#endif  // defined(ARM)
