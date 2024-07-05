@@ -2,7 +2,7 @@
  * @file ASTRA.h
  * @author David Sharpe (ds0196@uah.edu)
  * @brief
- * @version 0.2.1
+ * @version 0.2.2
  * @date 2024-07-04
  *
  */
@@ -44,8 +44,8 @@
 #elif defined(ARM)
 #include "project/ARM.h"
 
-#elif defined(WRIST)
-#include "project/WRIST.h"
+#elif defined(DIGIT)
+#include "project/DIGIT.h"
 
 #elif defined(FAERIE)
 #include "project/FAERIE.h"
