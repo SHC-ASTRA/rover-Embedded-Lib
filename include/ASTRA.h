@@ -13,7 +13,7 @@
 // PlatformIO lib_deps //
 //---------------------//
 
-// ftrias/TeensyThreads
+// https://github.com/ftrias/TeensyThreads
 // https://github.com/tonton81/FlexCAN_T4
 // adafruit/Adafruit Unified Sensor
 // adafruit/Adafruit BMP3XX Library
