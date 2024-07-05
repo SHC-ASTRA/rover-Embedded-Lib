@@ -13,16 +13,27 @@
 // PlatformIO lib_deps //
 //---------------------//
 
+// * Misc
 // https://github.com/ftrias/TeensyThreads
+// https://github.com/Lynxmotion/LSS_Library_Arduino
+// adafruit/Adafruit Unified Sensor
+// adafruit/Adafruit SHT31 Library
+// * ARM
+// jonas-merkle/AS5047P
+// https://github.com/Lynxmotion/LSS_Library_Arduino
+// * REVMOTOR
 // https://github.com/tonton81/FlexCAN_T4
+// * SENSOR
 // adafruit/Adafruit Unified Sensor
 // adafruit/Adafruit BMP3XX Library
 // adafruit/Adafruit BNO055
 // adafruit/Adafruit Unified Sensor
 // sparkfun/SparkFun u-blox GNSS Arduino Library
-// jonas-merkle/AS5047P
-// https://github.com/Lynxmotion/LSS_Library_Arduino
 
+
+//----------//
+// Includes //
+//----------//
 
 #if defined(ASTRA)
 
