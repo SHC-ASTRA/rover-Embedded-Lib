@@ -7,7 +7,8 @@
  *
  */
 
-#include "ASTRA.h"
+#include "AstraMisc.h"
+#include "project/TEMPLATE.h"
 
 
 // Comment out to disable LED blinking
