@@ -2,8 +2,8 @@
  * @file AstraCAN.cpp
  * @author Tristan McGinnis (tlm0047@uah.edu)
  * @brief 
- * @version 0.1.1
- * @date 2024-07-04
+ * @version 0.1.2
+ * @date 2024-07-06
  * 
  */
 

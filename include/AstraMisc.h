@@ -2,8 +2,8 @@
  * @file AstraMisc.h
  * @author David Sharpe (ds0196@uah.edu)
  * @brief Misc functions and definitions used in Astra embedded
- * @version 0.1.2
- * @date 2024-07-04
+ * @version 0.1.3
+ * @date 2024-07-06
  *
  */
 #pragma once
