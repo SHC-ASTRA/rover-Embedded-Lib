@@ -8,7 +8,7 @@
  */
 #pragma once
 
-#include <FlexCAN_T4.h>
+#include <FlexCAN_T4.h>  // https://github.com/tonton81/FlexCAN_T4
 
 
 // Core and FAERIE use CAN1, Arm uses CAN3

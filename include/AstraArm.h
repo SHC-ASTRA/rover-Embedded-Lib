@@ -9,8 +9,8 @@
 #pragma once
 
 // #include <AstraWrist.h>
-#include <FABRIK2D.h>
-#include <LSS.h>
+#include <FABRIK2D.h>  // jonas-merkle/AS5047P
+#include <LSS.h>       // https://github.com/Lynxmotion/LSS_Library_Arduino
 
 
 class Objective {

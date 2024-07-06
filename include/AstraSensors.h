@@ -8,20 +8,20 @@
  */
 #pragma once
 
-#include <AS5047P.h>
-#include <Adafruit_BNO055.h>
-#include <Adafruit_Sensor.h>
+#include <AS5047P.h>          // jonas-merkle/AS5047P
+#include <Adafruit_BNO055.h>  // adafruit/Adafruit BNO055
+#include <Adafruit_Sensor.h>  // adafruit/Adafruit Unified Sensor
 #include <EEPROM.h>
 #include <SPI.h>
-#include <SparkFun_u-blox_GNSS_Arduino_Library.h>
+#include <SparkFun_u-blox_GNSS_Arduino_Library.h>  // sparkfun/SparkFun u-blox GNSS Arduino Library
 #include <Wire.h>
-#include <utility/imumaths.h>
+#include <utility/imumaths.h>  // where does come from?
 
 #include <cmath>
 #include <cstdlib>
 #include <queue>
 
-#include "Adafruit_BMP3XX.h"
+#include "Adafruit_BMP3XX.h"  // adafruit/Adafruit BMP3XX Library
 
 
 #define SEALEVELPRESSURE_HPA (1013.25)
