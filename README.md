@@ -7,42 +7,13 @@ constants, functions
 
  1. Add the following line to `lib_deps` in your `/platformio.ini`:
  [https://github.com/SHC-ASTRA/rover-Embedded-Lib](https://github.com/SHC-ASTRA/rover-Embedded-Lib)
- 2. Add needed project and library macros (found below) to `/platformio.ini`.
- 3. Replace the `#include` statements for Astra libraries in `Main.cpp` with `#include "ASTRA.h"`.
- 4. Copy your needed libraries from `/.pio/libdeps/[board]/rover-Embedded-Lib/include/ASTRA.h` to `/platformio.ini`.
+ 2. Add include statement for your project. Ex: `#include "project/CITADEL.h"`
+ 3. Make sure to grab the correct lines for `/platformio.ini` from the project headers.
 
 ## Starting a new PlatformIO project
 
  1. [To be written]
- 2. [Copy example files from `/.pio/libdeps/teensy40/rover-Embedded-Lib/examples/Template/`, copy template file and fill with stuff you need]
-
-## Project and library macros
-
-To define these macros, use the build flags in `/platformio.ini`. Ex:
-
-```ini
-[env:teensy40]
-build_flags =
-    -D ASTRA
-    -D FAERIE
-    -D REVMOTOR
-```
-
-All ASTRA PlatformIO projects need `ASTRA` defined.
-
-### Project macros
-
-- `CORE`
-- `ARM`
-- `DIGIT`
-- `FAERIE`
-- `CITADEL`
-
-### Library macros
-
-- `ARM`
-- `REVMOTOR`
-- `SENSOR`
+ 2. [Copy example files from `/.pio/libdeps/[board]/rover-Embedded-Lib/examples/Template/`, copy template file and fill with stuff you need]
 
 ## Naming conventions
 
@@ -50,9 +21,7 @@ All ASTRA PlatformIO projects need `ASTRA` defined.
 
 - **Library files** - Depending on context, either the files generally contained in the library,
 or the main functional C++ files containing functions and classes.
-- **Project header** - A header file that corresponds specifically to one or more PlatformIO projects.
-- **Project macro** - A macro specific to a single PlatformIO project. Ex: `CITADEL`
-- **Library macro** - A macro which enables one or more library/cpp files. Ex: `REVMOTOR`
+- **Project header** - A header file that corresponds to one PlatformIO project.
 
 ### File names
 
@@ -73,7 +42,6 @@ or the main functional C++ files containing functions and classes.
 
 ### Misc
 
-- `ASTRA.h` - manages the including of all library files
 - `AstraCAN.h/.cpp` - ASTRA's implementation of CAN communication with REV motors
 - `AstraSensors.h/.cpp` - functions for sensors
 - `AstraMisc.h/.cpp` - functions, consts, etc. useful to all ASTRA projects.
@@ -91,10 +59,11 @@ or the main functional C++ files containing functions and classes.
 
 ## Theory
 
-- `main.cpp` includes `ASTRA.h`.
-- `ASTRA.h` checks if `ASTRA` is defined.
-- If `ASTRA` is defined, this signals to the library that project and library headers are set up in `platformio.ini`,
-so it can include the header files provided by `rover-Embedded-Lib`.
+- `main.cpp` includes all the library headers it needs
+- Only if a library header is included by `main.cpp` will it throw `#include` errors. If the header isn't
+included in `main.cpp`, then no include errors, but if it is, then you will get required include errors.
+- `.cpp` files enable themselves when all of its required external libraries are found. External libraries
+are 90% of the reason the `.cpp` files need the option to be disabled.
 
 ## Updating this Repository
 
