@@ -7,9 +7,9 @@
  *
  */
 
-#include "ASTRA.h"
+#if __has_include("FlexCAN_T4.h")
 
-#if defined(REVMOTOR)
+#include "AstraMotors.h"
 
 
 long map(long x, long in_min, long in_max, long out_min, long out_max) {
@@ -136,4 +136,4 @@ void AstraMotors::UpdateForAcceleration() {
 #endif
 }
 
-#endif // defined(REVMOTOR)
+#endif // __has_include("FlexCAN_T4.h")

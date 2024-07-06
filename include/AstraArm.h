@@ -8,9 +8,6 @@
  */
 #pragma once
 
-#if defined(ARM)
-
-
 // #include <AstraWrist.h>
 #include <FABRIK2D.h>
 #include <LSS.h>
@@ -74,5 +71,3 @@ class AstraArm {
     int updateJointSpeeds();  // Update the joint speeds such that they'll reach their target angles
                               // together
 };
-
-#endif // defined(ARM)

@@ -7,9 +7,9 @@
  *
  */
 
-#include "ASTRA.h"
+#if __has_include("FABRIK2D.h") && __has_include("LSS.h")
 
-#if defined(ARM)
+#include "AstraArm.h"
 
 
 Objective::Objective(){};  // Default constructor
@@ -213,4 +213,4 @@ int AstraArm::updateJointSpeeds()  // Returns 1 if all joints are at their targe
     }
 }
 
-#endif  // defined(ARM)
+#endif  // __has_include("FABRIK2D.h") && __has_include("LSS.h")

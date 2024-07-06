@@ -7,10 +7,9 @@
  * 
  */
 
+#if __has_include("FlexCAN_T4.h")
 
-#include "ASTRA.h"
-
-#if defined(REVMOTOR)
+#include "AstraCAN.h"
 
 
 // Convert float to little endian decimal representation
@@ -71,4 +70,4 @@ void setParameter(AstraFCAN &Can0, int can_id, uint8_t paramID, uint32_t value) 
     Can0.write(msg);
 }
 
-#endif
+#endif // __has_include("FlexCAN_T4.h")

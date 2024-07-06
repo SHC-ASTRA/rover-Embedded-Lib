@@ -7,9 +7,9 @@
  * 
  */
 
-#include "ASTRA.h"
+#if __has_include("Adafruit_BNO055.h") && __has_include("Adafruit_BMP3XX.h") && __has_include("SFE_UBLOX_GNSS.h") && __has_include("AS5047P.h") && __has_include("utility/imumaths.h")
 
-#if defined(SENSOR)
+#include "AstraSensors.h"
 
 
 /**************************************************************************/
@@ -241,4 +241,4 @@ String getUTC(SFE_UBLOX_GNSS &myGNSS) {
            String(myGNSS.getSecond());
 }
 
-#endif // defined(SENSOR)
+#endif // __has_include

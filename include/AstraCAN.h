@@ -8,8 +8,6 @@
  */
 #pragma once
 
-#if defined(REVMOTOR)
-
 #include <FlexCAN_T4.h>
 
 
@@ -33,5 +31,3 @@ void sendDutyCycle(AstraFCAN &Can0, int can_id, float duty_cycle);
 void sendHeartbeat(AstraFCAN &Can0, int can_id);
 
 void setParameter(AstraFCAN &Can0, int can_id, uint8_t paramID, uint32_t value);
-
-#endif // defined(REVMOTOR)
