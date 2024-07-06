@@ -2,16 +2,13 @@
  * @file Template.cpp
  * @author your name (you@domain.com)
  * @brief description
- * @version 0.1.1
+ * @version 0.1.2
  * @date 2024-06-27
  *
  */
 
-#include "ASTRA.h"
-
-#include <Arduino.h>
-
-#include <vector>
+#include "AstraMisc.h"
+#include "project/TEMPLATE.h"
 
 
 // Comment out to disable LED blinking

@@ -2,20 +2,27 @@
  * @file AstraArm.h
  * @author Tristan McGinnis (tlm0047@uah.edu)
  * @brief Outlines classes for operating the Astra Arm
- * @version 0.1
- * @date 2024-06-25
+ * @version 0.1.2
+ * @date 2024-07-06
  *
  */
 #pragma once
 
-#include "ASTRA.h"
+#if !__has_include("FABRIK2D.h") || !__has_include("LSS.h")
 
-#if defined(ARM) || defined(WRIST)
+#    if !__has_include("FABRIK2D.h")
+#        error Missing library! Please add the following line to lib_deps in platformio.ini:  henriksod/Fabrik2D
+#    endif
+#    if !__has_include("LSS.h")
+#        error Missing library! Please add the following line to lib_deps in platformio.ini:  https://github.com/Lynxmotion/LSS_Library_Arduino
+#    endif
 
-#include <Arduino.h>
+#else
+
 // #include <AstraWrist.h>
-#include <FABRIK2D.h>
-#include <LSS.h>
+#    include <FABRIK2D.h>  // henriksod/Fabrik2D
+#    include <LSS.h>       // https://github.com/Lynxmotion/LSS_Library_Arduino
+
 
 class Objective {
    public:
@@ -76,4 +83,4 @@ class AstraArm {
                               // together
 };
 
-#endif
+#endif  // __has_include

@@ -2,14 +2,12 @@
  * @file AstraSensors.cpp
  * @author Tristan McGinnis (tlm0047@uah.edu)
  * @brief Implements functions for using Astra's sensors
- * @version 0.1
- * @date 2024-06-28
+ * @version 0.1.2
+ * @date 2024-07-06
  * 
  */
 
-#include "ASTRA.h"
-
-#if defined(CORE) || defined(ARM)
+#if __has_include("Adafruit_BNO055.h") && __has_include("Adafruit_BMP3XX.h") && __has_include("SFE_UBLOX_GNSS.h") && __has_include("AS5047P.h") && __has_include("utility/imumaths.h")
 
 #include "AstraSensors.h"
 
@@ -243,4 +241,4 @@ String getUTC(SFE_UBLOX_GNSS &myGNSS) {
            String(myGNSS.getSecond());
 }
 
-#endif // defined(CORE) || defined(ARM)
+#endif // __has_include

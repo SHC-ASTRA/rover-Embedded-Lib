@@ -2,19 +2,18 @@
  * @file AstraCAN.cpp
  * @author Tristan McGinnis (tlm0047@uah.edu)
  * @brief 
- * @version 0.1
- * @date 2024-06-28
+ * @version 0.1.2
+ * @date 2024-07-06
  * 
  */
 
+#if __has_include("FlexCAN_T4.h")
 
 #include "AstraCAN.h"
 
-#if defined(CORE) || defined(ARM) || defined(FAERIE)
-
 
 // Convert float to little endian decimal representation
-inline void Float2LEDec(float x, uint8_t (&buffer_data)[8]) {
+void Float2LEDec(float x, uint8_t (&buffer_data)[8]) {
     unsigned char b[8] = {0};
     memcpy(b, &x, 4);
     // int* buffer_data[4];
@@ -27,7 +26,7 @@ inline void Float2LEDec(float x, uint8_t (&buffer_data)[8]) {
 }
 
 
-inline void identifyDevice(AstraFCAN &Can0, int can_id) {
+void identifyDevice(AstraFCAN &Can0, int can_id) {
     CAN_message_t msg;
     msg.flags.extended = 1;
 
@@ -39,7 +38,7 @@ inline void identifyDevice(AstraFCAN &Can0, int can_id) {
 }
 
 
-inline void sendDutyCycle(AstraFCAN &Can0, int can_id, float duty_cycle) {
+void sendDutyCycle(AstraFCAN &Can0, int can_id, float duty_cycle) {
     CAN_message_t msg;
     msg.flags.extended = 1;
 
@@ -48,7 +47,7 @@ inline void sendDutyCycle(AstraFCAN &Can0, int can_id, float duty_cycle) {
     Can0.write(msg);
 }
 
-inline void sendHeartbeat(AstraFCAN &Can0, int can_id) {
+void sendHeartbeat(AstraFCAN &Can0, int can_id) {
     CAN_message_t msg;
     msg.flags.extended = 1;
 
@@ -60,7 +59,7 @@ inline void sendHeartbeat(AstraFCAN &Can0, int can_id) {
     // Serial.println(msg.id);
 }
 
-inline void setParameter(AstraFCAN &Can0, int can_id, uint8_t paramID, uint32_t value) {
+void setParameter(AstraFCAN &Can0, int can_id, uint8_t paramID, uint32_t value) {
     CAN_message_t msg;
     msg.flags.extended = 1;
     msg.len = 5;
@@ -71,4 +70,4 @@ inline void setParameter(AstraFCAN &Can0, int can_id, uint8_t paramID, uint32_t 
     Can0.write(msg);
 }
 
-#endif
+#endif // __has_include("FlexCAN_T4.h")

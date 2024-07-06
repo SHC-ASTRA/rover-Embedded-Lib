@@ -2,18 +2,14 @@
  * @file AstraArm.cpp
  * @author Tristan McGinnis (tlm0047@uah.edu)
  * @brief Implements classes for operating the Astra Arm
- * @version 0.1
- * @date 2024-06-25
+ * @version 0.1.2
+ * @date 2024-07-06
  *
  */
 
-#include "ASTRA.h"
+#if __has_include("FABRIK2D.h") && __has_include("LSS.h")
 
-#if defined(ARM) || defined(WRIST)
-
-#include <Arduino.h>
-#include <AstraArm.h>
-#include <FABRIK2D.h>
+#include "AstraArm.h"
 
 
 Objective::Objective(){};  // Default constructor
@@ -217,4 +213,4 @@ int AstraArm::updateJointSpeeds()  // Returns 1 if all joints are at their targe
     }
 }
 
-#endif  // defined(ARM) || defined(WRIST)
+#endif  // __has_include("FABRIK2D.h") && __has_include("LSS.h")

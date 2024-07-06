@@ -2,12 +2,15 @@
  * @file AstraMisc.cpp
  * @author David Sharpe (ds0196@uah.edu)
  * @brief Misc functions used in Astra embedded
- * @version 0.1
- * @date 2024-06-28
+ * @version 0.1.2
+ * @date 2024-07-06
  * 
  */
 
-#include "AstraMisc.h"
+
+#include <Arduino.h>
+
+#include <vector>
 
 /**
  * `input` into `args` separated by `delim`; equivalent to Python's `.split`;

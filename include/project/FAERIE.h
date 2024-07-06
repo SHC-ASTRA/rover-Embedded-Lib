@@ -2,34 +2,11 @@
  * @file FAERIE.h
  * @author David Sharpe (ds0196@uah.edu)
  * @brief Pinouts etc used on FAERIE embedded
- * @version 0.1.1
- * @date 2024-06-25
+ * @version 0.2
+ * @date 2024-07-04
  *
  */
 #pragma once
-
-
-//---------------------//
-// PlatformIO lib_deps //
-//---------------------//
-
-// ftrias/TeensyThreads
-// https://github.com/tonton81/FlexCAN_T4
-// adafruit/Adafruit Unified Sensor
-// adafruit/Adafruit SHT31 Library
-
-
-//------//
-// LIBS //
-//------//
-
-#include <Servo.h>  // For SCABBARD servo (unused)
-
-#include "Adafruit_SHT31.h"
-#include "AstraCAN.h"
-#include "AstraMisc.h"
-#include "AstraMotors.h"
-#include "TeensyThreads.h"
 
 
 //------//

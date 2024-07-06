@@ -2,29 +2,55 @@
  * @file AstraSensors.h
  * @author Tristan McGinnis (tlm0047@uah.edu)
  * @brief Provides functions for using Astra's sensors
- * @version 0.1.1
- * @date 2024-06-25
+ * @version 0.1.3
+ * @date 2024-07-06
  *
  */
 #pragma once
 
-#include <AS5047P.h>
-#include <Adafruit_BNO055.h>
-#include <Adafruit_Sensor.h>
-#include <EEPROM.h>
-#include <SPI.h>
-#include <SparkFun_u-blox_GNSS_Arduino_Library.h>
-#include <Wire.h>
-#include <utility/imumaths.h>
+// This is beatiful I love this so much
+#if !__has_include(                                                                           \
+    "AS5047P.h") ||                                                                           \
+    !__has_include("Adafruit_BNO055.h") ||                                                    \
+                   !__has_include("Adafruit_Sensor.h") ||                                     \
+                                  !__has_include("SparkFun_u-blox_GNSS_Arduino_Library.h") || \
+                                                 !__has_include("Adafruit_BMP3XX.h")
 
-#include <cmath>
-#include <cstdlib>
-#include <queue>
+#    if !__has_include("AS5047P.h")
+#        error Missing library! Please add the following line to lib_deps in platformio.ini:  jonas-merkle/AS5047P
+#    endif
+#    if !__has_include("Adafruit_BNO055.h")
+#        error Missing library! Please add the following line to lib_deps in platformio.ini:  adafruit/Adafruit BNO055
+#    endif
+#    if !__has_include("Adafruit_Sensor.h")
+#        error Missing library! Please add the following line to lib_deps in platformio.ini:  adafruit/Adafruit Unified Sensor
+#    endif
+#    if !__has_include("SparkFun_u-blox_GNSS_Arduino_Library.h")
+#        error Missing library! Please add the following line to lib_deps in platformio.ini:  sparkfun/SparkFun u-blox GNSS Arduino Library
+#    endif
+#    if !__has_include("Adafruit_BMP3XX.h")
+#        error Missing library! Please add the following line to lib_deps in platformio.ini:  adafruit/Adafruit BMP3XX Library
+#    endif
 
-#include "Adafruit_BMP3XX.h"
+#else
+
+#    include <AS5047P.h>          // jonas-merkle/AS5047P
+#    include <Adafruit_BNO055.h>  // adafruit/Adafruit BNO055
+#    include <Adafruit_Sensor.h>  // adafruit/Adafruit Unified Sensor
+#    include <EEPROM.h>
+#    include <SPI.h>
+#    include <SparkFun_u-blox_GNSS_Arduino_Library.h>  // sparkfun/SparkFun u-blox GNSS Arduino Library
+#    include <Wire.h>
+#    include <utility/imumaths.h>  // where does come from?
+
+#    include <cmath>
+#    include <cstdlib>
+#    include <queue>
+
+#    include "Adafruit_BMP3XX.h"  // adafruit/Adafruit BMP3XX Library
 
 
-#define SEALEVELPRESSURE_HPA (1013.25)
+#    define SEALEVELPRESSURE_HPA (1013.25)
 
 
 /**************************************************************************/
@@ -73,3 +99,5 @@ float getBNOOrient(Adafruit_BNO055 &bno);
 void getPosition(SFE_UBLOX_GNSS &myGNSS, float (&gps_data)[3]);
 
 String getUTC(SFE_UBLOX_GNSS &myGNSS);
+
+#endif  // __has_include

@@ -2,10 +2,12 @@
  * @file AstraMotors.cpp
  * @author Tristan McGinnis (tlm0047@uah.edu)
  * @brief Implements class for controlling Rev Sparkmax motors
- * @version 0.1
- * @date 2024-06-25
+ * @version 0.1.2
+ * @date 2024-07-06
  *
  */
+
+#if __has_include("FlexCAN_T4.h")
 
 #include "AstraMotors.h"
 
@@ -133,3 +135,5 @@ void AstraMotors::UpdateForAcceleration() {
     //}
 #endif
 }
+
+#endif // __has_include("FlexCAN_T4.h")
