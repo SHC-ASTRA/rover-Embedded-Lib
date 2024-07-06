@@ -9,10 +9,10 @@
 #pragma once
 
 #if !__has_include("FABRIK2D.h")
-#error Please add the folling line to platformio.ini under lib_deps: henriksod/Fabrik2D
+#error Missing library! Please add the following line to lib_deps in platformio.ini:  henriksod/Fabrik2D
 
 #elif !__has_include("LSS.h")
-#error Please add the folling line to platformio.ini under lib_deps: https://github.com/Lynxmotion/LSS_Library_Arduino
+#error Missing library! Please add the following line to lib_deps in platformio.ini:  https://github.com/Lynxmotion/LSS_Library_Arduino
 
 #else
 
@@ -80,4 +80,4 @@ class AstraArm {
                               // together
 };
 
-#endif  // !__has_include
+#endif  // __has_include

@@ -9,7 +9,7 @@
 #pragma once
 
 #if !__has_include("FlexCAN_T4.h")
-#error Please add the folling line to platformio.ini under lib_deps: https://github.com/tonton81/FlexCAN_T4
+#error Missing library! Please add the following line to lib_deps in platformio.ini:  https://github.com/tonton81/FlexCAN_T4
 
 #else
 
@@ -37,4 +37,4 @@ void sendHeartbeat(AstraFCAN &Can0, int can_id);
 
 void setParameter(AstraFCAN &Can0, int can_id, uint8_t paramID, uint32_t value);
 
-#endif  // !__has_include
+#endif  // __has_include
