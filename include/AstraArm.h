@@ -8,17 +8,20 @@
  */
 #pragma once
 
-#if !__has_include("FABRIK2D.h")
-#error Missing library! Please add the following line to lib_deps in platformio.ini:  henriksod/Fabrik2D
+#if !__has_include("FABRIK2D.h") || !__has_include("LSS.h")
 
-#elif !__has_include("LSS.h")
-#error Missing library! Please add the following line to lib_deps in platformio.ini:  https://github.com/Lynxmotion/LSS_Library_Arduino
+#    if !__has_include("FABRIK2D.h")
+#        error Missing library! Please add the following line to lib_deps in platformio.ini:  henriksod/Fabrik2D
+#    endif
+#    if !__has_include("LSS.h")
+#        error Missing library! Please add the following line to lib_deps in platformio.ini:  https://github.com/Lynxmotion/LSS_Library_Arduino
+#    endif
 
 #else
 
 // #include <AstraWrist.h>
-#include <FABRIK2D.h>  // henriksod/Fabrik2D
-#include <LSS.h>       // https://github.com/Lynxmotion/LSS_Library_Arduino
+#    include <FABRIK2D.h>  // henriksod/Fabrik2D
+#    include <LSS.h>       // https://github.com/Lynxmotion/LSS_Library_Arduino
 
 
 class Objective {

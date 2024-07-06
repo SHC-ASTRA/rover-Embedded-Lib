@@ -9,19 +9,19 @@
 #pragma once
 
 #if !__has_include("FlexCAN_T4.h")
-#error Missing library! Please add the following line to lib_deps in platformio.ini:  https://github.com/tonton81/FlexCAN_T4
+#    error Missing library! Please add the following line to lib_deps in platformio.ini:  https://github.com/tonton81/FlexCAN_T4
 
 #else
 
-#include <FlexCAN_T4.h>  // https://github.com/tonton81/FlexCAN_T4
+#    include <FlexCAN_T4.h>  // https://github.com/tonton81/FlexCAN_T4
 
 
 // Core and FAERIE use CAN1, Arm uses CAN3
-#ifdef ARM
+#    ifdef ARM
 typedef FlexCAN_T4<CAN3, RX_SIZE_256, TX_SIZE_16> AstraFCAN;
-#else
+#    else
 typedef FlexCAN_T4<CAN1, RX_SIZE_256, TX_SIZE_16> AstraFCAN;
-#endif
+#    endif
 
 
 // Convert float to little endian decimal representation

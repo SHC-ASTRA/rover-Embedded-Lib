@@ -8,40 +8,49 @@
  */
 #pragma once
 
-#if !__has_include("AS5047P.h")
-#error Missing library! Please add the following line to lib_deps in platformio.ini:  jonas-merkle/AS5047P
+// This is beatiful I love this so much
+#if !__has_include(                                                                           \
+    "AS5047P.h") ||                                                                           \
+    !__has_include("Adafruit_BNO055.h") ||                                                    \
+                   !__has_include("Adafruit_Sensor.h") ||                                     \
+                                  !__has_include("SparkFun_u-blox_GNSS_Arduino_Library.h") || \
+                                                 !__has_include("Adafruit_BMP3XX.h")
 
-#elif !__has_include("Adafruit_BNO055.h")
-#error Missing library! Please add the following line to lib_deps in platformio.ini:  adafruit/Adafruit BNO055
-
-#elif !__has_include("Adafruit_Sensor.h")
-#error Missing library! Please add the following line to lib_deps in platformio.ini:  adafruit/Adafruit Unified Sensor
-
-#elif !__has_include("SparkFun_u-blox_GNSS_Arduino_Library.h")
-#error Missing library! Please add the following line to lib_deps in platformio.ini:  sparkfun/SparkFun u-blox GNSS Arduino Library
-
-#elif !__has_include("Adafruit_BMP3XX.h")
-#error Missing library! Please add the following line to lib_deps in platformio.ini:  adafruit/Adafruit BMP3XX Library
+#    if !__has_include("AS5047P.h")
+#        error Missing library! Please add the following line to lib_deps in platformio.ini:  jonas-merkle/AS5047P
+#    endif
+#    if !__has_include("Adafruit_BNO055.h")
+#        error Missing library! Please add the following line to lib_deps in platformio.ini:  adafruit/Adafruit BNO055
+#    endif
+#    if !__has_include("Adafruit_Sensor.h")
+#        error Missing library! Please add the following line to lib_deps in platformio.ini:  adafruit/Adafruit Unified Sensor
+#    endif
+#    if !__has_include("SparkFun_u-blox_GNSS_Arduino_Library.h")
+#        error Missing library! Please add the following line to lib_deps in platformio.ini:  sparkfun/SparkFun u-blox GNSS Arduino Library
+#    endif
+#    if !__has_include("Adafruit_BMP3XX.h")
+#        error Missing library! Please add the following line to lib_deps in platformio.ini:  adafruit/Adafruit BMP3XX Library
+#    endif
 
 #else
 
-#include <AS5047P.h>          // jonas-merkle/AS5047P
-#include <Adafruit_BNO055.h>  // adafruit/Adafruit BNO055
-#include <Adafruit_Sensor.h>  // adafruit/Adafruit Unified Sensor
-#include <EEPROM.h>
-#include <SPI.h>
-#include <SparkFun_u-blox_GNSS_Arduino_Library.h>  // sparkfun/SparkFun u-blox GNSS Arduino Library
-#include <Wire.h>
-#include <utility/imumaths.h>  // where does come from?
+#    include <AS5047P.h>          // jonas-merkle/AS5047P
+#    include <Adafruit_BNO055.h>  // adafruit/Adafruit BNO055
+#    include <Adafruit_Sensor.h>  // adafruit/Adafruit Unified Sensor
+#    include <EEPROM.h>
+#    include <SPI.h>
+#    include <SparkFun_u-blox_GNSS_Arduino_Library.h>  // sparkfun/SparkFun u-blox GNSS Arduino Library
+#    include <Wire.h>
+#    include <utility/imumaths.h>  // where does come from?
 
-#include <cmath>
-#include <cstdlib>
-#include <queue>
+#    include <cmath>
+#    include <cstdlib>
+#    include <queue>
 
-#include "Adafruit_BMP3XX.h"  // adafruit/Adafruit BMP3XX Library
+#    include "Adafruit_BMP3XX.h"  // adafruit/Adafruit BMP3XX Library
 
 
-#define SEALEVELPRESSURE_HPA (1013.25)
+#    define SEALEVELPRESSURE_HPA (1013.25)
 
 
 /**************************************************************************/
