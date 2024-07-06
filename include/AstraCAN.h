@@ -8,6 +8,11 @@
  */
 #pragma once
 
+#if !__has_include("FlexCAN_T4.h")
+#error Please add the folling line to platformio.ini under lib_deps: https://github.com/tonton81/FlexCAN_T4
+
+#else
+
 #include <FlexCAN_T4.h>  // https://github.com/tonton81/FlexCAN_T4
 
 
@@ -31,3 +36,5 @@ void sendDutyCycle(AstraFCAN &Can0, int can_id, float duty_cycle);
 void sendHeartbeat(AstraFCAN &Can0, int can_id);
 
 void setParameter(AstraFCAN &Can0, int can_id, uint8_t paramID, uint32_t value);
+
+#endif  // !__has_include

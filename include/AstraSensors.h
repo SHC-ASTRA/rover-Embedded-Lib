@@ -8,6 +8,23 @@
  */
 #pragma once
 
+#if !__has_include("AS5047P.h")
+#error Please add the folling line to platformio.ini under lib_deps: jonas-merkle/AS5047P
+
+#elif !__has_include("Adafruit_BNO055.h")
+#error Please add the folling line to platformio.ini under lib_deps: adafruit/Adafruit BNO055
+
+#elif !__has_include("Adafruit_Sensor.h")
+#error Please add the folling line to platformio.ini under lib_deps: adafruit/Adafruit Unified Sensor
+
+#elif !__has_include("SparkFun_u-blox_GNSS_Arduino_Library.h")
+#error Please add the folling line to platformio.ini under lib_deps: sparkfun/SparkFun u-blox GNSS Arduino Library
+
+#elif !__has_include("Adafruit_BMP3XX.h")
+#error Please add the folling line to platformio.ini under lib_deps: adafruit/Adafruit BMP3XX Library
+
+#else
+
 #include <AS5047P.h>          // jonas-merkle/AS5047P
 #include <Adafruit_BNO055.h>  // adafruit/Adafruit BNO055
 #include <Adafruit_Sensor.h>  // adafruit/Adafruit Unified Sensor
@@ -73,3 +90,5 @@ float getBNOOrient(Adafruit_BNO055 &bno);
 void getPosition(SFE_UBLOX_GNSS &myGNSS, float (&gps_data)[3]);
 
 String getUTC(SFE_UBLOX_GNSS &myGNSS);
+
+#endif  // !__has_include

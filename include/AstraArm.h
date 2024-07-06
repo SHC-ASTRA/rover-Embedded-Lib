@@ -8,8 +8,16 @@
  */
 #pragma once
 
+#if !__has_include("FABRIK2D.h")
+#error Please add the folling line to platformio.ini under lib_deps: henriksod/Fabrik2D
+
+#elif !__has_include("LSS.h")
+#error Please add the folling line to platformio.ini under lib_deps: https://github.com/Lynxmotion/LSS_Library_Arduino
+
+#else
+
 // #include <AstraWrist.h>
-#include <FABRIK2D.h>  // jonas-merkle/AS5047P
+#include <FABRIK2D.h>  // henriksod/Fabrik2D
 #include <LSS.h>       // https://github.com/Lynxmotion/LSS_Library_Arduino
 
 
@@ -71,3 +79,5 @@ class AstraArm {
     int updateJointSpeeds();  // Update the joint speeds such that they'll reach their target angles
                               // together
 };
+
+#endif  // !__has_include
