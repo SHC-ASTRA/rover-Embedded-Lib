@@ -8,7 +8,6 @@
  */
 #pragma once
 
-#include <AccelStepper.h>
 #include <SPI.h>
 #include <Servo.h>
 #include <Wire.h>
