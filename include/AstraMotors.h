@@ -8,15 +8,9 @@
  */
 #pragma once
 
-#include <AccelStepper.h>
-#include <SPI.h>
-#include <Servo.h>
-#include <Wire.h>
-
 #include <cmath>
-#include <cstdlib>
-#include <iostream>
-#include <string>
+
+#include "AstraCAN.h"
 
 
 long map(long x, long in_min, long in_max, long out_min, long out_max);
