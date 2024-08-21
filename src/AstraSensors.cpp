@@ -7,7 +7,7 @@
  * 
  */
 
-#if __has_include("Adafruit_BNO055.h") && __has_include("Adafruit_BMP3XX.h") && __has_include("SFE_UBLOX_GNSS.h") && __has_include("AS5047P.h") && __has_include("utility/imumaths.h")
+#if __has_include("Adafruit_BNO055.h") && __has_include("Adafruit_BMP3XX.h") && __has_include("SparkFun_u-blox_GNSS_Arduino_Library.h") && __has_include("AS5047P.h") && __has_include("utility/imumaths.h")
 
 #include "AstraSensors.h"
 
@@ -230,7 +230,7 @@ float getBNOOrient(Adafruit_BNO055 &bno) {
     return event.orientation.x;  // Absolute Orientation/Heading
 }
 
-void getPosition(SFE_UBLOX_GNSS &myGNSS, float (&gps_data)[3]) {
+void getPosition(SFE_UBLOX_GNSS &myGNSS, double (&gps_data)[3]) {
     gps_data[0] = myGNSS.getLatitude() / 10000000.0;
     gps_data[1] = myGNSS.getLongitude() / 10000000.0;
     gps_data[2] = uint8_t(myGNSS.getSIV());
