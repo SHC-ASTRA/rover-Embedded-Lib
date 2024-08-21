@@ -12,11 +12,6 @@
 #include "AstraSensors.h"
 
 
-/**************************************************************************/
-/*
-    Display the raw calibration offset and radius data
-    */
-/**************************************************************************/
 void displaySensorOffsets(const adafruit_bno055_offsets_t &calibData) {
     Serial.print("Accelerometer: ");
     Serial.print(calibData.accel_offset_x);
@@ -49,12 +44,6 @@ void displaySensorOffsets(const adafruit_bno055_offsets_t &calibData) {
     Serial.print(calibData.mag_radius);
 }
 
-/**************************************************************************/
-/*
-    Displays some basic information on this sensor from the unified
-    sensor API sensor_t type (see Adafruit_Sensor for more information)
-    */
-/**************************************************************************/
 void displaySensorDetails(Adafruit_BNO055 &bno) {
     sensor_t sensor;
     bno.getSensor(&sensor);
@@ -79,11 +68,6 @@ void displaySensorDetails(Adafruit_BNO055 &bno) {
     delay(500);
 }
 
-/**************************************************************************/
-/*
-    Display some basic info about the sensor status
-    */
-/**************************************************************************/
 void displaySensorStatus(Adafruit_BNO055 &bno) {
     /* Get the system status values (mostly for debugging purposes) */
     uint8_t system_status, self_test_results, system_error;
@@ -102,11 +86,6 @@ void displaySensorStatus(Adafruit_BNO055 &bno) {
     delay(500);
 }
 
-/**************************************************************************/
-/*
-    Display sensor calibration status
-    */
-/**************************************************************************/
 void displayCalStatus(Adafruit_BNO055 &bno) {
     /* Get the four calibration values (0..3) */
     /* Any sensor data reporting 0 should be ignored, */
