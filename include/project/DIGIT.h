@@ -13,8 +13,7 @@
 // PINS //
 //------//
 
-#define PIN_LASER 15
-#define PIN_AS5047P_CS 17
+#define PIN_LASER 8
 
 
 //-----------//
