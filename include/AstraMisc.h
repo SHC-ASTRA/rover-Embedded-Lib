@@ -12,6 +12,9 @@
 
 #include <vector>
 
+// Baud rate for comms with LSS servos
+#define LSS_BAUD LSS_DefaultBaud
+
 
 // Baud rate for USB comms to a computer
 #define SERIAL_BAUD 115200

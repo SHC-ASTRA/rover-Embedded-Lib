@@ -30,7 +30,6 @@
 
 // ID of Lynx Servo, on Bio Arm
 #define LSS_ID (3)
-#define LSS_BAUD LSS_DefaultBaud
 #define LSS_SERIAL Serial2
 
 // UART used for comms with Raspberry Pi
