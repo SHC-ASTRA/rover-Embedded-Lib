@@ -25,7 +25,7 @@
 
 #define COMMS_UART Serial3
 
-#define LSS_BAUD (LSS_DefaultBaud)
-#define LSS_SERIAL (Serial7)
+#define LSS_BAUD LSS_DefaultBaud
+#define LSS_SERIAL Serial7
 
 #define AS5047P_CUSTOM_SPI_BUS_SPEED 10'000'000
