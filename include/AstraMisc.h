@@ -13,6 +13,12 @@
 #include <vector>
 
 
+// Baud rate for USB comms to a computer
+#define SERIAL_BAUD 115200
+// Baud rate for inter-microcontroller comms over UART
+#define COMMS_UART_BAUD 115200
+
+
 // TODO: Maybe loopHeartbeats() can go here?
 // It could take AstraMotors*[] to address having multiple motors.
 // Using a for loop to iterate through the motors

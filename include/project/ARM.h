@@ -23,10 +23,7 @@
 // Constants //
 //-----------//
 
-#define SERIAL_BAUD 115200
-
 #define COMMS_UART Serial3
-#define COMMS_UART_BAUD 115200
 
 #define LSS_BAUD (LSS_DefaultBaud)
 #define LSS_SERIAL (Serial7)
