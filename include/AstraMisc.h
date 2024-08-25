@@ -24,6 +24,8 @@
 // It could take AstraMotors*[] to address having multiple motors.
 // Using a for loop to iterate through the motors
 
+// void loopHeartbeatsNew(AstraMotors* motors[], const int numMotors);
+
 
 /**
  * `input` into `args` separated by `delim`; equivalent to Python's `.split`;
