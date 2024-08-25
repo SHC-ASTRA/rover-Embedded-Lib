@@ -2,8 +2,6 @@
  * @file FAERIE.h
  * @author David Sharpe (ds0196@uah.edu)
  * @brief Pinouts etc used on FAERIE embedded
- * @version 0.2
- * @date 2024-07-04
  *
  */
 #pragma once

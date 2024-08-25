@@ -2,8 +2,6 @@
  * @file AstraSensors.cpp
  * @author Tristan McGinnis (tlm0047@uah.edu)
  * @brief Implements functions for using Astra's sensors
- * @version 0.1.2
- * @date 2024-07-06
  * 
  */
 

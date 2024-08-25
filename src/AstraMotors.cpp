@@ -2,8 +2,6 @@
  * @file AstraMotors.cpp
  * @author Tristan McGinnis (tlm0047@uah.edu)
  * @brief Implements class for controlling Rev Sparkmax motors
- * @version 0.1.2
- * @date 2024-07-06
  *
  */
 
