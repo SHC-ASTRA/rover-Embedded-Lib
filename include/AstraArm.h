@@ -2,8 +2,6 @@
  * @file AstraArm.h
  * @author Tristan McGinnis (tlm0047@uah.edu)
  * @brief Outlines classes for operating the Astra Arm
- * @version 0.1.2
- * @date 2024-07-06
  *
  */
 #pragma once

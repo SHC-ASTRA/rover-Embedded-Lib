@@ -2,8 +2,6 @@
  * @file AstraCAN.h
  * @author Tristan McGinnis (tlm0047@uah.edu)
  * @brief Provides methods for interfacing with Rev SparkMax motor controllers over CAN
- * @version 0.1.3
- * @date 2024-07-06
  *
  */
 #pragma once

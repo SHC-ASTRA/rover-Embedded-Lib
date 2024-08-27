@@ -2,8 +2,6 @@
  * @file AstraMisc.cpp
  * @author David Sharpe (ds0196@uah.edu)
  * @brief Misc functions used in Astra embedded
- * @version 0.1.2
- * @date 2024-07-06
  * 
  */
 

@@ -2,13 +2,11 @@
  * @file AstraSensors.h
  * @author Tristan McGinnis (tlm0047@uah.edu)
  * @brief Provides functions for using Astra's sensors
- * @version 0.1.3
- * @date 2024-07-06
  *
  */
 #pragma once
 
-// This is beatiful I love this so much
+// This is beautiful I love this so much
 #if !__has_include(                                                                           \
     "AS5047P.h") ||                                                                           \
     !__has_include("Adafruit_BNO055.h") ||                                                    \
@@ -53,33 +51,33 @@
 #    define SEALEVELPRESSURE_HPA (1013.25)
 
 
-/**************************************************************************/
-/*
-    Display the raw calibration offset and radius data
-    */
-/**************************************************************************/
+/**
+ * @brief Displays the raw calibration offset and radius data
+ *
+ * @param calibData
+ */
 void displaySensorOffsets(const adafruit_bno055_offsets_t &calibData);
 
-/**************************************************************************/
-/*
-    Displays some basic information on this sensor from the unified
-    sensor API sensor_t type (see Adafruit_Sensor for more information)
-    */
-/**************************************************************************/
+/**
+ * Displays some basic information on this sensor from the unified
+ * sensor API sensor_t type (see Adafruit_Sensor for more information)
+ *
+ * @param bno
+ */
 void displaySensorDetails(Adafruit_BNO055 &bno);
 
-/**************************************************************************/
-/*
-    Display some basic info about the sensor status
-    */
-/**************************************************************************/
+/**
+ * @brief Displays some basic info about the sensor status
+ *
+ * @param bno
+ */
 void displaySensorStatus(Adafruit_BNO055 &bno);
 
-/**************************************************************************/
-/*
-    Display sensor calibration status
-    */
-/**************************************************************************/
+/**
+ * @brief Displays sensor calibration status
+ *
+ * @param bno
+ */
 void displayCalStatus(Adafruit_BNO055 &bno);
 
 bool isCalibrated(Adafruit_BNO055 &bno);
@@ -96,7 +94,7 @@ void pullBMPData(Adafruit_BMP3XX &bmp, float (&bmp_data)[3]);
 
 float getBNOOrient(Adafruit_BNO055 &bno);
 
-void getPosition(SFE_UBLOX_GNSS &myGNSS, float (&gps_data)[3]);
+void getPosition(SFE_UBLOX_GNSS &myGNSS, double (&gps_data)[3]);
 
 String getUTC(SFE_UBLOX_GNSS &myGNSS);
 

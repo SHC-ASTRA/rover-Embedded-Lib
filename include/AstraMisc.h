@@ -2,8 +2,6 @@
  * @file AstraMisc.h
  * @author David Sharpe (ds0196@uah.edu)
  * @brief Misc functions and definitions used in Astra embedded
- * @version 0.1.3
- * @date 2024-07-06
  *
  */
 #pragma once
@@ -12,10 +10,21 @@
 
 #include <vector>
 
+// Baud rate for comms with LSS servos
+#define LSS_BAUD LSS_DefaultBaud
+
+
+// Baud rate for USB comms to a computer
+#define SERIAL_BAUD 115200
+// Baud rate for inter-microcontroller comms over UART
+#define COMMS_UART_BAUD 115200
+
 
 // TODO: Maybe loopHeartbeats() can go here?
 // It could take AstraMotors*[] to address having multiple motors.
 // Using a for loop to iterate through the motors
+
+// void loopHeartbeatsNew(AstraMotors* motors[], const int numMotors);
 
 
 /**

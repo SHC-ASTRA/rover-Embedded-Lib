@@ -2,21 +2,14 @@
  * @file AstraSensors.cpp
  * @author Tristan McGinnis (tlm0047@uah.edu)
  * @brief Implements functions for using Astra's sensors
- * @version 0.1.2
- * @date 2024-07-06
  * 
  */
 
-#if __has_include("Adafruit_BNO055.h") && __has_include("Adafruit_BMP3XX.h") && __has_include("SFE_UBLOX_GNSS.h") && __has_include("AS5047P.h") && __has_include("utility/imumaths.h")
+#if __has_include("Adafruit_BNO055.h") && __has_include("Adafruit_BMP3XX.h") && __has_include("SparkFun_u-blox_GNSS_Arduino_Library.h") && __has_include("AS5047P.h") && __has_include("utility/imumaths.h")
 
 #include "AstraSensors.h"
 
 
-/**************************************************************************/
-/*
-    Display the raw calibration offset and radius data
-    */
-/**************************************************************************/
 void displaySensorOffsets(const adafruit_bno055_offsets_t &calibData) {
     Serial.print("Accelerometer: ");
     Serial.print(calibData.accel_offset_x);
@@ -49,12 +42,6 @@ void displaySensorOffsets(const adafruit_bno055_offsets_t &calibData) {
     Serial.print(calibData.mag_radius);
 }
 
-/**************************************************************************/
-/*
-    Displays some basic information on this sensor from the unified
-    sensor API sensor_t type (see Adafruit_Sensor for more information)
-    */
-/**************************************************************************/
 void displaySensorDetails(Adafruit_BNO055 &bno) {
     sensor_t sensor;
     bno.getSensor(&sensor);
@@ -79,11 +66,6 @@ void displaySensorDetails(Adafruit_BNO055 &bno) {
     delay(500);
 }
 
-/**************************************************************************/
-/*
-    Display some basic info about the sensor status
-    */
-/**************************************************************************/
 void displaySensorStatus(Adafruit_BNO055 &bno) {
     /* Get the system status values (mostly for debugging purposes) */
     uint8_t system_status, self_test_results, system_error;
@@ -102,11 +84,6 @@ void displaySensorStatus(Adafruit_BNO055 &bno) {
     delay(500);
 }
 
-/**************************************************************************/
-/*
-    Display sensor calibration status
-    */
-/**************************************************************************/
 void displayCalStatus(Adafruit_BNO055 &bno) {
     /* Get the four calibration values (0..3) */
     /* Any sensor data reporting 0 should be ignored, */
@@ -230,7 +207,7 @@ float getBNOOrient(Adafruit_BNO055 &bno) {
     return event.orientation.x;  // Absolute Orientation/Heading
 }
 
-void getPosition(SFE_UBLOX_GNSS &myGNSS, float (&gps_data)[3]) {
+void getPosition(SFE_UBLOX_GNSS &myGNSS, double (&gps_data)[3]) {
     gps_data[0] = myGNSS.getLatitude() / 10000000.0;
     gps_data[1] = myGNSS.getLongitude() / 10000000.0;
     gps_data[2] = uint8_t(myGNSS.getSIV());

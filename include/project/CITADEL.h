@@ -2,8 +2,6 @@
  * @file CITADEL.h
  * @author David Sharpe (ds0196@uah.edu)
  * @brief Pins etc used on CITADEL embedded
- * @version 0.2
- * @date 2024-07-04
  *
  */
 #pragma once
@@ -30,8 +28,7 @@
 
 // ID of Lynx Servo, on Bio Arm
 #define LSS_ID (3)
-#define LSS_BAUD (LSS_DefaultBaud)
-#define LSS_SERIAL (Serial2)
+#define LSS_SERIAL Serial2
 
 // UART used for comms with Raspberry Pi
 // (Not currently used)
