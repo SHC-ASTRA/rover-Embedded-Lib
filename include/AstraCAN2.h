@@ -17,9 +17,9 @@
 
 // Core and FAERIE use CAN1, Arm uses CAN3
 #    ifdef ARM
-TwaiCAN AstraFCAN;
+typedef TwaiCAN AstraFCAN;
 #    else
-TwaiCAN AstraFCAN;
+typedef TwaiCAN AstraFCAN;
 #    endif
 
 
