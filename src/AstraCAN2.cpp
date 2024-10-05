@@ -11,6 +11,7 @@
 #include "AstraCAN.h"
 
 
+
 // Convert float to little endian decimal representation
 void Float2LEDec(float x, uint8_t (&buffer_data)[8]) {
     unsigned char b[8] = {0};
@@ -38,12 +39,13 @@ void identifyDevice(AstraFCAN &Can0, int can_id) {
 
 
 void sendDutyCycle(AstraFCAN &Can0, int can_id, float duty_cycle) {
-    CAN_message_t msg;
+    CanFrame msg;
     msg.flags.extended = 1;
 
     msg.id = 0x2050080 + can_id;
     Float2LEDec(duty_cycle, msg.buf);
     Can0.write(msg);
+    ESP32Can.writeFrame(msg);
 }
 
 void sendHeartbeat(AstraFCAN &Can0, int can_id) {
