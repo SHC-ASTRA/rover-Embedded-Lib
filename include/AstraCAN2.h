@@ -16,6 +16,7 @@
 
 #include <stdio.h>
 #include <stdint.h>
+#include <cstring>
 
 // Core and FAERIE use CAN1, Arm uses CAN3
 #    ifdef ARM
