@@ -67,7 +67,7 @@ void sendHeartbeat(AstraFCAN &Can0, int can_id) {
 
 void setParameter(AstraFCAN &Can0, int can_id, uint8_t paramID, uint32_t value) {
     CanFrame msg;
-    msg.extd = 1
+    msg.extd = 1;
     msg.data_length_code = 5;
 
     msg.identifier = 0x205C000 + can_id;
