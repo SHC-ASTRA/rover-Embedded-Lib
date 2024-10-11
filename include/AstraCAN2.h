@@ -7,12 +7,12 @@
  */
 #pragma once
 
-#if !__has_include("ESP32-TWAI-CAN.hpp")
-#    error Missing library! Please add the following line to lib_deps in platformio.ini:  https://github.com/tonton81/FlexCAN_T4
+// #if !__has_include("ESP32-TWAI-CAN.hpp")
+// #    error Missing library! Please add the following line to lib_deps in platformio.ini:  https://github.com/tonton81/FlexCAN_T4
 
-#else
+// #else
 
-#    include <ESP32-TWAI-CAN.hpp>  // https://github.com/tonton81/FlexCAN_T4
+// #    include <ESP32-TWAI-CAN.hpp>  // https://github.com/tonton81/FlexCAN_T4
 
 
 // Core and FAERIE use CAN1, Arm uses CAN3

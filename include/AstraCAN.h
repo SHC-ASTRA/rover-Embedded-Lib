@@ -6,12 +6,12 @@
  */
 #pragma once
 
-#if !__has_include("FlexCAN_T4.h")
-#    error Missing library! Please add the following line to lib_deps in platformio.ini:  https://github.com/tonton81/FlexCAN_T4
+// #if !__has_include("FlexCAN_T4.h")
+// #    error Missing library! Please add the following line to lib_deps in platformio.ini:  https://github.com/tonton81/FlexCAN_T4
 
-#else
+// #else
 
-#    include <FlexCAN_T4.h>  // https://github.com/tonton81/FlexCAN_T4
+// #    include <FlexCAN_T4.h>  // https://github.com/tonton81/FlexCAN_T4
 
 
 // Core and FAERIE use CAN1, Arm uses CAN3
