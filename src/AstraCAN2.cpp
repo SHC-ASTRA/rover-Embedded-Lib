@@ -72,7 +72,7 @@ void setParameter(AstraFCAN &Can0, int can_id, uint8_t paramID, uint32_t value) 
 
     msg.identifier = 0x205C000 + can_id;
     Float2LEDec(value, msg.data);  // Set the parameter to this
-    msg.buf[4] = paramID;         // Parameter ID
+    msg.data[4] = paramID;         // Parameter ID
     Can0.writeFrame(msg);
 }
 
