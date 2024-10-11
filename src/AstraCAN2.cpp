@@ -1,6 +1,6 @@
 //WHAT THE HELL AM I DOING?
 /**
- * @file AstraCAN.cpp
+ * @file AstraCAN2.cpp
  * @author Charles Marmann (cmm0077@uah.edu)
  * @brief 
  * 
@@ -8,7 +8,7 @@
 
 #if __has_include("ESP32-TWAI-CAN.hpp")
 
-#include "AstraCAN.h"
+#include "AstraCAN2.h"
 
 
 
