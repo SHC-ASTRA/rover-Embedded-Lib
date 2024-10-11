@@ -35,7 +35,7 @@ void identifyDevice(AstraFCAN &Can0, int can_id) {
     for (uint8_t i = 0; i < 8; i++)
         msg.data[i] = 0;
     msg.data[0] = can_id;
-    Can0.write(msg);
+    Can0.writeFrame(msg);
 }
 
 
