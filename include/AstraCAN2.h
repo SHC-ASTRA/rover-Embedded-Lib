@@ -14,6 +14,9 @@
 
 #include <ESP32-TWAI-CAN.hpp>  // https://github.com/tonton81/FlexCAN_T4
 
+#include <stdio.h>
+#include <stdint.h>
+
 // Core and FAERIE use CAN1, Arm uses CAN3
 #    ifdef ARM
 typedef TwaiCAN AstraFCAN;
