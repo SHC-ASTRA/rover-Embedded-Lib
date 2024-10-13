@@ -6,7 +6,9 @@
  * 
  */
 
-#if __has_include("ESP32-TWAI-CAN.hpp")
+// #define ENABLE_ASTRACAN2_h
+
+#if __has_include("ESP32-TWAI-CAN.hpp") && defined(ENABLE_ASTRACAN2_H)
 
 #include "AstraCAN2.h"
 

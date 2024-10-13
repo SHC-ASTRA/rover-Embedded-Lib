@@ -5,7 +5,7 @@
  *
  */
 
-#if __has_include("ESP32-TWAI-CAN.hpp")
+#if __has_include("ESP32-TWAI-CAN.hpp") || __has_include("FlexCAN_T4.h")
 
 #include "AstraMotors.h"
 
