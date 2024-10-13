@@ -7,7 +7,7 @@
 
 #if __has_include("ESP32-TWAI-CAN.hpp") || __has_include("FlexCAN_T4.h")
 
-#include "AstraMotors.h"
+#    include "AstraMotors.h"
 
 
 long map(long x, long in_min, long in_max, long out_min, long out_max) {
@@ -46,11 +46,11 @@ float AstraMotors::convertControllerValue(float stickValue) {
 
     if (controlMode == 0)  // speed Control mode
     {
-#ifdef ARM
+#    ifdef ARM
         return 0;  // speed control not implemented
-#else
+#    else
         output = map(output, -1, 1, (-1 * maxSpeed), maxSpeed);
-#endif
+#    endif
     } else {  // duty cycle control mode
         output = map(output, -1, 1, (-1 * maxDuty), maxDuty);
     }
@@ -82,16 +82,16 @@ int AstraMotors::getID() const {
 
 
 void AstraMotors::setDuty(float val) {  // controller input value
-#ifdef ARM
+#    ifdef ARM
     currentDutyCycle = val;
     setDutyCycle = val;
-#else
+#    else
     if (abs(val) <= 0.02) {
         setDutyCycle = 0;
     } else {
         setDutyCycle = convertControllerValue(val);
     }
-#endif
+#    endif
 }
 
 float AstraMotors::getDuty() const {
@@ -107,9 +107,9 @@ void AstraMotors::setBrake(bool enable) {
 
 
 void AstraMotors::UpdateForAcceleration() {
-#ifdef ARM
+#    ifdef ARM
     currentDutyCycle = setDutyCycle;
-#else
+#    else
     float dCThreshold = 0.1;
     float cD = currentDutyCycle;
     float sD = setDutyCycle;
@@ -137,7 +137,7 @@ void AstraMotors::UpdateForAcceleration() {
         currentDutyCycle = 0;
     }
     //}
-#endif
+#    endif
 }
 
-#endif // __has_include("FlexCAN_T4.h")
+#endif  // __has_include("FlexCAN_T4.h")
