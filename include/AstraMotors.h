@@ -48,6 +48,7 @@ class AstraMotors {
 
     void setSpeed(float val);  // Set the setMotorSpeed variable
     void setDuty(float val);
+    void setBrake(bool enable);   // Enable/disable the brake mode
     
 
     void UpdateForAcceleration();  // Update the current speed to try and match the setMotorSpeed
