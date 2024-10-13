@@ -14,8 +14,10 @@ long map(long x, long in_min, long in_max, long out_min, long out_max) {
     return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
 }
 
-AstraMotors::AstraMotors(int setMotorID, int setCtrlMode, bool inv, int setMaxSpeed,
-                         float setMaxDuty) {
+AstraMotors::AstraMotors(AstraFCAN setCanObject, int setMotorID, int setCtrlMode, bool inv,
+                         int setMaxSpeed, float setMaxDuty) {
+    canObject = setCanObject;
+
     controlMode = setCtrlMode;  // 0-Speed 1-Duty Cycle
 
     currentDutyCycle = 0;

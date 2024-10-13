@@ -30,21 +30,25 @@ class AstraMotors {
 
     bool inverted;  // Inverts the speed of the motor, this should be -1 for motor 3 and 4
 
+    AstraFCAN canObject;
+
    public:
     // AstraMotors();                                      // Startup function
     // AstraMotors(bool inv);                              // Creates an object with inverted = -1
-    AstraMotors(int setMotorID, int setCtrlMode, bool inv, int setMaxSpeed, float setMaxDuty);
-    float convertControllerValue(
-        float stickvalue);  // Converts the joystick value -1 < 0 < 1 to 1700 < 1500 < 1300
+    AstraMotors(AstraFCAN setCanObject, int setMotorID, int setCtrlMode, bool inv, int setMaxSpeed, float setMaxDuty);
+
+    float convertControllerValue(float stickvalue);  // Converts the joystick value -1 < 0 < 1 to 1700 < 1500 < 1300
     // void setMotorMultiplier(float val);                 // Set the speedMultiplier variable
-    void setSpeed(float val);  // Set the setMotorSpeed variable
+    
+    int getControlMode() const;
     int getSpeed() const;      // Get the current speed
-    int getID() const;         // Get the motor's set CAN ID
-    void setDuty(float val);
     float getDuty() const;
     float getSetDuty() const;
+    int getID() const;         // Get the motor's set CAN ID
 
-    int getControlMode() const;
+    void setSpeed(float val);  // Set the setMotorSpeed variable
+    void setDuty(float val);
+    
 
     void UpdateForAcceleration();  // Update the current speed to try and match the setMotorSpeed
                                    // variable
