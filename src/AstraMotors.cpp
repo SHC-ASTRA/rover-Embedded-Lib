@@ -105,6 +105,16 @@ void AstraMotors::setBrake(bool enable) {
     setParameter(canObject, motorID, 6, (int)enable);
 }
 
+void AstraMotors::sendDuty() {
+    sendDutyCycle(canObject, motorID, currentDutyCycle);
+}
+
+void AstraMotors::sendDuty(float val) {
+    setDuty(val);
+    currentDutyCycle = setDutyCycle;
+    sendDuty();
+}
+
 
 void AstraMotors::UpdateForAcceleration() {
 #    ifdef ARM
