@@ -14,8 +14,8 @@
 
 #define PIN_LED_STRIP 10
 
-#define CAN_TX 12
-#define CAN_RX 13
+#define CAN_TX 13
+#define CAN_RX 12
 
 #define I2C_SCL 20
 #define I2C_SDA 22
