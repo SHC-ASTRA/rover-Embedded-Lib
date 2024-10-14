@@ -7,7 +7,7 @@
  */
 #pragma once
 
-#warning AstraCAN.h should now work for both Teensy and ESP32
+#error AstraCAN.h should now work for both Teensy and ESP32
 
 // #if !__has_include("ESP32-TWAI-CAN.hpp")
 // #    error Missing library! Please add the following line to lib_deps in platformio.ini:  https://github.com/tonton81/FlexCAN_T4
