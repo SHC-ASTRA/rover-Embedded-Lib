@@ -14,7 +14,7 @@ long map(long x, long in_min, long in_max, long out_min, long out_max) {
     return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
 }
 
-AstraMotors::AstraMotors(AstraFCAN setCanObject, int setMotorID, int setCtrlMode, bool inv,
+AstraMotors::AstraMotors(AstraFCAN* setCanObject, int setMotorID, int setCtrlMode, bool inv,
                          int setMaxSpeed, float setMaxDuty) {
     canObject = setCanObject;
 
@@ -102,11 +102,11 @@ float AstraMotors::getSetDuty() const {
 }
 
 void AstraMotors::setBrake(bool enable) {
-    setParameter(canObject, motorID, 6, (int)enable);
+    setParameter(*canObject, motorID, 6, (int)enable);
 }
 
 void AstraMotors::sendDuty() {
-    sendDutyCycle(canObject, motorID, currentDutyCycle);
+    sendDutyCycle(*canObject, motorID, currentDutyCycle);
 }
 
 void AstraMotors::sendDuty(float val) {
