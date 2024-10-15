@@ -71,6 +71,7 @@ class AstraMotors {
     void setBrake(bool enable);   // Enable/disable the brake mode
     void sendDuty();  // Send the currently tracked duty cycle to the motor
     void sendDuty(float val);  // Send this duty cycle to the motor (Bypasses acceleration)
+    void accelerate();  // Run UpdateForAcceleration() and sendDuty()
     
 
     void UpdateForAcceleration();  // Update the current speed to try and match the setMotorSpeed

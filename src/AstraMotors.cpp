@@ -120,6 +120,12 @@ void AstraMotors::sendDuty(float val) {
     sendDuty();
 }
 
+void AstraMotors::accelerate() {
+    UpdateForAcceleration();
+    if (controlMode == 1)  // Duty cycle mode
+        sendDuty();
+}
+
 
 void AstraMotors::UpdateForAcceleration() {
 #    ifdef ARM
