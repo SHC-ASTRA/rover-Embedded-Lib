@@ -48,8 +48,9 @@ class AstraMotors {
 
     void setSpeed(float val);  // Set the setMotorSpeed variable
     void setDuty(float val);
+    
+    void identify();  // Send the identify command to the motor
     void setBrake(bool enable);   // Enable/disable the brake mode
-
     void sendDuty();  // Send the currently tracked duty cycle to the motor
     void sendDuty(float val);  // Send this duty cycle to the motor (Bypasses acceleration)
     
