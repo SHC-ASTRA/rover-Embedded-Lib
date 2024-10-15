@@ -14,6 +14,7 @@ long map(long x, long in_min, long in_max, long out_min, long out_max) {
     return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
 }
 
+
 AstraMotors::AstraMotors(AstraFCAN* setCanObject, int setMotorID, int setCtrlMode, bool inv,
                          int setMaxSpeed, float setMaxDuty) {
     canObject = setCanObject;
@@ -63,6 +64,21 @@ int AstraMotors::getControlMode() const {
     return controlMode;
 }
 
+int AstraMotors::getSpeed() const {
+    return currentMotorSpeed;
+}
+
+float AstraMotors::getDuty() const {
+    return currentDutyCycle;
+}
+float AstraMotors::getSetDuty() const {
+    return setDutyCycle;
+}
+
+int AstraMotors::getID() const {
+    return motorID;
+}
+
 
 void AstraMotors::setSpeed(float val) {  // controller input value
     if (abs(val) <= 0.02) {
@@ -71,15 +87,6 @@ void AstraMotors::setSpeed(float val) {  // controller input value
         setMotorSpeed = convertControllerValue(val);
     }
 }
-
-int AstraMotors::getSpeed() const {
-    return currentMotorSpeed;
-}
-
-int AstraMotors::getID() const {
-    return motorID;
-}
-
 
 void AstraMotors::setDuty(float val) {  // controller input value
 #    ifdef ARM
@@ -94,12 +101,6 @@ void AstraMotors::setDuty(float val) {  // controller input value
 #    endif
 }
 
-float AstraMotors::getDuty() const {
-    return currentDutyCycle;
-}
-float AstraMotors::getSetDuty() const {
-    return setDutyCycle;
-}
 
 void AstraMotors::identify() {
     identifyDevice(*canObject, motorID);

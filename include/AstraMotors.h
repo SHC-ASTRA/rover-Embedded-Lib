@@ -10,7 +10,8 @@
 
 #include "AstraCAN.h"
 
-
+// Clamps x between out_min and out_max using the expected input min and max
+// Used for controller input
 long map(long x, long in_min, long in_max, long out_min, long out_max);
 
 class AstraMotors {
@@ -35,9 +36,26 @@ class AstraMotors {
    public:
     // AstraMotors();                                      // Startup function
     // AstraMotors(bool inv);                              // Creates an object with inverted = -1
+    
+    /**
+     * @brief Default constructor for a REV motor controller
+     * 
+     * @param setCanObject Can0
+     * @param setMotorID 
+     * @param setCtrlMode 
+     * @param inv 
+     * @param setMaxSpeed 
+     * @param setMaxDuty 
+     */
     AstraMotors(AstraFCAN* setCanObject, int setMotorID, int setCtrlMode, bool inv, int setMaxSpeed, float setMaxDuty);
 
-    float convertControllerValue(float stickvalue);  // Converts the joystick value -1 < 0 < 1 to 1700 < 1500 < 1300
+    /**
+     * @brief Clamps a joystick value between max and min speed or duty
+     * 
+     * @param stickvalue Input value from the controller joystick between -1 and 1
+     * @return float Clamped value able to be sent to the motors
+     */
+    float convertControllerValue(float stickvalue);
     // void setMotorMultiplier(float val);                 // Set the speedMultiplier variable
     
     int getControlMode() const;
