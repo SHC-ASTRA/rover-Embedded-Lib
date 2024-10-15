@@ -24,9 +24,9 @@
 
 // Core and FAERIE use CAN1, Arm uses CAN3
 #        ifdef ARM
-typedef FlexCAN_T4<CAN3, RX_SIZE_256, TX_SIZE_16> AstraFCAN;
+typedef FlexCAN_T4<CAN3, RX_SIZE_256, TX_SIZE_16> AstraCAN;
 #        else
-typedef FlexCAN_T4<CAN1, RX_SIZE_256, TX_SIZE_16> AstraFCAN;
+typedef FlexCAN_T4<CAN1, RX_SIZE_256, TX_SIZE_16> AstraCAN;
 #        endif
 
 
@@ -40,7 +40,7 @@ typedef FlexCAN_T4<CAN1, RX_SIZE_256, TX_SIZE_16> AstraFCAN;
 
 #        include <cstring>
 
-typedef TwaiCAN AstraFCAN;
+typedef TwaiCAN AstraCAN;
 
 #    endif
 
@@ -49,13 +49,13 @@ typedef TwaiCAN AstraFCAN;
 void Float2LEDec(float x, uint8_t (&buffer_data)[8]);
 
 
-void identifyDevice(AstraFCAN &Can0, int can_id);
+void identifyDevice(AstraCAN &Can0, int can_id);
 
 
-void sendDutyCycle(AstraFCAN &Can0, int can_id, float duty_cycle);
+void sendDutyCycle(AstraCAN &Can0, int can_id, float duty_cycle);
 
-void sendHeartbeat(AstraFCAN &Can0, int can_id);
+void sendHeartbeat(AstraCAN &Can0, int can_id);
 
-void setParameter(AstraFCAN &Can0, int can_id, uint8_t paramID, uint32_t value);
+void setParameter(AstraCAN &Can0, int can_id, uint8_t paramID, uint32_t value);
 
 #endif  // __has_include()

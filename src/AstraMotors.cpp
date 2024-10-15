@@ -15,7 +15,7 @@ long map(long x, long in_min, long in_max, long out_min, long out_max) {
 }
 
 
-AstraMotors::AstraMotors(AstraFCAN* setCanObject, int setMotorID, int setCtrlMode, bool inv,
+AstraMotors::AstraMotors(AstraCAN* setCanObject, int setMotorID, int setCtrlMode, bool inv,
                          int setMaxSpeed, float setMaxDuty) {
     canObject = setCanObject;
 

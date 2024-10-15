@@ -25,7 +25,7 @@ void Float2LEDec(float x, uint8_t (&buffer_data)[8]) {
     }
 }
 
-void identifyDevice(AstraFCAN &Can0, int can_id) {
+void identifyDevice(AstraCAN &Can0, int can_id) {
     CanFrame msg;
     msg.extd = 1;
     msg.data_length_code = 8;
@@ -38,7 +38,7 @@ void identifyDevice(AstraFCAN &Can0, int can_id) {
 }
 
 
-void sendDutyCycle(AstraFCAN &Can0, int can_id, float duty_cycle) {
+void sendDutyCycle(AstraCAN &Can0, int can_id, float duty_cycle) {
 
     // Code mostly taken from example
     CanFrame msg = { 0 };
@@ -51,7 +51,7 @@ void sendDutyCycle(AstraFCAN &Can0, int can_id, float duty_cycle) {
     Can0.writeFrame(msg);
 }
 
-void sendHeartbeat(AstraFCAN &Can0, int can_id) {
+void sendHeartbeat(AstraCAN &Can0, int can_id) {
     CanFrame msg;
     msg.extd = 1;
     msg.data_length_code = 8;
@@ -64,7 +64,7 @@ void sendHeartbeat(AstraFCAN &Can0, int can_id) {
     // Serial.println(msg.id);
 }
 
-void setParameter(AstraFCAN &Can0, int can_id, uint8_t paramID, uint32_t value) {
+void setParameter(AstraCAN &Can0, int can_id, uint8_t paramID, uint32_t value) {
     CanFrame msg;
     msg.extd = 1;
     msg.data_length_code = 5;
@@ -94,7 +94,7 @@ void Float2LEDec(float x, uint8_t (&buffer_data)[8]) {
 }
 
 
-void identifyDevice(AstraFCAN &Can0, int can_id) {
+void identifyDevice(AstraCAN &Can0, int can_id) {
     CAN_message_t msg;
     msg.flags.extended = 1;
 
@@ -106,7 +106,7 @@ void identifyDevice(AstraFCAN &Can0, int can_id) {
 }
 
 
-void sendDutyCycle(AstraFCAN &Can0, int can_id, float duty_cycle) {
+void sendDutyCycle(AstraCAN &Can0, int can_id, float duty_cycle) {
     CAN_message_t msg;
     msg.flags.extended = 1;
 
@@ -115,7 +115,7 @@ void sendDutyCycle(AstraFCAN &Can0, int can_id, float duty_cycle) {
     Can0.write(msg);
 }
 
-void sendHeartbeat(AstraFCAN &Can0, int can_id) {
+void sendHeartbeat(AstraCAN &Can0, int can_id) {
     CAN_message_t msg;
     msg.flags.extended = 1;
 
@@ -127,7 +127,7 @@ void sendHeartbeat(AstraFCAN &Can0, int can_id) {
     // Serial.println(msg.id);
 }
 
-void setParameter(AstraFCAN &Can0, int can_id, uint8_t paramID, uint32_t value) {
+void setParameter(AstraCAN &Can0, int can_id, uint8_t paramID, uint32_t value) {
     CAN_message_t msg;
     msg.flags.extended = 1;
     msg.len = 5;

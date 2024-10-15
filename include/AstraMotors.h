@@ -31,7 +31,7 @@ class AstraMotors {
 
     bool inverted;  // Inverts the speed of the motor, this should be -1 for motor 3 and 4
 
-    AstraFCAN* canObject;
+    AstraCAN* canObject;
 
    public:
     // AstraMotors();                                      // Startup function
@@ -47,7 +47,7 @@ class AstraMotors {
      * @param setMaxSpeed 
      * @param setMaxDuty 
      */
-    AstraMotors(AstraFCAN* setCanObject, int setMotorID, int setCtrlMode, bool inv, int setMaxSpeed, float setMaxDuty);
+    AstraMotors(AstraCAN* setCanObject, int setMotorID, int setCtrlMode, bool inv, int setMaxSpeed, float setMaxDuty);
 
     /**
      * @brief Clamps a joystick value between max and min speed or duty
