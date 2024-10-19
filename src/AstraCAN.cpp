@@ -38,7 +38,7 @@ void identifyDevice(AstraCAN &Can0, int can_id) {
 }
 
 
-void sendDutyCycle(AstraCAN &Can0, int can_id, float duty_cycle) {
+unsigned char * sendDutyCycle(AstraCAN &Can0, int can_id, float duty_cycle) {
 
     // Code mostly taken from example
     CanFrame msg = { 0 };
@@ -54,7 +54,8 @@ void sendDutyCycle(AstraCAN &Can0, int can_id, float duty_cycle) {
     for (int i = 4; i < 8; i++) {
         msg.data[i] = 0;
     }
-
+    unsigned char* out = new unsigned char[8];
+    return out;
 
     Can0.writeFrame(msg);
 }

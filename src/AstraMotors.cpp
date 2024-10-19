@@ -110,14 +110,14 @@ void AstraMotors::setBrake(bool enable) {
     setParameter(*canObject, motorID, 6, (int)enable);
 }
 
-void AstraMotors::sendDuty() {
-    sendDutyCycle(*canObject, motorID, currentDutyCycle);
+unsigned char* AstraMotors::sendDuty() {
+    return sendDutyCycle(*canObject, motorID, currentDutyCycle);
 }
 
-void AstraMotors::sendDuty(float val) {
+unsigned char* AstraMotors::sendDuty(float val) {
     setDuty(val);
     currentDutyCycle = setDutyCycle;
-    sendDuty();
+    return sendDuty();
 }
 
 void AstraMotors::accelerate() {
