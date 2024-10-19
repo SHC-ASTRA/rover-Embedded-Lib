@@ -45,9 +45,16 @@ void sendDutyCycle(AstraCAN &Can0, int can_id, float duty_cycle) {
 	msg.identifier = 0x2050080 + can_id;
 	msg.extd = 1;
 	msg.data_length_code = 8;
+    unsigned char a[8] = {0};
 
-    Float2LEDec(duty_cycle, msg.data);
-    Serial.print(msg.data);
+    Float2LEDec(duty_cycle, a);
+    for (int i = 0; i < 4; i++) {
+        msg.data[i] = a[i];
+    }
+    for (int i = 4; i < 8; i++) {
+        msg.data[i] = 0;
+    }
+
 
     Can0.writeFrame(msg);
 }
