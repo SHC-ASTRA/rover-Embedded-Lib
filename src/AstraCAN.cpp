@@ -23,6 +23,7 @@ void Float2LEDec(float x, uint8_t (&buffer_data)[8]) {
     for (int i = 4; i < 8; i++) {
         buffer_data[i] = 0;
     }
+    
 }
 
 void identifyDevice(AstraCAN &Can0, int can_id) {
@@ -45,8 +46,10 @@ void sendDutyCycle(AstraCAN &Can0, int can_id, float duty_cycle) {
 	msg.identifier = 0x2050080 + can_id;
 	msg.extd = 1;
 	msg.data_length_code = 8;
+    unsigned char a[8] = {0};
 
-    Float2LEDec(duty_cycle, msg.data);
+    Float2LEDec(duty_cycle, a);
+    msg.data = a;
 
     Can0.writeFrame(msg);
 }
