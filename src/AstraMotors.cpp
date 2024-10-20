@@ -119,7 +119,11 @@ void AstraMotors::sendDuty() {
 }
 
 void AstraMotors::sendDuty(float val) {
+    Serial.print("\nPre Value Conversion: ");
+    Serial.print(val);
     setDutyCycle = convertControllerValue(val);
+    Serial.print("\nPost Value Conversion: ");
+    Serial.print(setDutyCycle);
     currentDutyCycle = setDutyCycle;
     return sendDuty();
 }
