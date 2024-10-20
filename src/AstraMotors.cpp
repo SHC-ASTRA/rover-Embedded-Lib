@@ -113,11 +113,13 @@ void AstraMotors::setBrake(bool enable) {
 }
 
 void AstraMotors::sendDuty() {
+    Serial.print("\nSending Speed to CAN: ");
+    Serial.print(currentDutyCycle);
     sendDutyCycle(*canObject, motorID, currentDutyCycle);
 }
 
 void AstraMotors::sendDuty(float val) {
-    setDuty(val);
+    setDutyCycle = convertControllerValue(val);
     currentDutyCycle = setDutyCycle;
     return sendDuty();
 }
