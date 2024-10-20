@@ -19,15 +19,6 @@ AstraMotors::AstraMotors(AstraCAN* setCanObject, int setMotorID, int setCtrlMode
                          int setMaxSpeed, float setMaxDuty) {
     canObject = setCanObject;
 
-
-
-
-
-
-
-
-
-a
     controlMode = setCtrlMode;  // 0-Speed 1-Duty Cycle
 
     currentDutyCycle = 0;
