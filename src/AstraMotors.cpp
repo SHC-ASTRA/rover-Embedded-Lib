@@ -53,7 +53,11 @@ float AstraMotors::convertControllerValue(float stickValue) {
         output = map(output, -1, 1, (-1 * maxSpeed), maxSpeed);
 #    endif
     } else {  // duty cycle control mode
+        Serial.print("\nPre Value Conversion: ");
+        Serial.print(output);
         output = map(output, -1, 1, (-1 * maxDuty), maxDuty);
+        Serial.print("\nPost Value Conversion: ");
+        Serial.print(setDutyCycle);
     }
 
     return output;
@@ -119,11 +123,7 @@ void AstraMotors::sendDuty() {
 }
 
 void AstraMotors::sendDuty(float val) {
-    Serial.print("\nPre Value Conversion: ");
-    Serial.print(val);
     setDutyCycle = convertControllerValue(val);
-    Serial.print("\nPost Value Conversion: ");
-    Serial.print(setDutyCycle);
     currentDutyCycle = setDutyCycle;
     return sendDuty();
 }
