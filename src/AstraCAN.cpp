@@ -24,7 +24,9 @@ void Float2LEDec(float x, uint8_t (&buffer_data)[8]) {
     // int* buffer_data[4];
     for (int i = 0; i < 4; i++) {
         buffer_data[i] = b[i];
-        Serial.print("\nCreated in b[" + i + "]: ");
+        Serial.print("\nCreated in b[");
+        Serial.print(i); 
+        Serial.print("]: ");
         Serial.print(b[i]);
     }
     for (int i = 4; i < 8; i++) {
@@ -57,7 +59,9 @@ void sendDutyCycle(AstraCAN &Can0, int can_id, float duty_cycle) {
     Float2LEDec(duty_cycle, a);
     for (int i = 0; i < 4; i++) {
         msg.data[i] = a[i];
-        Serial.print("\nIn msg.data[" + i + "]: ");
+        Serial.print("\nIn msg.data[");
+        Serial.print(i);
+        Serial.print("]: ");
         Serial.print(msg.data[i]);
     }
     for (int i = 4; i < 8; i++) {
