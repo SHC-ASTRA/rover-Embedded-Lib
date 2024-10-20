@@ -11,23 +11,14 @@
 
 #include "AstraCAN.h"
 
-#include <Arduino.h>
-
-
 
 // Convert float to little endian decimal representation
 void Float2LEDec(float x, uint8_t (&buffer_data)[8]) {
     unsigned char b[8] = {0};
-    Serial.print("\nFloat to be modified: ");
-    Serial.print(x);
     memcpy(b, &x, 4);
     // int* buffer_data[4];
     for (int i = 0; i < 4; i++) {
         buffer_data[i] = b[i];
-        Serial.print("\nCreated in b[");
-        Serial.print(i); 
-        Serial.print("]: ");
-        Serial.print(b[i]);
     }
     for (int i = 4; i < 8; i++) {
         buffer_data[i] = 0;
@@ -54,21 +45,8 @@ void sendDutyCycle(AstraCAN &Can0, int can_id, float duty_cycle) {
 	msg.identifier = 0x2050080 + can_id;
 	msg.extd = 1;
 	msg.data_length_code = 8;
-    unsigned char a[8] = {0};
-    Serial.print("\nDuty cycle being sent: ");
-    Serial.print(duty_cycle);
 
-    Float2LEDec(duty_cycle, a);
-    for (int i = 0; i < 4; i++) {
-        msg.data[i] = a[i];
-        Serial.print("\nIn msg.data[");
-        Serial.print(i);
-        Serial.print("]: ");
-        Serial.print(msg.data[i]);
-    }
-    for (int i = 4; i < 8; i++) {
-        msg.data[i] = 0;
-    }
+    Float2LEDec(duty_cycle, msg.data);
 
     Can0.writeFrame(msg);
 }

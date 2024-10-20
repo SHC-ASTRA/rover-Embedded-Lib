@@ -10,8 +10,15 @@
 #    include "AstraMotors.h"
 
 
-float map(float x, float in_min, float in_max, float out_min, float out_max) {
-    return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
+double map(double x, double in_min, double in_max, double out_min, double out_max) {
+    const double run = in_max - in_min;
+    if (run == 0)
+    {
+	    return 0;  // in_min == in_max, error
+    }
+    const double rise = out_max - out_min;
+    const double delta = x - in_min;
+    return (delta * rise) / run + out_min;
 }
 
 
@@ -117,7 +124,7 @@ void AstraMotors::sendDuty() {
 void AstraMotors::sendDuty(float val) {
     setDuty(val);
     currentDutyCycle = setDutyCycle;
-    return sendDuty();
+    sendDuty();
 }
 
 void AstraMotors::accelerate() {
