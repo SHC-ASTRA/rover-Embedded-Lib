@@ -89,6 +89,8 @@ void AstraMotors::setSpeed(float val) {  // controller input value
 }
 
 void AstraMotors::setDuty(float val) {  // controller input value
+    Serial.print("\nSet duty: ");
+    Serial.print(val);
 #    ifdef ARM
     currentDutyCycle = val;
     setDutyCycle = val;
@@ -111,8 +113,6 @@ void AstraMotors::setBrake(bool enable) {
 }
 
 void AstraMotors::sendDuty() {
-    Serial.print("current duty cycle: ");
-    Serial.print(currentDutyCycle);
     sendDutyCycle(*canObject, motorID, currentDutyCycle);
 }
 
