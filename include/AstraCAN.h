@@ -52,7 +52,7 @@ void Float2LEDec(float x, uint8_t (&buffer_data)[8]);
 void identifyDevice(AstraCAN &Can0, int can_id);
 
 
-unsigned char* sendDutyCycle(AstraCAN &Can0, int can_id, float duty_cycle);
+void sendDutyCycle(AstraCAN &Can0, int can_id, float duty_cycle);
 
 void sendHeartbeat(AstraCAN &Can0, int can_id);
 
