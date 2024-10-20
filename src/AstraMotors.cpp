@@ -10,7 +10,7 @@
 #    include "AstraMotors.h"
 
 
-long map(long x, long in_min, long in_max, long out_min, long out_max) {
+float map(float x, float in_min, float in_max, float out_min, float out_max) {
     return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
 }
 
@@ -53,11 +53,7 @@ float AstraMotors::convertControllerValue(float stickValue) {
         output = map(output, -1, 1, (-1 * maxSpeed), maxSpeed);
 #    endif
     } else {  // duty cycle control mode
-        Serial.print("\nPre Value Conversion: ");
-        Serial.print(output);
         output = map(output, -1, 1, (-1 * maxDuty), maxDuty);
-        Serial.print("\nPost Value Conversion: ");
-        Serial.print(setDutyCycle);
     }
 
     return output;
