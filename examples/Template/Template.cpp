@@ -13,18 +13,24 @@
 #define BLINK 1
 
 uint32_t lastBlink = 0;
+bool ledState = false;
 
 
 void setup() {
     Serial.begin(SERIAL_BAUD);
     pinMode(LED_BUILTIN, OUTPUT);
+    digitalWrite(LED_BUILTIN, HIGH);
+    delay(1000);
+    digitalWrite(LED_BUILTIN, LOW);
 }
 
 
 void loop() {
 #ifdef BLINK
     if (millis() - lastBlink > 1000) {
-        digitalToggle(LED_BUILTIN);
+        lastBlink = millis();
+        ledState = !ledState;
+        digitalWrite(LED_BUILTIN, ledState);
     }
 #endif
 
@@ -48,12 +54,14 @@ void loop() {
         }
 
         else if (command == "led") {
-            if (args[1] == "off")
-                digitalWrite(LED_BUILTIN, LOW);
-            else if (args[1] == "toggle")
-                digitalToggle(LED_BUILTIN);
-            else
+            if (args[1] == "on")
                 digitalWrite(LED_BUILTIN, HIGH);
+            else if (args[1] == "off")
+                digitalWrite(LED_BUILTIN, LOW);
+            else if (args[1] == "toggle") {
+                ledState = !ledState;
+                digitalWrite(LED_BUILTIN, ledState);
+            }
         }
     }
 }
