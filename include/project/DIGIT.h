@@ -11,7 +11,10 @@
 // PINS //
 //------//
 
+// DC on/off control for laser on end effector
 #define PIN_LASER 8
+// PWM control for REV motor that opens/closes end effector
+#define PIN_EF_MOTOR 19
 
 
 //-----------//
