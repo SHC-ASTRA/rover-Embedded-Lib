@@ -3,13 +3,15 @@
  * @author Tristan McGinnis (tlm0047@uah.edu)
  * @author Charles Marmann (cmm0077@uah.edu)
  * @author David Sharpe (ds0196@uah.edu)
- * @brief 
- * 
+ * @brief
+ *
  */
+
+// #define ENABLE
 
 #if __has_include("ESP32-TWAI-CAN.hpp")
 
-#include "AstraCAN.h"
+#   include "AstraCAN.h"
 
 
 // Convert float to little endian decimal representation
@@ -25,7 +27,7 @@ void Float2LEDec(float x, uint8_t (&buffer_data)[8]) {
     }
 }
 
-void identifyDevice(AstraCAN &Can0, int can_id) {
+void identifyDevice(AstraCAN& Can0, int can_id) {
     CanFrame msg;
     msg.extd = 1;
     msg.data_length_code = 8;
@@ -38,20 +40,18 @@ void identifyDevice(AstraCAN &Can0, int can_id) {
 }
 
 
-void sendDutyCycle(AstraCAN &Can0, int can_id, float duty_cycle) {
-
-    // Code mostly taken from example
-    CanFrame msg = { 0 };
-	msg.identifier = 0x2050080 + can_id;
-	msg.extd = 1;
-	msg.data_length_code = 8;
+void sendDutyCycle(AstraCAN& Can0, int can_id, float duty_cycle) {
+    CanFrame msg = {0};
+    msg.identifier = 0x2050080 + can_id;
+    msg.extd = 1;
+    msg.data_length_code = 8;
 
     Float2LEDec(duty_cycle, msg.data);
 
     Can0.writeFrame(msg);
 }
 
-void sendHeartbeat(AstraCAN &Can0, int can_id) {
+void sendHeartbeat(AstraCAN& Can0, int can_id) {
     CanFrame msg;
     msg.extd = 1;
     msg.data_length_code = 8;
@@ -64,21 +64,25 @@ void sendHeartbeat(AstraCAN &Can0, int can_id) {
     // Serial.println(msg.id);
 }
 
-void setParameter(AstraCAN &Can0, int can_id, uint8_t paramID, uint32_t value) {
+void setParameter(AstraCAN& Can0, int can_id, uint8_t paramID, uint32_t value) {
     CanFrame msg;
     msg.extd = 1;
     msg.data_length_code = 5;
 
-    msg.identifier = 0x205C000 + can_id;
-    Float2LEDec(value, msg.data);  // Set the parameter to this
-    msg.data[4] = paramID;         // Parameter ID
+    msg.identifier = 0x2050000; // + can_id;
+    msg.identifier |= ((uint8_t)can_id & 0x3F);
+    msg.identifier |= ((paramID | 0x03) & 0x3FF) << 6;
+    msg.data[3] = (uint8_t)value;
+    // Float2LEDec(value, msg.data);
+    msg.data[4] = 3;
+    // msg.data[4] = paramID;         // Parameter ID
     Can0.writeFrame(msg);
 }
 
 
 #elif __has_include("FlexCAN_T4.h")
 
-#include "AstraCAN.h"
+#    include "AstraCAN.h"
 
 // Convert float to little endian decimal representation
 void Float2LEDec(float x, uint8_t (&buffer_data)[8]) {
@@ -138,4 +142,4 @@ void setParameter(AstraCAN &Can0, int can_id, uint8_t paramID, uint32_t value) {
     Can0.write(msg);
 }
 
-#endif // __has_include("FlexCAN_T4.h")
+#endif  // __has_include("FlexCAN_T4.h")

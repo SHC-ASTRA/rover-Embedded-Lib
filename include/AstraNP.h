@@ -18,14 +18,16 @@
  * 
  */
 enum class AstraNPStatus {
-    NP_OFF = 0,  // Turn NeoPixel off
-    NP_DEFAULT,  // Default color
-    NP_INIT,     // Feather initializing (running setup)
-    NP_OK,       // Feather is running normally
-    NP_WARN,     // Feather has warning
-    NP_ERROR,    // Feather has error, should be looked into
-    NP_FATAL,    // Feather has fatal error, needs immediate attention
-    NP_PONG      // Feather is responding to a ping
+    NP_OFF = 0,    // Turn NeoPixel off
+    NP_DEFAULT,    // Default color
+    NP_INIT,       // Feather initializing (running setup)
+    NP_OK,         // Feather is running normally
+    NP_WARN,       // Feather has warning
+    NP_ERROR,      // Feather has error, should be looked into
+    NP_FATAL,      // Feather has fatal error, needs immediate attention
+    NP_PONG_USB,   // Feather is responding to a ping over USB
+    NP_PONG_UART,  // Feather is responding to a ping over UART
+    NP_PONG_CAN,   // Feather is responding to a ping over CAN
 };
 
 class AstraNeoPixel {
