@@ -7,7 +7,7 @@
  *
  */
 
-// #define ENABLE
+#ifdef OLD_ASTRACAN_ENABLE
 
 #if __has_include("ESP32-TWAI-CAN.hpp")
 
@@ -143,3 +143,5 @@ void setParameter(AstraCAN &Can0, int can_id, uint8_t paramID, uint32_t value) {
 }
 
 #endif  // __has_include("FlexCAN_T4.h")
+
+#endif

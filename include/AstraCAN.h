@@ -7,6 +7,8 @@
  */
 #pragma once
 
+#ifdef OLD_ASTRACAN_ENABLE
+
 // Must have the CAN library corresponding to the current MCU
 #if defined(CORE_TEENSY) && !__has_include("FlexCAN_T4.h")  // If on Teensy, must have FlexCAN_T4
 #    error Missing library! Please add the following line to lib_deps in platformio.ini:  https://github.com/tonton81/FlexCAN_T4
@@ -59,3 +61,5 @@ void sendHeartbeat(AstraCAN &Can0, int can_id);
 void setParameter(AstraCAN &Can0, int can_id, uint8_t paramID, uint32_t value);
 
 #endif  // __has_include()
+
+#endif
