@@ -1,95 +1,153 @@
 /**
  * @file AstraREVCAN.cpp
- * @author David Sharpe (you@domain.com)
+ * @author David Sharpe (ds0196@uah.edu)
  * @brief ASTRA's utilities for interfacing with the REV Sparkmax over CAN
  *
  */
 
-#include "AstraREVCAN.h"
+// Don't require a platformio project to download a MCU CAN library if not using CAN
+// (AstraREVCAN.h will only be included if main.cpp includes it or we have the required MCU CAN
+// library)
+#if (defined(ESP32) && __has_include("ESP32-TWAI-CAN.hpp")) || \
+     (defined(CORE_TEENSY) && __has_include("FlexCAN_T4.h"))
+#    include "AstraREVCAN.h"
+#endif
 
-#include <Arduino.h>
 
-#include "AstraCAN.h"
-
-
-/**
- * @brief Identify Sparkmax
- * 
- * @param storage 
- * @param Can0 
- */
-void identify(CANStorage* storage, AstraCAN& Can0) {
-    uint8_t frame[8] = {0};
-    int32_t* status;
-    HAL_WriteCANPacket(storage, frame, 0, 0x76, status, Can0);
+// Convert float to little endian decimal representation
+void Float2LEDec(float x, uint8_t (&buffer_data)[8]) {
+    unsigned char b[8] = {0};
+    memcpy(b, &x, 4);
+    // int* buffer_data[4];
+    for (int i = 0; i < 4; i++) {
+        buffer_data[i] = b[i];
+    }
+    for (int i = 4; i < 8; i++) {
+        buffer_data[i] = 0;
+    }
 }
 
 
-/**
- * @brief Set parameter of sparkmax; returns true on success
- *
- * @param storage
- * @param parameterID
- * @param type
- * @param value
- * @param Can0
- * @return true
- * @return false
- */
-void setParameterNew(CANStorage* storage, uint8_t parameterID, int32_t type, uint32_t value,
-                  AstraCAN& Can0) {
-    // mov     eax, [rbp+value]
-    // mov     dword ptr [rbp+frame], eax
-    // mov     eax, [rbp+type]
-    // mov     byte ptr [rbp+frame+4], al
-    // 0- value[0]
-    // 1- value[1]
-    // 2- value[2]
-    // 3- value[3]
-    // 4- type[0]
-    // 5- n/a
-    // 6- n/a
-    // 7- n/a
+//--------------------------------------------------------------------------//
+//   ESP32                                                                  //
+//--------------------------------------------------------------------------//
 
+#if defined(ESP32) && __has_include("ESP32-TWAI-CAN.hpp")
+
+
+void CAN_sendDutyCycle(uint8_t deviceId, float dutyCycle, AstraCAN& Can0) {
+    uint8_t frame[8] = {0};
+    Float2LEDec(dutyCycle, frame);
+    CAN_sendPacket(deviceId, 0x02, frame, 8, Can0);
+}
+
+
+void CAN_sendHeartbeat(uint8_t deviceId, AstraCAN& Can0) {
+    uint8_t frame[8] = {0};
+    CAN_sendPacket(deviceId, 0xB2, frame, 8, Can0);
+}
+
+void CAN_identifySparkMax(uint8_t deviceId, AstraCAN& Can0) {
+    uint8_t frame[8] = {0};
+    CAN_sendPacket(deviceId, 0x76, frame, 0, Can0);
+}
+
+void CAN_setParameter(uint8_t deviceId, uint8_t parameterID, sparkMax_ParameterType type,
+                      uint32_t value, AstraCAN& Can0) {
     // First 32 bits of frame are value, next 8 bits are type
     uint8_t frame[8] = {0};
     Float2LEDec(static_cast<float>(value), frame);
     frame[4] = static_cast<uint8_t>(type);
 
-
-    int32_t* status;
-    HAL_WriteCANPacket(storage, frame, 5, parameterID | 0x03, status, Can0);
+    CAN_sendPacket(deviceId, parameterID | 0x300, frame, 5, Can0);
 }
 
 
-void HAL_WriteCANPacket(CANStorage* storage, uint8_t data[], uint8_t length, int32_t apiId,
-                        int32_t* status, AstraCAN& Can0) {
-    int32_t id = CreateCANId(storage, apiId);
-
-    HAL_CAN_SendMessage(id, data, length, status, Can0);
-
-    if (*status != 0) {
-        return;
-    }
-}
-
-void HAL_CAN_SendMessage(uint32_t messageID, uint8_t data[], uint8_t dataSize, int32_t* status,
-                         AstraCAN& Can0) {
+// Given direct values for the CAN packet
+void CAN_sendPacket(uint32_t messageID, uint8_t data[], uint8_t dataLen, AstraCAN& Can0) {
     CanFrame outMsg;
     outMsg.extd = 1;  // All REV CAN messages are extended
-    outMsg.data_length_code = dataSize;
+    outMsg.data_length_code = dataLen;
     outMsg.identifier = messageID;
-    for (uint8_t i = 0; i < dataSize; i++)
+    outMsg.data[0] = 0;  // Just in case... TODO: needed???
+    for (uint8_t i = 0; i < dataLen; i++)
         outMsg.data[i] = data[i];
-    // Can0.writeFrame(outMsg);
+    Can0.writeFrame(outMsg);
+    Serial.println("Send with ID ");
+    Serial.println(outMsg.identifier, HEX);
 }
 
-
-int32_t CreateCANId(CANStorage* storage, int32_t apiId) {
-    int32_t createdId = 0;
-    createdId |= (static_cast<int32_t>(storage->deviceType) & 0x1F) << 24;
-    createdId |= (static_cast<int32_t>(storage->manufacturer) & 0xFF) << 16;
+// Using target device REV ID and REV API ID
+void CAN_sendPacket(uint8_t deviceId, int32_t apiId, uint8_t data[], uint8_t dataLen,
+                    AstraCAN& Can0) {
+    uint32_t createdId = 0x2050000;
+    // createdId |= (static_cast<int32_t>(storage->deviceType) & 0x1F) << 24;
+    // createdId |= (static_cast<int32_t>(storage->manufacturer) & 0xFF) << 16;
     createdId |= (apiId & 0x3FF) << 6;
-    createdId |= (storage->deviceId & 0x3F);
-    return createdId;
+    createdId |= (deviceId & 0x3F);
+
+    CAN_sendPacket(createdId, data, dataLen, Can0);
 }
+
+
+//--------------------------------------------------------------------------//
+//   Teensy                                                                 //
+//--------------------------------------------------------------------------//
+
+#elif defined(CORE_TEENSY) && __has_include("FlexCAN_T4.h")
+
+
+void identifyDevice(AstraCAN& Can0, int can_id) {
+    CanFrame msg;
+    msg.extd = 1;
+    msg.data_length_code = 8;
+
+    msg.identifier = 0x2051D80 + can_id;
+    for (uint8_t i = 0; i < 8; i++)
+        msg.data[i] = 0;
+    msg.data[0] = can_id;
+    Can0.writeFrame(msg);
+}
+
+
+void sendDutyCycle(AstraCAN& Can0, int can_id, float duty_cycle) {
+    CanFrame msg = {0};
+    msg.identifier = 0x2050080 + can_id;
+    msg.extd = 1;
+    msg.data_length_code = 8;
+
+    Float2LEDec(duty_cycle, msg.data);
+
+    Can0.writeFrame(msg);
+}
+
+// void sendHeartbeat(AstraCAN& Can0, int can_id) {
+//     CanFrame msg;
+//     msg.extd = 1;
+//     msg.data_length_code = 8;
+
+//     msg.identifier = 0x2052C80;  // non-Rio heartbeat
+//     for (uint8_t i = 0; i < 8; i++)
+//         msg.data[i] = 0;
+//     msg.data[0] = pow(2, can_id);
+//     Can0.writeFrame(msg);
+//     // Serial.println(msg.id);
+// }
+
+void setParameter(AstraCAN& Can0, int can_id, uint8_t paramID, uint32_t value) {
+    CanFrame msg;
+    msg.extd = 1;
+    msg.data_length_code = 5;
+
+    msg.identifier = 0x2050000;  // + can_id;
+    msg.identifier |= ((uint8_t)can_id & 0x3F);
+    msg.identifier |= ((paramID | 0x03) & 0x3FF) << 6;
+    msg.data[3] = (uint8_t)value;
+    // Float2LEDec(value, msg.data);
+    msg.data[4] = 3;
+    // msg.data[4] = paramID;         // Parameter ID
+    Can0.writeFrame(msg);
+}
+
+
+#endif  // End microcontroller check
