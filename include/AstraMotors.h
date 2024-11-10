@@ -8,7 +8,7 @@
 
 #include <cmath>
 
-#include "AstraCAN.h"
+#include "AstraREVCAN.h"
 
 // Clamps x between out_min and out_max using the expected input min and max
 // Used for controller input

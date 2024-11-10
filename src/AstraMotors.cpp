@@ -110,15 +110,15 @@ void AstraMotors::setDuty(float val) {  // controller input value
 
 
 void AstraMotors::identify() {
-    identifyDevice(*canObject, motorID);
+    CAN_identifySparkMax(motorID, *canObject);
 }
 
 void AstraMotors::setBrake(bool enable) {
-    setParameter(*canObject, motorID, 6, (int)enable);
+    CAN_setParameter(motorID, 6, sparkMax_ParameterType::kBool, static_cast<uint32_t>(enable), *canObject);
 }
 
 void AstraMotors::sendDuty() {
-    sendDutyCycle(*canObject, motorID, currentDutyCycle);
+    CAN_sendDutyCycle(motorID, currentDutyCycle, *canObject);
 }
 
 void AstraMotors::sendDuty(float val) {
