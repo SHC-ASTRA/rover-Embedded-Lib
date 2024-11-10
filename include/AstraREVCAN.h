@@ -211,7 +211,10 @@ enum class sparkMax_ConfigParameter : int32_t {
     NumParameters = 0x9E,
 };
 
-enum class sparkMax_IdleMode { kCoast = 0, kBrake = 1 };
+enum class sparkMax_IdleMode {
+    kCoast = 0,
+    kBrake = 1
+};
 
 enum class sparkMax_faultID {
     kBrownout = 0,

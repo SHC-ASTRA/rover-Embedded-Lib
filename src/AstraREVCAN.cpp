@@ -121,18 +121,18 @@ void sendDutyCycle(AstraCAN& Can0, int can_id, float duty_cycle) {
     Can0.writeFrame(msg);
 }
 
-// void sendHeartbeat(AstraCAN& Can0, int can_id) {
-//     CanFrame msg;
-//     msg.extd = 1;
-//     msg.data_length_code = 8;
+void sendHeartbeat(AstraCAN& Can0, int can_id) {
+    CanFrame msg;
+    msg.extd = 1;
+    msg.data_length_code = 8;
 
-//     msg.identifier = 0x2052C80;  // non-Rio heartbeat
-//     for (uint8_t i = 0; i < 8; i++)
-//         msg.data[i] = 0;
-//     msg.data[0] = pow(2, can_id);
-//     Can0.writeFrame(msg);
-//     // Serial.println(msg.id);
-// }
+    msg.identifier = 0x2052C80;  // non-Rio heartbeat
+    for (uint8_t i = 0; i < 8; i++)
+        msg.data[i] = 0;
+    msg.data[0] = pow(2, can_id);
+    Can0.writeFrame(msg);
+    // Serial.println(msg.id);
+}
 
 void setParameter(AstraCAN& Can0, int can_id, uint8_t paramID, uint32_t value) {
     CanFrame msg;
