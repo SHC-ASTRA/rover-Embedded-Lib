@@ -239,6 +239,8 @@ enum class sparkMax_faultID {
 //   REV Functions                                                          //
 //--------------------------------------------------------------------------//
 
+void CAN_sendSpeed(uint8_t deviceId, float speed, AstraCAN& Can0);
+
 void CAN_sendDutyCycle(uint8_t deviceId, float dutyCycle, AstraCAN& Can0);
 
 void CAN_sendHeartbeat(uint8_t deviceId, AstraCAN& Can0);

@@ -35,6 +35,12 @@ void Float2LEDec(float x, uint8_t (&buffer_data)[8]) {
 #if defined(ESP32) && __has_include("ESP32-TWAI-CAN.hpp")
 
 
+void CAN_sendSpeed(uint8_t deviceId, float speed, AstraCAN& Can0) {
+    uint8_t frame[8] = {0};
+    Float2LEDec(speed, frame);
+    CAN_sendPacket(deviceId, 0x12, frame, 8, Can0);
+}
+
 void CAN_sendDutyCycle(uint8_t deviceId, float dutyCycle, AstraCAN& Can0) {
     uint8_t frame[8] = {0};
     Float2LEDec(dutyCycle, frame);
