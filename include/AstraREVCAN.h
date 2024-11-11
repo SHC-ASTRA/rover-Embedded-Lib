@@ -20,7 +20,6 @@
 #elif defined(ARDUINO_RASPBERRY_PI_PICO)
 #    error "Raspberry Pi Pico is not supported"
 
-
 #else  // We have the required library.
 
 
@@ -37,6 +36,7 @@ void Float2LEDec(float x, uint8_t (&buffer_data)[8]);
 #        include <ESP32-TWAI-CAN.hpp>  // handmade0octopus/ESP32-TWAI-CAN
 
 typedef TwaiCAN AstraCAN;
+
 
 //--------------------------------------------------------------------------//
 //   REV Enums                                                              //
@@ -234,6 +234,15 @@ enum class sparkMax_faultID {
     kHardLimitFwd = 14,
     kHardLimitRev = 15
 };
+
+struct motorStatus1 {
+    float sensorVelocity;
+    uint8_t motorTemperature;
+    float busVoltage;
+    float outputCurrent;
+    uint64_t timestamp;
+};
+
 
 //--------------------------------------------------------------------------//
 //   REV Functions                                                          //
