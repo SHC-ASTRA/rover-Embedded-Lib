@@ -8,7 +8,7 @@
 
 
 //------//
-// PINS //
+// Pins //
 //------//
 
 
@@ -27,14 +27,14 @@
 // CAN defined for both above
 
 // Voltage Dividers
-#define PIN_VDIV_5V 33
-#define PIN_VDIV_BATT 15
-#define PIN_VDIV_12V 32
-#define PIN_VDIV_3V3 14
+#    define PIN_VDIV_5V 33
+#    define PIN_VDIV_BATT 15
+#    define PIN_VDIV_12V 32
+#    define PIN_VDIV_3V3 14
 
 // I2C
-#define I2C_SCL 20
-#define I2C_SDA 22
+#    define I2C_SCL 20
+#    define I2C_SDA 22
 
 
 #else  // Motor Controller MCU  otherwise

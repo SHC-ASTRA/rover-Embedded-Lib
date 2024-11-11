@@ -7,22 +7,32 @@
 #pragma once
 
 
+#if defined(ESP32)
+
+#    warning "ESP32 board for Arm is WIP!"
+
+
+#elif defined(CORE_TEENSY)  // URC 2024 setup
+
 //------//
-// PINS //
+// Pins //
 //------//
 
-#define PIN_AS5047P_1_CS 10
-#define PIN_AS5047P_2_CS 37
-#define PIN_AS5047P_3_CS 36
-#define PIN_AXIS_0_PWM 19
+#    define PIN_AS5047P_1_CS 10
+#    define PIN_AS5047P_2_CS 37
+#    define PIN_AS5047P_3_CS 36
+#    define PIN_AXIS_0_PWM 19
 
 
 //-----------//
 // Constants //
 //-----------//
 
-#define COMMS_UART Serial3
+#    define COMMS_UART Serial3
 
-#define LSS_SERIAL Serial7
+#    define LSS_SERIAL Serial7
 
-#define AS5047P_CUSTOM_SPI_BUS_SPEED 10'000'000
+#    define AS5047P_CUSTOM_SPI_BUS_SPEED 10'000'000
+
+
+#endif

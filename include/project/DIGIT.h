@@ -7,18 +7,28 @@
 #pragma once
 
 
+#if defined(ESP32)
+
+#    warning "ESP32 board for Digit is WIP!"
+
+
+#elif defined(CORE_TEENSY)  // URC 2024 setup
+
 //------//
-// PINS //
+// Pins //
 //------//
 
 // DC on/off control for laser on end effector
-#define PIN_LASER 8
+#    define PIN_LASER 8
 // PWM control for REV motor that opens/closes end effector
-#define PIN_EF_MOTOR 19
+#    define PIN_EF_MOTOR 19
 
 
 //-----------//
 // Constants //
 //-----------//
 
-#define COMMS_UART Serial1
+#    define COMMS_UART Serial1
+
+
+#endif

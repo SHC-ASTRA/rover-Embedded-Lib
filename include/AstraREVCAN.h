@@ -211,10 +211,7 @@ enum class sparkMax_ConfigParameter : int32_t {
     NumParameters = 0x9E,
 };
 
-enum class sparkMax_IdleMode {
-    kCoast = 0,
-    kBrake = 1
-};
+enum class sparkMax_IdleMode { kCoast = 0, kBrake = 1 };
 
 enum class sparkMax_faultID {
     kBrownout = 0,
@@ -256,8 +253,8 @@ void CAN_sendHeartbeat(uint8_t deviceId, AstraCAN& Can0);
 
 void CAN_identifySparkMax(uint8_t deviceId, AstraCAN& Can0);
 
-void CAN_setParameter(uint8_t deviceId, sparkMax_ConfigParameter parameterID, sparkMax_ParameterType type,
-                      uint32_t value, AstraCAN& Can0);
+void CAN_setParameter(uint8_t deviceId, sparkMax_ConfigParameter parameterID,
+                      sparkMax_ParameterType type, uint32_t value, AstraCAN& Can0);
 
 // Given direct values for the CAN packet
 void CAN_sendPacket(uint32_t messageID, uint8_t data[], uint8_t dataLen, AstraCAN& Can0);
