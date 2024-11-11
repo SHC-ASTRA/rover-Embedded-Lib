@@ -31,6 +31,18 @@
 
 
 /**
+ * @brief 
+ * 
+ * @param args vector<String> args given by parseInput()
+ * @param numArgs Number of arguments desired, not including first argument (e.g., "ctrl" or "ping")
+ * @return true if the correct number of arguments have been provided
+ */
+inline bool checkArgs(const std::vector<String>& args, const size_t numArgs) {
+    return (args.size() - 1 == numArgs);
+}
+
+
+/**
  * `input` into `args` separated by `delim`; equivalent to Python's `.split`;
  * Example:  "ctrl,led,on" => `{"ctrl","led","on"}`
  * @param input String to be separated
