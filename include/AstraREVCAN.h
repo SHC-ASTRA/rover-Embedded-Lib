@@ -245,7 +245,7 @@ void CAN_sendHeartbeat(uint8_t deviceId, AstraCAN& Can0);
 
 void CAN_identifySparkMax(uint8_t deviceId, AstraCAN& Can0);
 
-void CAN_setParameter(uint8_t deviceId, uint8_t parameterID, sparkMax_ParameterType type,
+void CAN_setParameter(uint8_t deviceId, sparkMax_ConfigParameter parameterID, sparkMax_ParameterType type,
                       uint32_t value, AstraCAN& Can0);
 
 // Given direct values for the CAN packet

@@ -114,7 +114,7 @@ void AstraMotors::identify() {
 }
 
 void AstraMotors::setBrake(bool enable) {
-    CAN_setParameter(motorID, 6, sparkMax_ParameterType::kBool, static_cast<uint32_t>(enable), *canObject);
+    CAN_setParameter(motorID, sparkMax_ConfigParameter::kIdleMode, sparkMax_ParameterType::kUint32, static_cast<uint32_t>(enable), *canObject);
 }
 
 void AstraMotors::sendDuty() {
