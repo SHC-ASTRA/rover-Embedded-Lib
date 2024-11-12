@@ -79,8 +79,6 @@ void CAN_sendPacket(uint32_t messageID, uint8_t data[], uint8_t dataLen, AstraCA
     for (uint8_t i = 0; i < dataLen; i++)
         outMsg.data[i] = data[i];
     Can0.writeFrame(outMsg);
-    Serial.println("Send with ID ");
-    Serial.println(outMsg.identifier, HEX);
 }
 
 // Using target device REV ID and REV API ID
@@ -91,6 +89,19 @@ void CAN_sendPacket(uint8_t deviceId, int32_t apiId, uint8_t data[], uint8_t dat
     // createdId |= (static_cast<int32_t>(storage->manufacturer) & 0xFF) << 16;
     createdId |= (apiId & 0x3FF) << 6;
     createdId |= (deviceId & 0x3F);
+
+#ifdef DEBUG
+    if (apiId != 0xB2) {  // Don't spam the serial monitor with heartbeats
+        Serial.print("Sending to ");
+        Serial.print(createdId, HEX);
+        Serial.print(" - ");
+        for (int i = 0; i < dataLen; i++) {
+            Serial.print(data[i], HEX);
+            Serial.print(" ");
+        }
+        Serial.println();
+    }
+#endif
 
     CAN_sendPacket(createdId, data, dataLen, Can0);
 }
