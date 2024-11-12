@@ -25,26 +25,20 @@ double map(double x, double in_min, double in_max, double out_min, double out_ma
 AstraMotors::AstraMotors(AstraCAN* setCanObject, int setMotorID, int setCtrlMode, bool inv,
                          int setMaxSpeed, float setMaxDuty) {
     canObject = setCanObject;
-
+    motorID = setMotorID;
     controlMode = setCtrlMode;  // 0-Speed 1-Duty Cycle
-
-    currentDutyCycle = 0;
-    setDutyCycle = 0;
+    inverted = inv;
 
     currentMotorSpeed = 0;
-    setMotorSpeed = 0;
-
+    targetMotorSpeed = 0;
     maxSpeed = setMaxSpeed;
-    maxDuty = setMaxDuty;
 
+    currentDutyCycle = 0;
+    targetDutyCycle = 0;
     dutyCycleAccel = 0.05;
-
-    motorID = setMotorID;
-
-    inverted = inv;
+    maxDuty = setMaxDuty;
 }
 
-// Add the funky graph
 float AstraMotors::convertControllerValue(float stickValue) {
     float output = stickValue;
 
@@ -79,7 +73,7 @@ float AstraMotors::getDuty() const {
     return currentDutyCycle;
 }
 float AstraMotors::getSetDuty() const {
-    return setDutyCycle;
+    return targetDutyCycle;
 }
 
 int AstraMotors::getID() const {
@@ -89,21 +83,21 @@ int AstraMotors::getID() const {
 
 void AstraMotors::setSpeed(float val) {  // controller input value
     if (abs(val) <= 0.02) {
-        setMotorSpeed = 0;
+        targetMotorSpeed = 0;
     } else {
-        setMotorSpeed = convertControllerValue(val);
+        targetMotorSpeed = convertControllerValue(val);
     }
 }
 
 void AstraMotors::setDuty(float val) {  // controller input value
 #    ifdef ARM
     currentDutyCycle = val;
-    setDutyCycle = val;
+    targetDutyCycle = val;
 #    else
     if (abs(val) <= 0.02) {
-        setDutyCycle = 0;
+        targetDutyCycle = 0;
     } else {
-        setDutyCycle = convertControllerValue(val);
+        targetDutyCycle = convertControllerValue(val);
     }
 #    endif
 }
@@ -123,7 +117,7 @@ void AstraMotors::sendDuty() {
 
 void AstraMotors::sendDuty(float val) {
     setDuty(val);
-    currentDutyCycle = setDutyCycle;
+    currentDutyCycle = targetDutyCycle;
     sendDuty();
 }
 
@@ -136,35 +130,39 @@ void AstraMotors::accelerate() {
 
 void AstraMotors::UpdateForAcceleration() {
 #    ifdef ARM
-    currentDutyCycle = setDutyCycle;
+    currentDutyCycle = targetDutyCycle;
 #    else
-    float dCThreshold = 0.1;
-    float cD = currentDutyCycle;
-    float sD = setDutyCycle;
 
-    // if(controlMode == 1){
-    if (setDutyCycle != 0) {
-        if ((cD <= sD + 0.1) &&
-            (cD >=
-             sD - 0.1)) {  // if within 0.1 of desired. Just set it, don't gradually accelerate
-            currentDutyCycle = setDutyCycle;
-        } else if (cD < sD - dCThreshold) {  // increment if below set
+    if (targetDutyCycle == 0) {
+        currentDutyCycle = 0;
+        return;
+    }
+    else if (targetMotorSpeed == 0) {
+        currentMotorSpeed = 0;
+        return;
+    }
+
+    if(controlMode == CTRL_DUTYCYCLE) {
+        const float threshold = 0.1;
+        const float current = currentDutyCycle;
+        const float target = targetDutyCycle;
+
+        if (abs(target - current) <= threshold) {  // if within threshold, just set it, don't gradually accelerate
+            currentDutyCycle = targetDutyCycle;
+        } else if (current < target - threshold) {  // increment if below set
             currentDutyCycle += dutyCycleAccel;
-        } else if (cD > sD + dCThreshold) {  // decrement if above set
+        } else if (current > target + threshold) {  // decrement if above set
             currentDutyCycle -= dutyCycleAccel;
         } else {
-            if ((cD > 0 && sD < 0) ||
-                (cD < 0 && sD > 0))  // if sticks in opposite direction, quick stop
+            if ((current > 0 && target < 0) ||
+                (current < 0 && target > 0))  // if sticks in opposite direction, quick stop
             {
                 currentDutyCycle = 0;
-                setDutyCycle = 0;
+                targetDutyCycle = 0;
             }
             currentDutyCycle = 0;
         }
-    } else {  // if set 0
-        currentDutyCycle = 0;
     }
-    //}
 #    endif
 }
 
