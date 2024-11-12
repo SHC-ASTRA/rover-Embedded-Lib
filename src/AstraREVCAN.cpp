@@ -61,7 +61,7 @@ void CAN_identifySparkMax(uint8_t deviceId, AstraCAN& Can0) {
 void CAN_setParameter(uint8_t deviceId, sparkMax_ConfigParameter parameterID,
                       sparkMax_ParameterType type, uint32_t value, AstraCAN& Can0) {
     uint8_t frame[8] = {0};  // First 32 bits of frame are value, next 8 bits are type
-    Float2LEDec(static_cast<float>(value), frame);
+    frame[0] = static_cast<uint8_t>(value);
     frame[4] = static_cast<uint8_t>(type);
 
     CAN_sendPacket(deviceId, static_cast<uint8_t>(parameterID) | 0x300, frame, 5, Can0);
