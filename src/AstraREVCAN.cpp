@@ -50,7 +50,8 @@ void CAN_sendDutyCycle(uint8_t deviceId, float dutyCycle, AstraCAN& Can0) {
 
 void CAN_sendHeartbeat(uint8_t deviceId, AstraCAN& Can0) {
     uint8_t frame[8] = {0};
-    CAN_sendPacket(deviceId, 0xB2, frame, 8, Can0);
+    frame[0] = pow(2, deviceId);
+    CAN_sendPacket(0, 0xB2, frame, 8, Can0);  // Heartbeat is weird...
 }
 
 void CAN_identifySparkMax(uint8_t deviceId, AstraCAN& Can0) {
