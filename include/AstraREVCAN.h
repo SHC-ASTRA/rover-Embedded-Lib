@@ -23,19 +23,38 @@
 #else  // We have the required library.
 
 
-// Convert float to little endian decimal representation
-void Float2LEDec(float x, uint8_t (&buffer_data)[8]);
-
-
 //--------------------------------------------------------------------------//
-//   ESP32                                                                  //
+//   Microcontroller-specific                                               //
 //--------------------------------------------------------------------------//
 
 #    if defined(ESP32)
 
+//---------//
+//  ESP32  //
+//---------//
+
 #        include <ESP32-TWAI-CAN.hpp>  // handmade0octopus/ESP32-TWAI-CAN
 
 typedef TwaiCAN AstraCAN;
+
+
+#    elif defined(CORE_TEENSY)
+
+//----------//
+//  Teensy  //
+//----------//
+
+#        include <FlexCAN_T4.h>  // https://github.com/tonton81/FlexCAN_T4
+
+// Core and FAERIE use CAN1, Arm uses CAN3
+#        ifdef ARM
+typedef FlexCAN_T4<CAN3, RX_SIZE_256, TX_SIZE_16> AstraCAN;
+#        else
+typedef FlexCAN_T4<CAN1, RX_SIZE_256, TX_SIZE_16> AstraCAN;
+#        endif
+
+
+#    endif  // End microcontroller check
 
 
 //--------------------------------------------------------------------------//
@@ -242,7 +261,7 @@ struct motorStatus1 {
 
 
 //--------------------------------------------------------------------------//
-//   REV Functions                                                          //
+//   Specific REV Commands                                                  //
 //--------------------------------------------------------------------------//
 
 void CAN_sendSpeed(uint8_t deviceId, float speed, AstraCAN& Can0);
@@ -256,6 +275,39 @@ void CAN_identifySparkMax(uint8_t deviceId, AstraCAN& Can0);
 void CAN_setParameter(uint8_t deviceId, sparkMax_ConfigParameter parameterID,
                       sparkMax_ParameterType type, uint32_t value, AstraCAN& Can0);
 
+
+//-------------------------------------//
+//  Backwards Compatibility Functions  //
+//-------------------------------------//
+
+inline void identifyDevice(AstraCAN &Can0, int can_id) {
+    CAN_identifySparkMax(can_id, Can0);
+}
+
+inline void sendDutyCycle(AstraCAN &Can0, int can_id, float duty_cycle) {
+    CAN_sendDutyCycle(can_id, duty_cycle, Can0);
+}
+
+inline void sendHeartbeat(AstraCAN &Can0, int can_id) {
+    CAN_sendHeartbeat(can_id, Can0);
+}
+
+inline void setParameter(AstraCAN &Can0, int can_id, uint8_t paramID, uint32_t value) {
+    Serial.println("ERROR: setParameter is deprecated. Please use CAN_setParameter.");
+}
+
+//--------------------------//
+//  Basic Helper Functions  //
+//--------------------------//
+
+/**
+ * @brief Convert float to little endian decimal representation
+ * 
+ * @param[in] x 
+ * @param buffer_data 64-bit buffer corresponding the data frame of a CAN packet
+ */
+void Float2LEDec(float x, uint8_t (&buffer_data)[8]);
+
 // Given direct values for the CAN packet
 void CAN_sendPacket(uint32_t messageID, uint8_t data[], uint8_t dataLen, AstraCAN& Can0);
 
@@ -263,33 +315,5 @@ void CAN_sendPacket(uint32_t messageID, uint8_t data[], uint8_t dataLen, AstraCA
 void CAN_sendPacket(uint8_t deviceId, int32_t apiId, uint8_t data[], uint8_t dataLen,
                     AstraCAN& Can0);
 
-
-//--------------------------------------------------------------------------//
-//   Teensy                                                                 //
-//--------------------------------------------------------------------------//
-
-// Fallback to legacy Teensy CAN code if running on a Teensy
-#    elif defined(CORE_TEENSY)
-
-#        include <FlexCAN_T4.h>  // https://github.com/tonton81/FlexCAN_T4
-
-// Core and FAERIE use CAN1, Arm uses CAN3
-#        ifdef ARM
-typedef FlexCAN_T4<CAN3, RX_SIZE_256, TX_SIZE_16> AstraCAN;
-#        else
-typedef FlexCAN_T4<CAN1, RX_SIZE_256, TX_SIZE_16> AstraCAN;
-#        endif
-
-
-void identifyDevice(AstraCAN &Can0, int can_id);
-
-void sendDutyCycle(AstraCAN &Can0, int can_id, float duty_cycle);
-
-void sendHeartbeat(AstraCAN &Can0, int can_id);
-
-void setParameter(AstraCAN &Can0, int can_id, uint8_t paramID, uint32_t value);
-
-
-#    endif  // End microcontroller check
 
 #endif  // End library check

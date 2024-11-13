@@ -14,7 +14,12 @@
 #endif
 
 
-// Convert float to little endian decimal representation
+/**
+ * @brief Convert float to little endian decimal representation
+ * 
+ * @param[in] x 
+ * @param buffer_data 64-bit buffer corresponding the data frame of a CAN packet
+ */
 void Float2LEDec(float x, uint8_t (&buffer_data)[8]) {
     unsigned char b[8] = {0};
     memcpy(b, &x, 4);
@@ -29,16 +34,13 @@ void Float2LEDec(float x, uint8_t (&buffer_data)[8]) {
 
 
 //--------------------------------------------------------------------------//
-//   ESP32                                                                  //
+//   Specific REV Commands                                                  //
 //--------------------------------------------------------------------------//
-
-#if defined(ESP32) && __has_include("ESP32-TWAI-CAN.hpp")
-
 
 void CAN_enumerate(AstraCAN& Can0) {
     uint8_t frame[8] = {0};
     CAN_sendPacket(0, 0x99, frame, 0, Can0);
-    delay(80);  // Devices will wait (ID)*1ms before responding, let devices finish enumeration
+    delay(80);  // Let devices finish enumeration; they will wait ID * 1ms before responding
 }
 
 void CAN_sendSpeed(uint8_t deviceId, float speed, AstraCAN& Can0) {
@@ -52,7 +54,6 @@ void CAN_sendDutyCycle(uint8_t deviceId, float dutyCycle, AstraCAN& Can0) {
     Float2LEDec(dutyCycle, frame);
     CAN_sendPacket(deviceId, 0x02, frame, 8, Can0);
 }
-
 
 void CAN_sendHeartbeat(uint8_t deviceId, AstraCAN& Can0) {
     uint8_t frame[8] = {0};
@@ -75,17 +76,9 @@ void CAN_setParameter(uint8_t deviceId, sparkMax_ConfigParameter parameterID,
 }
 
 
-// Given direct values for the CAN packet
-void CAN_sendPacket(uint32_t messageID, uint8_t data[], uint8_t dataLen, AstraCAN& Can0) {
-    CanFrame outMsg;
-    outMsg.extd = 1;  // All REV CAN messages are extended
-    outMsg.data_length_code = dataLen;
-    outMsg.identifier = messageID;
-    outMsg.data[0] = 0;  // Just in case... TODO: needed???
-    for (uint8_t i = 0; i < dataLen; i++)
-        outMsg.data[i] = data[i];
-    Can0.writeFrame(outMsg);
-}
+//--------------------------------------------------------------------------//
+//   Basic Helper functions                                                 //
+//--------------------------------------------------------------------------//
 
 // Using target device REV ID and REV API ID
 void CAN_sendPacket(uint8_t deviceId, int32_t apiId, uint8_t data[], uint8_t dataLen,
@@ -114,62 +107,44 @@ void CAN_sendPacket(uint8_t deviceId, int32_t apiId, uint8_t data[], uint8_t dat
 
 
 //--------------------------------------------------------------------------//
-//   Teensy                                                                 //
+//   Microcontroller-specific                                               //
 //--------------------------------------------------------------------------//
+
+#if defined(ESP32) && __has_include("ESP32-TWAI-CAN.hpp")
+
+//---------//
+//  ESP32  //
+//---------//
+
+// Given direct values for the CAN packet
+void CAN_sendPacket(uint32_t messageID, uint8_t data[], uint8_t dataLen, AstraCAN& Can0) {
+    CanFrame outMsg;
+    outMsg.extd = 1;  // All REV CAN messages are extended
+    outMsg.data_length_code = dataLen;
+    outMsg.identifier = messageID;
+    outMsg.data[0] = 0;  // Just in case... TODO: needed???
+    for (uint8_t i = 0; i < dataLen; i++)
+        outMsg.data[i] = data[i];
+    Can0.writeFrame(outMsg);
+}
+
 
 #elif defined(CORE_TEENSY) && __has_include("FlexCAN_T4.h")
 
+//----------//
+//  Teensy  //
+//----------//
 
-void identifyDevice(AstraCAN& Can0, int can_id) {
-    CanFrame msg;
-    msg.extd = 1;
-    msg.data_length_code = 8;
-
-    msg.identifier = 0x2051D80 + can_id;
-    for (uint8_t i = 0; i < 8; i++)
-        msg.data[i] = 0;
-    msg.data[0] = can_id;
-    Can0.writeFrame(msg);
-}
-
-
-void sendDutyCycle(AstraCAN& Can0, int can_id, float duty_cycle) {
-    CanFrame msg = {0};
-    msg.identifier = 0x2050080 + can_id;
-    msg.extd = 1;
-    msg.data_length_code = 8;
-
-    Float2LEDec(duty_cycle, msg.data);
-
-    Can0.writeFrame(msg);
-}
-
-void sendHeartbeat(AstraCAN& Can0, int can_id) {
-    CanFrame msg;
-    msg.extd = 1;
-    msg.data_length_code = 8;
-
-    msg.identifier = 0x2052C80;  // non-Rio heartbeat
-    for (uint8_t i = 0; i < 8; i++)
-        msg.data[i] = 0;
-    msg.data[0] = pow(2, can_id);
-    Can0.writeFrame(msg);
-    // Serial.println(msg.id);
-}
-
-void setParameter(AstraCAN& Can0, int can_id, uint8_t paramID, uint32_t value) {
-    CanFrame msg;
-    msg.extd = 1;
-    msg.data_length_code = 5;
-
-    msg.identifier = 0x2050000;  // + can_id;
-    msg.identifier |= ((uint8_t)can_id & 0x3F);
-    msg.identifier |= ((paramID | 0x03) & 0x3FF) << 6;
-    msg.data[3] = (uint8_t)value;
-    // Float2LEDec(value, msg.data);
-    msg.data[4] = 3;
-    // msg.data[4] = paramID;         // Parameter ID
-    Can0.writeFrame(msg);
+// Given direct values for the CAN packet
+void CAN_sendPacket(uint32_t messageID, uint8_t data[], uint8_t dataLen, AstraCAN& Can0) {
+    CAN_message_t outMsg;
+    outMsg.flags.extended = 1;  // All REV CAN messages are extended
+    outMsg.len = dataLen;
+    outMsg.id = messageID;
+    outMsg.bug[0] = 0;  // Just in case... TODO: needed???
+    for (uint8_t i = 0; i < dataLen; i++)
+        outMsg.buf[i] = data[i];
+    Can0.write(outMsg);
 }
 
 
