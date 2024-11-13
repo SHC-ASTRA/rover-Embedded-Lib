@@ -35,6 +35,12 @@ void Float2LEDec(float x, uint8_t (&buffer_data)[8]) {
 #if defined(ESP32) && __has_include("ESP32-TWAI-CAN.hpp")
 
 
+void CAN_enumerate(AstraCAN& Can0) {
+    uint8_t frame[8] = {0};
+    CAN_sendPacket(0, 0x99, frame, 0, Can0);
+    delay(80);  // Devices will wait (ID)*1ms before responding, let devices finish enumeration
+}
+
 void CAN_sendSpeed(uint8_t deviceId, float speed, AstraCAN& Can0) {
     uint8_t frame[8] = {0};
     Float2LEDec(speed, frame);
