@@ -308,12 +308,14 @@ inline void setParameter(AstraCAN &Can0, int can_id, uint8_t paramID, uint32_t v
  */
 void Float2LEDec(float x, uint8_t (&buffer_data)[8]);
 
-// Given direct values for the CAN packet
-void CAN_sendPacket(uint32_t messageID, uint8_t data[], uint8_t dataLen, AstraCAN& Can0);
 
 // Using target device REV ID and REV API ID
 void CAN_sendPacket(uint8_t deviceId, int32_t apiId, uint8_t data[], uint8_t dataLen,
                     AstraCAN& Can0);
+
+// Given direct values for the CAN packet
+// In AstraREVCAN.cpp, this is defined differently depending on mcu.
+void CAN_sendPacket(uint32_t messageID, uint8_t data[], uint8_t dataLen, AstraCAN& Can0);
 
 
 #endif  // End library check
