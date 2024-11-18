@@ -2,6 +2,17 @@
 
 Standardizing ASTRA's embedded code.
 
+## Table of Contents
+
+ 1. [Overview](#overview)
+ 2. [Adding to an exiting PlatformIO project](#adding-to-an-existing-platformio-project)
+ 3. [Starting a new PlatformIO project](#adding-to-an-existing-platformio-project)
+ 4. [Naming conventions](#naming-conventions)
+ 5. [File List](#files)
+ 6. [Theory](#theory)
+ 7. [Updating this Repository](#updating-this-repository)
+ 8. [Responsible People](#responsible-people)
+
 ## Overview
 
 This library provides classes, structs, functions, pin number macros, and
@@ -83,7 +94,9 @@ are 90% of the reason the `.cpp` files need the option to be disabled.
 
 When making any update to this repository, before updating `main`, make sure to increment the version number in `library.json`, line 3.
 Without making this change, projects using this library will not update automatically. Instead, they will have to delete the library
-locally and let PlatformIO re-download it.
+locally and let PlatformIO re-download it. (Not sure if this is true.......)
+
+When making commits, it would be amazing if you use [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/#summary).
 
 ### Creating a new project header
 
@@ -95,3 +108,17 @@ locally and let PlatformIO re-download it.
  1. Place the header file in `include/` and its implementation `.cpp` in `src/`.
  2. Choose a library macro to enable its files.
  3. Place the library macro in this file for documentation.
+
+## Responsible People
+
+### Author
+
+Name: David Sharpe
+
+Email: <ds0196@uah.edu>
+
+### Maintainer
+
+Name: David Sharpe
+
+Email: <ds0196@uah.edu>
