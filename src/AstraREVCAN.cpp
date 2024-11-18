@@ -77,6 +77,30 @@ void CAN_setParameter(uint8_t deviceId, sparkMax_ConfigParameter parameterID,
 
 
 //--------------------------------------------------------------------------//
+//   Parsing REV Telemetry                                                  //
+//--------------------------------------------------------------------------//
+
+void CAN_parseStatus1(uint8_t frameIn[], uint64_t millisTime, motorStatus1 &status1) {
+    // (*C) Motor temperature is a dedicated byte in the data frame (4).
+    status1.motorTemperature = frameIn[4];
+
+    // (V) Motor voltage is 12-bit and comes from [5] and [6]
+    uint16_t voltageMSB = ((static_cast<uint16_t>(frameIn[6]) & 0xF) << 8);  // Lower 4 bits from [6]
+    uint16_t voltageLSB = frameIn[5];  // Full byte from [5]
+    status1.busVoltage = static_cast<float>(voltageMSB | voltageLSB) / 128.0;  // No re-interpret
+
+    // (A) Motor current is 12-bit and comes from [6] and [7]
+    uint16_t currentMSB = (static_cast<uint16_t>(frameIn[7]) << 4);  // Full byte from [7]
+    uint16_t currentLSB = ((static_cast<uint16_t>(frameIn[6]) & 0xF0) >> 4);  // Upper 4 bits from [6]
+    status1.outputCurrent = static_cast<float>(currentMSB | currentLSB) / 32.0;  // No re-interpret
+
+    status1.timestamp = millisTime;
+
+    // Ignore sensor velocity for now, tho it should be easy
+}
+
+
+//--------------------------------------------------------------------------//
 //   Basic Helper functions                                                 //
 //--------------------------------------------------------------------------//
 

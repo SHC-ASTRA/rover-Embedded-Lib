@@ -35,6 +35,8 @@ class AstraMotors {
     float maxDuty;
 
    public:
+
+    motorStatus1 status1;  // Keep public for now for testing
     
     /**
      * @brief Default constructor for a REV motor controller
