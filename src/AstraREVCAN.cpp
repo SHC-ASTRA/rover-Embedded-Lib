@@ -81,6 +81,10 @@ void CAN_setParameter(uint8_t deviceId, sparkMax_ConfigParameter parameterID,
 //--------------------------------------------------------------------------//
 
 void CAN_parseStatus1(uint8_t frameIn[], uint64_t millisTime, motorStatus1 &status1) {
+    // (RPM) Motor velocity is the first 32-bits, big endian(i think?) IEEE 754 float
+    uint32_t motorVel = (frameIn[3] << 24) | (frameIn[2] << 16) | (frameIn[1] << 8) | frameIn[0];
+    status1.sensorVelocity = *reinterpret_cast<float*>(&motorVel);
+
     // (*C) Motor temperature is a dedicated byte in the data frame (4).
     status1.motorTemperature = frameIn[4];
 
@@ -94,9 +98,8 @@ void CAN_parseStatus1(uint8_t frameIn[], uint64_t millisTime, motorStatus1 &stat
     uint16_t currentLSB = ((static_cast<uint16_t>(frameIn[6]) & 0xF0) >> 4);  // Upper 4 bits from [6]
     status1.outputCurrent = static_cast<float>(currentMSB | currentLSB) / 32.0;  // No re-interpret
 
+    // (ms) Timestamp
     status1.timestamp = millisTime;
-
-    // Ignore sensor velocity for now, tho it should be easy
 }
 
 

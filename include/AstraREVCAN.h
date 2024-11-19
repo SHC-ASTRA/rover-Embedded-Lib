@@ -277,7 +277,7 @@ void CAN_setParameter(uint8_t deviceId, sparkMax_ConfigParameter parameterID,
 
 
 /**
- * @brief Parse a 8-bit CAN data frame and pull temperature, voltage, and current.
+ * @brief Parse a 8-bit CAN data frame and pull temperature, voltage, current, and sensor velocity.
  * 
  * @param frameIn 8-bit data frame from CAN message
  * @param millisTime millis() when this CAN message was received
