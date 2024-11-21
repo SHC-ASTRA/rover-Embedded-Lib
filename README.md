@@ -5,13 +5,12 @@ Standardizing ASTRA's embedded code.
 ## Table of Contents
 
  1. [Overview](#overview)
- 2. [Adding to an exiting PlatformIO project](#adding-to-an-existing-platformio-project)
- 3. [Starting a new PlatformIO project](#adding-to-an-existing-platformio-project)
- 4. [Naming conventions](#naming-conventions)
- 5. [File List](#files)
- 6. [Theory](#theory)
- 7. [Updating this Repository](#updating-this-repository)
- 8. [Responsible People](#responsible-people)
+ 2. [Usage in PlatformIO](#usage-in-platformio)
+ 3. [Naming conventions](#naming-conventions)
+ 4. [File List](#files)
+ 5. [Theory](#theory)
+ 6. [Updating this Repository](#updating-this-repository)
+ 7. [Responsible People](#responsible-people)
 
 ## Overview
 
@@ -24,7 +23,9 @@ team-wide constants, just to name a few. Here are a few examples:
 * `COMMS_UART`: Macro for the UART interface used by each mcu.
 * `SERIAL_BAUD`: Standard baudrate for USB Serial used by all of ASTRA's mcu's.
 
-## Adding to an existing PlatformIO project
+## Usage in PlatformIO
+
+### Adding to an existing PlatformIO project
 
  1. Add the following line to `lib_deps` in your `/platformio.ini`:
 
@@ -33,11 +34,20 @@ team-wide constants, just to name a few. Here are a few examples:
  2. Add the include statement for your project. Ex: `#include "project/CITADEL.h"`
  3. Make sure to grab the correct dependencies for `/platformio.ini` from the project headers.
 
-## Starting a new PlatformIO project
+### Starting a new PlatformIO project
 
  1. Copy the example file from `/.pio/libdeps/[board]/rover-Embedded-Lib/examples/Template/`
  2. Grab the correct project header from `include/project/` or create one
  from `TEMPLATE.h`
+
+### Updating your libraries
+
+PlatformIO provides a button which will check for updates in all of your dependencies and update them for you. Here's how to take advantage of it:
+
+* Open the PlatformIO side-bar (the alien on the left)
+* Under "Project Tasks" (the top pane), for each microcontroller specified in your platformio.ini, there are a handful of folders. "General" and "Platform" should be open already.
+* Open the "Dependencies" folder.
+* Click "Update".
 
 ## Naming conventions
 
