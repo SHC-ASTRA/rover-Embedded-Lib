@@ -61,26 +61,6 @@ float AstraMotors::convertControllerValue(float stickValue) {
 }
 
 
-int AstraMotors::getControlMode() const {
-    return controlMode;
-}
-
-int AstraMotors::getSpeed() const {
-    return currentMotorSpeed;
-}
-
-float AstraMotors::getDuty() const {
-    return currentDutyCycle;
-}
-float AstraMotors::getSetDuty() const {
-    return targetDutyCycle;
-}
-
-int AstraMotors::getID() const {
-    return motorID;
-}
-
-
 void AstraMotors::setSpeed(float val) {  // controller input value
     if (abs(val) <= 0.02) {
         targetMotorSpeed = 0;
@@ -102,18 +82,6 @@ void AstraMotors::setDuty(float val) {  // controller input value
 #    endif
 }
 
-
-void AstraMotors::identify() {
-    CAN_identifySparkMax(motorID, *canObject);
-}
-
-void AstraMotors::setBrake(bool enable) {
-    CAN_setParameter(motorID, sparkMax_ConfigParameter::kIdleMode, sparkMax_ParameterType::kUint32, static_cast<uint32_t>(enable), *canObject);
-}
-
-void AstraMotors::sendDuty() {
-    CAN_sendDutyCycle(motorID, currentDutyCycle, *canObject);
-}
 
 void AstraMotors::sendDuty(float val) {
     setDuty(val);

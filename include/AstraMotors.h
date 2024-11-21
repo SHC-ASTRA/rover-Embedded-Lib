@@ -58,20 +58,56 @@ class AstraMotors {
      */
     float convertControllerValue(float stickvalue);
     
-    int getControlMode() const;
-    int getSpeed() const;  // Get the current speed
-    float getDuty() const;
-    float getSetDuty() const;
-    int getID() const;  // Get the motor's set CAN ID
-
-    void setSpeed(float val);  // Set the targetMotorSpeed variable
-    void setDuty(float val);
+    //---------------------------------------------//
+    //  Getters
+    //---------------------------------------------//
     
-    void identify();             // Send the identify command to the motor
-    void setBrake(bool enable);  // Enable either brake (true) or coast (false) idle mode
-    void sendDuty();             // Send the currently tracked duty cycle to the motor
+    inline int getControlMode() const {
+        return controlMode;
+    }
+    // Get the current speed
+    inline int getSpeed() const {
+        return currentMotorSpeed;
+    }
+    inline float getDuty() const {
+        return currentDutyCycle;
+    }
+    inline float getSetDuty() const {
+        return targetDutyCycle;
+    }
+    // Get the motor's set CAN ID
+    inline int getID() const {
+        return motorID;
+    }
+
+    //---------------------------------------------//
+    //  Setters
+    //---------------------------------------------//
+
+    // Set the targetMotorSpeed variable
+    void setSpeed(float val);
+    void setDuty(float val);
+
+    // Update the current speed to try and match targetMotorSpeed
+    void UpdateForAcceleration();
+
+    //---------------------------------------------//
+    //  Controlling physical motor
+    //---------------------------------------------//
+    
+    // Send the identify command to the motor
+    inline void identify() {
+        CAN_identifySparkMax(motorID, *canObject);
+    }
+    // Enable either brake (true) or coast (false) idle mode
+    inline void setBrake(bool enable) {
+        CAN_setParameter(motorID, sparkMax_ConfigParameter::kIdleMode, sparkMax_ParameterType::kUint32, static_cast<uint32_t>(enable), *canObject);
+    }
+    // Send the currently tracked duty cycle to the motor
+    inline void sendDuty() {
+        CAN_sendDutyCycle(motorID, currentDutyCycle, *canObject);
+    }
+    
     void sendDuty(float val);    // Send this duty cycle to the motor (Bypasses acceleration)
     void accelerate();           // Run UpdateForAcceleration() and sendDuty()
-    
-    void UpdateForAcceleration();  // Update the current speed to try and match targetMotorSpeed
 };
