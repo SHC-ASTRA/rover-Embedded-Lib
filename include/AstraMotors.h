@@ -38,6 +38,8 @@ class AstraMotors {
     float dutyCycleAccel;
     float maxDuty;
 
+    int gearBox;  // Gearbox ratio attached to motor; e.g. for 64:1, use 64
+
    public:
 
 #ifndef OLD_ASTRACAN_ENABLE
@@ -90,6 +92,11 @@ class AstraMotors {
     //---------------------------------------------//
     //  Setters
     //---------------------------------------------//
+
+    // Gearbox ratio attached to motor; e.g. for 64:1, use 64
+    inline void setGearBox(int ratio) {
+        gearBox = ratio;
+    }
 
     // Set the targetMotorSpeed variable
     void setSpeed(float val);
