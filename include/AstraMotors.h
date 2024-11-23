@@ -37,6 +37,7 @@ class AstraMotors {
    public:
 
     motorStatus1 status1;  // Keep public for now for testing
+    motorStatus2 status2;
     
     /**
      * @brief Default constructor for a REV motor controller
@@ -97,7 +98,8 @@ class AstraMotors {
     
     // Send the identify command to the motor
     inline void identify() {
-        CAN_identifySparkMax(motorID, *canObject);
+        // CAN_identifySparkMax(motorID, *canObject);
+        identifyDevice(*canObject, motorID);
     }
     // Enable either brake (true) or coast (false) idle mode
     inline void setBrake(bool enable) {
@@ -105,7 +107,8 @@ class AstraMotors {
     }
     // Send the currently tracked duty cycle to the motor
     inline void sendDuty() {
-        CAN_sendDutyCycle(motorID, currentDutyCycle, *canObject);
+        // CAN_sendDutyCycle(motorID, currentDutyCycle, *canObject);
+        sendDutyCycle(*canObject, motorID, currentDutyCycle);
     }
     
     void sendDuty(float val);    // Send this duty cycle to the motor (Bypasses acceleration)
