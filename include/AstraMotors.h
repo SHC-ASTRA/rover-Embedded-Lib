@@ -55,7 +55,7 @@ class AstraMotors {
      * @param setMaxSpeed Max RPM for speed control mode
      * @param setMaxDuty Max percent speed for duty cycle control mode [-1, 1]
      */
-    AstraMotors(AstraCAN* setCanObject, int setMotorID, int setCtrlMode, bool inv, int setMaxSpeed = 100, float setMaxDuty = 1.0);
+    AstraMotors(AstraCAN* setCanObject, int setMotorID, int setCtrlMode = CTRL_DUTYCYCLE, bool inv = false, int setMaxSpeed = 100, float setMaxDuty = 1.0);
 
     /**
      * @brief Clamps a joystick value between max and min speed or duty
