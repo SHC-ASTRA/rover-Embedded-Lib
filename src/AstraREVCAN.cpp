@@ -81,7 +81,7 @@ void CAN_setParameter(uint8_t deviceId, sparkMax_ConfigParameter parameterID,
 //--------------------------------------------------------------------------//
 
 void CAN_parseStatus1(uint8_t frameIn[], uint64_t millisTime, motorStatus1 &status1) {
-    // (RPM) Motor velocity is the first 32-bits, big endian(i think?) IEEE 754 float
+    // (RPM) Motor velocity is the first 32-bits, little endian IEEE 754 float
     uint32_t motorVel = (frameIn[3] << 24) | (frameIn[2] << 16) | (frameIn[1] << 8) | frameIn[0];
     status1.sensorVelocity = *reinterpret_cast<float*>(&motorVel);
 
@@ -100,6 +100,17 @@ void CAN_parseStatus1(uint8_t frameIn[], uint64_t millisTime, motorStatus1 &stat
 
     // (ms) Timestamp
     status1.timestamp = millisTime;
+}
+
+void CAN_parseStatus2(uint8_t frameIn[], uint64_t millisTime, motorStatus2 &status2) {
+    // (?) Motor position is the first 32-bits, little endian IEEE 754 float
+    uint32_t motorPos = (frameIn[3] << 24) | (frameIn[2] << 16) | (frameIn[1] << 8) | frameIn[0];
+    status2.sensorPosition = *reinterpret_cast<float*>(&motorPos);
+
+    // Ignore second half of frame
+
+    // (ms) Timestamp
+    status2.timestamp = millisTime;
 }
 
 

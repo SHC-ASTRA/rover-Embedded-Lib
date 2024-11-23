@@ -259,6 +259,11 @@ struct motorStatus1 {
     uint64_t timestamp;
 };
 
+struct motorStatus2 {
+    float sensorPosition;
+    uint64_t timestamp;
+};
+
 
 //--------------------------------------------------------------------------//
 //   Specific REV Commands                                                  //
@@ -284,6 +289,8 @@ void CAN_setParameter(uint8_t deviceId, sparkMax_ConfigParameter parameterID,
  * @param status1 motorStatus1 struct to store parsed data
  */
 void CAN_parseStatus1(uint8_t frameIn[], uint64_t millisTime, motorStatus1 &status1);
+
+void CAN_parseStatus2(uint8_t frameIn[], uint64_t millisTime, motorStatus2 &status2);
 
 
 //-------------------------------------//
