@@ -283,18 +283,6 @@ void CAN_setParameter(uint8_t deviceId, sparkMax_ConfigParameter parameterID,
                       sparkMax_ParameterType type, uint32_t value, AstraCAN& Can0);
 
 
-/**
- * @brief Parse a 8-bit CAN data frame and pull temperature, voltage, current, and sensor velocity.
- * 
- * @param frameIn 8-bit data frame from CAN message
- * @param millisTime millis() when this CAN message was received
- * @param status1 motorStatus1 struct to store parsed data
- */
-void CAN_parseStatus1(uint8_t frameIn[], uint64_t millisTime, motorStatus1 &status1);
-
-void CAN_parseStatus2(uint8_t frameIn[], uint64_t millisTime, motorStatus2 &status2);
-
-
 //-------------------------------------//
 //  Backwards Compatibility Functions  //
 //-------------------------------------//

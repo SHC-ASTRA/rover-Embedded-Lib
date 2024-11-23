@@ -98,6 +98,9 @@ class AstraMotors {
     // Update the current speed to try and match targetMotorSpeed
     void UpdateForAcceleration();
 
+    void parseStatus1(uint8_t frameIn[]);
+    void parseStatus2(uint8_t frameIn[]);
+
     //---------------------------------------------//
     //  Controlling physical motor
     //---------------------------------------------//
