@@ -40,7 +40,7 @@ class AstraMotors {
 
     int gearBox;  // Gearbox ratio attached to motor; e.g. for 64:1, use 64
 
-    bool rotatingToDeg;
+    bool rotatingToPos;
     float targetPos;
 
    public:
@@ -139,7 +139,7 @@ class AstraMotors {
     void turnToDeg(float deg);     // Turn the motor to deg degrees
     // Abort turn by/to degrees
     inline void stopTurn() {
-        rotatingToDeg = false;
+        rotatingToPos = false;
         sendDuty(0);
     }
 };

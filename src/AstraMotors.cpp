@@ -43,7 +43,7 @@ AstraMotors::AstraMotors(AstraCAN* setCanObject, int setMotorID, int setCtrlMode
 #   else
     gearBox = 100;  // default to 100:1 for Core
 #   endif
-    rotatingToDeg = false;
+    rotatingToPos = false;
 }
 
 float AstraMotors::convertControllerValue(float stickValue) {
@@ -112,20 +112,20 @@ void AstraMotors::UpdateForAcceleration() {
     currentDutyCycle = targetDutyCycle;
 #    else
 
-    if (rotatingToDeg) {
-        if (abs(targetPos - status2.sensorPosition) < 0.1 || millis() - status2.timestamp > 100) {
-            rotatingToDeg = false;
-            sendDuty(0);
-        }
-        return;
-    }
-
     if (controlMode == CTRL_DUTYCYCLE && targetDutyCycle == 0) {
         currentDutyCycle = 0;
         return;
     }
     else if (controlMode == CTRL_SPEED && targetMotorSpeed == 0) {
         currentMotorSpeed = 0;
+        return;
+    }
+
+    if (rotatingToPos) {
+        if (millis() - status2.timestamp > 100 || (currentDutyCycle > 0 && status2.sensorPosition > targetPos - 1)
+            || (currentDutyCycle < 0 && status2.sensorPosition < targetPos + 1)) {
+            stopTurn();
+        }
         return;
     }
 
@@ -187,7 +187,7 @@ void AstraMotors::parseStatus2(uint8_t frameIn[]) {
 }
 
 void AstraMotors::turnByDeg(float deg) {
-    rotatingToDeg = true;
+    rotatingToPos = true;
     targetPos = status2.sensorPosition + ((deg / 360.0) * gearBox);
     const float dutyCycle = 0.075;  // Arbitrary for now
     if (deg < 0)
