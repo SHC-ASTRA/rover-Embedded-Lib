@@ -37,6 +37,13 @@ AstraMotors::AstraMotors(AstraCAN* setCanObject, int setMotorID, int setCtrlMode
     targetDutyCycle = 0;
     dutyCycleAccel = 0.05;
     maxDuty = setMaxDuty;
+
+#   ifdef TESTBED
+    gearBox = 64;  // default to 64:1 for Testbed
+#   else
+    gearBox = 100;  // default to 100:1 for Core
+#   endif
+    rotatingToDeg = false;
 }
 
 float AstraMotors::convertControllerValue(float stickValue) {
@@ -105,12 +112,21 @@ void AstraMotors::UpdateForAcceleration() {
     currentDutyCycle = targetDutyCycle;
 #    else
 
-    if (targetDutyCycle == 0) {
+    if (rotatingToDeg) {
+        if (abs(targetPos - status2.sensorPosition) < 0.1 || millis() - status2.timestamp > 100) {
+            rotatingToDeg = false;
+            sendDuty(0);
+        }
+        return;
+    }
+
+    if (controlMode == CTRL_DUTYCYCLE && targetDutyCycle == 0) {
         currentDutyCycle = 0;
         return;
     }
-    else if (targetMotorSpeed == 0) {
+    else if (controlMode == CTRL_SPEED && targetMotorSpeed == 0) {
         currentMotorSpeed = 0;
+        return;
     }
 
     if(controlMode == CTRL_DUTYCYCLE) {
@@ -168,6 +184,16 @@ void AstraMotors::parseStatus2(uint8_t frameIn[]) {
 
     // (ms) Timestamp
     status2.timestamp = millis();
+}
+
+void AstraMotors::turnByDeg(float deg) {
+    rotatingToDeg = true;
+    targetPos = status2.sensorPosition + ((deg / 360.0) * gearBox);
+    const float dutyCycle = 0.075;  // Arbitrary for now
+    if (deg < 0)
+        sendDuty(dutyCycle);
+    else
+        sendDuty(-1 * dutyCycle);
 }
 
 #endif  // __has_include("FlexCAN_T4.h")

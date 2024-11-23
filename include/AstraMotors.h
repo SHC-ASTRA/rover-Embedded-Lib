@@ -40,6 +40,9 @@ class AstraMotors {
 
     int gearBox;  // Gearbox ratio attached to motor; e.g. for 64:1, use 64
 
+    bool rotatingToDeg;
+    float targetPos;
+
    public:
 
 #ifndef OLD_ASTRACAN_ENABLE
@@ -131,4 +134,12 @@ class AstraMotors {
     
     void sendDuty(float val);    // Send this duty cycle to the motor (Bypasses acceleration)
     void accelerate();           // Run UpdateForAcceleration() and sendDuty()
+
+    void turnByDeg(float deg);     // Turn the motor by deg degrees
+    void turnToDeg(float deg);     // Turn the motor to deg degrees
+    // Abort turn by/to degrees
+    inline void stopTurn() {
+        rotatingToDeg = false;
+        sendDuty(0);
+    }
 };
