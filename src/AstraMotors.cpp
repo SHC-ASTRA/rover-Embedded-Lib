@@ -91,6 +91,10 @@ void AstraMotors::sendDuty(float val) {
 
 void AstraMotors::accelerate() {
     UpdateForAcceleration();
+#ifdef DEBUG
+    Serial.print("Accelerating to ");
+    Serial.println(currentDutyCycle);
+#endif
     if (controlMode == 1)  // Duty cycle mode
         sendDuty();
 }
@@ -107,7 +111,6 @@ void AstraMotors::UpdateForAcceleration() {
     }
     else if (targetMotorSpeed == 0) {
         currentMotorSpeed = 0;
-        return;
     }
 
     if(controlMode == CTRL_DUTYCYCLE) {

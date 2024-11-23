@@ -5,6 +5,8 @@
  *
  */
 
+#ifndef OLD_ASTRACAN_ENABLE
+
 // Don't require a platformio project to download a MCU CAN library if not using CAN
 // (AstraREVCAN.h will only be included if main.cpp includes it or we have the required MCU CAN
 // library)
@@ -50,9 +52,21 @@ void CAN_sendSpeed(uint8_t deviceId, float speed, AstraCAN& Can0) {
 }
 
 void CAN_sendDutyCycle(uint8_t deviceId, float dutyCycle, AstraCAN& Can0) {
-    uint8_t frame[8] = {0};
-    Float2LEDec(dutyCycle, frame);
-    CAN_sendPacket(deviceId, 0x02, frame, 8, Can0);
+    // DO NOT USE THE NEW CAN FUNCTIONS FOR THIS. SEE COMMENT BELOW.
+    // Ask David, Tristan, or Maddy. We don't fucking know why.
+    CanFrame msg = {0};
+    msg.identifier = 0x2050080 + deviceId;
+    msg.extd = 1;
+    msg.data_length_code = 8;
+
+    Float2LEDec(dutyCycle, msg.data);
+
+    Can0.writeFrame(msg);
+
+    // WARNING: DO NOT USE THIS CODE. THE MOTORS WILL HAVE A SEIZURE.
+    // uint8_t frame[8] = {0};
+    // Float2LEDec(dutyCycle, frame);
+    // CAN_sendPacket(deviceId, 0x02, frame, 8, Can0);
 }
 
 void CAN_sendHeartbeat(uint8_t deviceId, AstraCAN& Can0) {
@@ -136,6 +150,8 @@ void CAN_sendPacket(uint8_t deviceId, int32_t apiId, uint8_t data[], uint8_t dat
             Serial.print(data[i], HEX);
             Serial.print(" ");
         }
+        Serial.print(" at ");
+        Serial.print(millis());
         Serial.println();
     }
 #endif
@@ -187,3 +203,5 @@ void CAN_sendPacket(uint32_t messageID, uint8_t data[], uint8_t dataLen, AstraCA
 
 
 #endif  // End microcontroller check
+
+#endif

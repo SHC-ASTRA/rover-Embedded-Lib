@@ -8,7 +8,11 @@
 
 #include <cmath>
 
-#include "AstraREVCAN.h"
+#ifdef OLD_ASTRACAN_ENABLE
+#   include "AstraCAN.h"
+#else
+#   include "AstraREVCAN.h"
+#endif
 
 enum motorCtrlMode {
     CTRL_SPEED = 0,
@@ -36,8 +40,10 @@ class AstraMotors {
 
    public:
 
+#ifndef OLD_ASTRACAN_ENABLE
     motorStatus1 status1;  // Keep public for now for testing
     motorStatus2 status2;
+#endif
     
     /**
      * @brief Default constructor for a REV motor controller
@@ -103,7 +109,9 @@ class AstraMotors {
     }
     // Enable either brake (true) or coast (false) idle mode
     inline void setBrake(bool enable) {
+#ifndef OLD_ASTRACAN_ENABLE
         CAN_setParameter(motorID, sparkMax_ConfigParameter::kIdleMode, sparkMax_ParameterType::kUint32, static_cast<uint32_t>(enable), *canObject);
+#endif
     }
     // Send the currently tracked duty cycle to the motor
     inline void sendDuty() {

@@ -6,6 +6,8 @@
  */
 #pragma once
 
+#ifndef OLD_ASTRACAN_ENABLE
+
 #include <Arduino.h>  // For fixed-size integer type definitions
 
 
@@ -336,3 +338,5 @@ void CAN_sendPacket(uint32_t messageID, uint8_t data[], uint8_t dataLen, AstraCA
 
 
 #endif  // End library check
+
+#endif
