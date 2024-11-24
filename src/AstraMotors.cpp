@@ -98,10 +98,6 @@ void AstraMotors::sendDuty(float val) {
 
 void AstraMotors::accelerate() {
     UpdateForAcceleration();
-#ifdef DEBUG
-    Serial.print("Accelerating to ");
-    Serial.println(currentDutyCycle);
-#endif
     if (controlMode == 1)  // Duty cycle mode
         sendDuty();
 }
@@ -125,6 +121,9 @@ void AstraMotors::UpdateForAcceleration() {
         if (millis() - status2.timestamp > 100 || (currentDutyCycle > 0 && status2.sensorPosition > targetPos - 1)
             || (currentDutyCycle < 0 && status2.sensorPosition < targetPos + 1)) {
             stopTurn();
+#ifdef DEBUG
+            Serial.println("Stopping rotation.");
+#endif
         }
         return;
     }
@@ -189,11 +188,15 @@ void AstraMotors::parseStatus2(uint8_t frameIn[]) {
 void AstraMotors::turnByDeg(float deg) {
     rotatingToPos = true;
     targetPos = status2.sensorPosition + ((deg / 360.0) * gearBox);
-    const float dutyCycle = 0.075;  // Arbitrary for now
+    const float dutyCycle = 0.05;  // Arbitrary for now
     if (deg < 0)
         sendDuty(dutyCycle);
     else
         sendDuty(-1 * dutyCycle);
+#ifdef DEBUG
+    Serial.print("Turning to pos: ");
+    Serial.println(targetPos);
+#endif
 }
 
 #endif  // __has_include("FlexCAN_T4.h")
