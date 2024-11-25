@@ -143,4 +143,18 @@ class AstraMotors {
         rotatingToPos = false;
         sendDuty(0);
     }
+
+    inline int direction() {
+        if (controlMode == CTRL_DUTYCYCLE) {
+            if (currentDutyCycle == 0)
+                return 0;
+            else
+                return (currentDutyCycle > 0) ? 1 : -1;
+        } else if (controlMode == CTRL_SPEED) {
+            if (currentMotorSpeed == 0)
+                return 0;
+            else
+                return (currentMotorSpeed > 0) ? 1 : -1;
+        }
+    }
 };
