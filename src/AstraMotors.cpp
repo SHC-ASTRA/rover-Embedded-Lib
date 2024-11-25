@@ -190,15 +190,25 @@ void AstraMotors::parseStatus2(uint8_t frameIn[]) {
 void AstraMotors::turnByDeg(float deg) {
     rotatingToPos = true;
     targetPos = status2.sensorPosition + ((deg / 360.0) * gearBox);
-    const float dutyCycle = 0.05;  // Arbitrary for now
-    if (deg < 0)
-        sendDuty(dutyCycle);
-    else
-        sendDuty(-1 * dutyCycle);
+
 #ifdef DEBUG
     Serial.print("Turning to pos: ");
     Serial.println(targetPos);
 #endif
+
+    if (controlMode == CTRL_DUTYCYCLE) {
+        const float dutyCycle = 0.15;  // Arbitrary for now
+        if (deg < 0)
+            sendDuty(dutyCycle);
+        else
+            sendDuty(-1 * dutyCycle);
+    } else if (controlMode == CTRL_SPEED) {
+        const float speed = 100;  // Arbitrary for now
+        if (deg < 0)
+            setSpeed(speed);
+        else
+            setSpeed(-1 * speed);
+    }
 }
 
 #endif  // __has_include("FlexCAN_T4.h")
