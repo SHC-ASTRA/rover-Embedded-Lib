@@ -137,8 +137,9 @@ class AstraMotors {
 
     void turnByDeg(float deg);     // Turn the motor by deg degrees
     void turnToDeg(float deg);     // Turn the motor to deg degrees
-    // Abort turn by/to degrees
-    inline void stopTurn() {
+    
+    // Stop motor; does not activate brake mode
+    inline void stop() {
         rotatingToPos = false;
         sendDuty(0);
     }
