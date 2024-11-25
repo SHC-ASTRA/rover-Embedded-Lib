@@ -118,8 +118,10 @@ void AstraMotors::UpdateForAcceleration() {
     }
 
     if (rotatingToPos) {
-        if (millis() - status2.timestamp > 100 || (currentDutyCycle > 0 && status2.sensorPosition > targetPos - 1)
-            || (currentDutyCycle < 0 && status2.sensorPosition < targetPos + 1)) {
+        if (millis() - status2.timestamp > 100
+            || (direction() == 1 && status2.sensorPosition > targetPos - 1)
+            || (direction() == -1 && status2.sensorPosition < targetPos + 1))
+        {
             stop();
 #ifdef DEBUG
             Serial.println("Stopping rotation.");
