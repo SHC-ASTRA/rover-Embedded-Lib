@@ -150,7 +150,7 @@ class AstraMotors {
                 return 0;
             else
                 return (currentDutyCycle > 0) ? 1 : -1;
-        } else if (controlMode == CTRL_SPEED) {
+        } else {
             if (currentMotorSpeed == 0)
                 return 0;
             else
