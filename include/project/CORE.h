@@ -11,6 +11,8 @@
 
 #    warning "ESP32 board for Core is WIP! Did you mean to use testbed?"
 
+#   define WHEEL_CIRCUMFERENCE 1.064  // Wheel's circumference in meters
+
 
 #elif defined(CORE_TEENSY)  // URC 2024 setup
 

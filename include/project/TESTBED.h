@@ -44,6 +44,8 @@
 #    define MOTOR_ID_BL 4  // REV motor ID for back left wheel
 #    define MOTOR_ID_BR 3  // REV motor ID for back right wheel
 
+#   define WHEEL_CIRCUMFERENCE 0.6168  // Wheel's circumference in meters
+
 #endif
 
 
