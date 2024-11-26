@@ -281,16 +281,27 @@ struct motorStatus2 {
 //   Specific REV Commands                                                  //
 //--------------------------------------------------------------------------//
 
-void CAN_sendSpeed(uint8_t deviceId, float speed, AstraCAN& Can0);
+void CAN_enumerate(AstraCAN& Can0);
+
 
 void CAN_sendDutyCycle(uint8_t deviceId, float dutyCycle, AstraCAN& Can0);
+
+void CAN_sendVelocity(uint8_t deviceId, float speed, AstraCAN& Can0);
+
+void CAN_sendSmartVelocity(uint8_t deviceId, float speed, AstraCAN& Can0);
+
+void CAN_sendPosition(uint8_t deviceId, float position, AstraCAN& Can0);
+
 
 void CAN_sendHeartbeat(uint8_t deviceId, AstraCAN& Can0);
 
 void CAN_identifySparkMax(uint8_t deviceId, AstraCAN& Can0);
 
+
 void CAN_setParameter(uint8_t deviceId, sparkMax_ConfigParameter parameterID,
                       sparkMax_ParameterType type, uint32_t value, AstraCAN& Can0);
+
+void CAN_reqParameter(uint8_t deviceId, sparkMax_ConfigParameter parameterID, AstraCAN& Can0);
 
 
 //-------------------------------------//
