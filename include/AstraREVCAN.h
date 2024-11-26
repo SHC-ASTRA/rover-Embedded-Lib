@@ -253,6 +253,16 @@ enum class sparkMax_faultID {
     kHardLimitRev = 15
 };
 
+enum class sparkMax_ctrlType {
+    kDutyCycle = 0,
+    kVelocity = 1,
+    kVoltage = 2,
+    kPosition = 3,
+    kSmartMotion = 4,
+    kCurrent = 5,
+    kSmartVelocity = 6
+};
+
 struct motorStatus1 {
     float sensorVelocity;
     uint8_t motorTemperature;

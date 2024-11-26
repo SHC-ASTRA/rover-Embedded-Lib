@@ -89,6 +89,12 @@ void CAN_setParameter(uint8_t deviceId, sparkMax_ConfigParameter parameterID,
     CAN_sendPacket(deviceId, static_cast<uint8_t>(parameterID) | 0x300, frame, 5, Can0);
 }
 
+void CAN_getParameter(uint8_t deviceId, sparkMax_ConfigParameter parameterID, AstraCAN& Can0) {
+    uint8_t frame[8] = {0};
+
+    CAN_sendPacket(deviceId, static_cast<uint8_t>(parameterID) | 0x300, frame, 0, Can0);
+}
+
 
 //--------------------------------------------------------------------------//
 //   Basic Helper functions                                                 //
