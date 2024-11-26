@@ -157,4 +157,8 @@ class AstraMotors {
                 return (currentMotorSpeed > 0) ? 1 : -1;
         }
     }
+
+    inline bool isRotToPos() {
+        return rotatingToPos;
+    }
 };
