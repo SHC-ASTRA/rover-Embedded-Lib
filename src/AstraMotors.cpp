@@ -22,7 +22,7 @@ double map(double x, double in_min, double in_max, double out_min, double out_ma
 }
 
 
-AstraMotors::AstraMotors(AstraCAN* setCanObject, int setMotorID, int setCtrlMode, bool inv,
+AstraMotors::AstraMotors(AstraCAN* setCanObject, int setMotorID, sparkMax_ctrlType setCtrlMode, bool inv,
                          int setMaxSpeed, float setMaxDuty) {
     canObject = setCanObject;
     motorID = setMotorID;
@@ -53,7 +53,7 @@ float AstraMotors::convertControllerValue(float stickValue) {
         output *= -1;
     }
 
-    if (controlMode == 0)  // speed Control mode
+    if (controlMode == sparkMax_ctrlType::kVelocity)  // speed Control mode
     {
 #    ifdef ARM
         return 0;  // speed control not implemented
@@ -98,7 +98,7 @@ void AstraMotors::sendDuty(float val) {
 
 void AstraMotors::accelerate() {
     UpdateForAcceleration();
-    if (controlMode == 1)  // Duty cycle mode
+    if (controlMode == sparkMax_ctrlType::kDutyCycle)  // Duty cycle mode
         sendDuty();
 }
 
@@ -108,11 +108,11 @@ void AstraMotors::UpdateForAcceleration() {
     currentDutyCycle = targetDutyCycle;
 #    else
 
-    if (controlMode == CTRL_DUTYCYCLE && targetDutyCycle == 0) {
+    if (controlMode == sparkMax_ctrlType::kDutyCycle && targetDutyCycle == 0) {
         currentDutyCycle = 0;
         return;
     }
-    else if (controlMode == CTRL_SPEED && targetMotorSpeed == 0) {
+    else if (controlMode == sparkMax_ctrlType::kVelocity && targetMotorSpeed == 0) {
         currentMotorSpeed = 0;
         return;
     }
@@ -130,7 +130,7 @@ void AstraMotors::UpdateForAcceleration() {
         return;
     }
 
-    if(controlMode == CTRL_DUTYCYCLE) {
+    if(controlMode == sparkMax_ctrlType::kDutyCycle) {
         const float threshold = 0.1;
         const float current = currentDutyCycle;
         const float target = targetDutyCycle;
@@ -196,13 +196,13 @@ void AstraMotors::turnByDeg(float deg) {
     Serial.println(targetPos);
 #endif
 
-    if (controlMode == CTRL_DUTYCYCLE) {
+    if (controlMode == sparkMax_ctrlType::kDutyCycle) {
         const float dutyCycle = 0.15;  // Arbitrary for now
         if (deg < 0)
             sendDuty(dutyCycle);
         else
             sendDuty(-1 * dutyCycle);
-    } else if (controlMode == CTRL_SPEED) {
+    } else if (controlMode == sparkMax_ctrlType::kVelocity) {
         const float speed = 100;  // Arbitrary for now
         if (deg < 0)
             setSpeed(speed);

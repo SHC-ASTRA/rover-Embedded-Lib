@@ -26,7 +26,7 @@ long map(long x, long in_min, long in_max, long out_min, long out_max);
 class AstraMotors {
     AstraCAN* canObject;
     int motorID;  // REV motor ID
-    int controlMode;  // 0- Speed  1-Duty Cycle
+    sparkMax_ctrlType controlMode;  // 0 - Duty cycle  1 - Speed
     bool inverted;  // Inverts the speed of the motor, this should be true for right wheels
 
     int currentMotorSpeed;  // Current speed of the motor
@@ -60,7 +60,7 @@ class AstraMotors {
      * @param setMaxSpeed Max RPM for speed control mode
      * @param setMaxDuty Max percent speed for duty cycle control mode [-1, 1]
      */
-    AstraMotors(AstraCAN* setCanObject, int setMotorID, int setCtrlMode = CTRL_DUTYCYCLE, bool inv = false, int setMaxSpeed = 100, float setMaxDuty = 1.0);
+    AstraMotors(AstraCAN* setCanObject, int setMotorID, sparkMax_ctrlType setCtrlMode = sparkMax_ctrlType::kDutyCycle, bool inv = false, int setMaxSpeed = 100, float setMaxDuty = 1.0);
 
     /**
      * @brief Clamps a joystick value between max and min speed or duty
@@ -74,7 +74,7 @@ class AstraMotors {
     //  Getters
     //---------------------------------------------//
     
-    inline int getControlMode() const {
+    inline sparkMax_ctrlType getControlMode() const {
         return controlMode;
     }
     // Get the current speed
@@ -145,7 +145,7 @@ class AstraMotors {
     }
 
     inline int direction() {
-        if (controlMode == CTRL_DUTYCYCLE) {
+        if (controlMode == sparkMax_ctrlType::kDutyCycle) {
             if (currentDutyCycle == 0)
                 return 0;
             else
