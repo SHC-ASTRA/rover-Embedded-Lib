@@ -232,7 +232,7 @@ enum class sparkMax_ConfigParameter : int32_t {
     NumParameters = 0x9E,
 };
 
-enum class ParameterStatus {
+enum class sparkMax_paramStatus {
     kOK = 0,
     kInvalidID = 1,
     kMismatchType = 2,
