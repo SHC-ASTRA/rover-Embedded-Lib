@@ -272,6 +272,15 @@ enum class sparkMax_ctrlType {
     kSmartVelocity = 6
 };
 
+struct motorStatus0 {
+    double appliedOutput;
+    uint16_t faults;
+    uint16_t stickyFaults;
+    uint8_t lock;
+    uint8_t isInverted;
+    uint64_t timestamp;
+};
+
 struct motorStatus1 {
     float sensorVelocity;
     uint8_t motorTemperature;

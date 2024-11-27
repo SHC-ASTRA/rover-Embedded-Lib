@@ -46,6 +46,7 @@ class AstraMotors {
    public:
 
 #ifndef OLD_ASTRACAN_ENABLE
+    motorStatus0 status0;
     motorStatus1 status1;  // Keep public for now for testing
     motorStatus2 status2;
 #endif
@@ -108,6 +109,7 @@ class AstraMotors {
     // Update the current speed to try and match targetMotorSpeed
     void UpdateForAcceleration();
 
+    void parseStatus0(uint8_t frameIn[]);
     void parseStatus1(uint8_t frameIn[]);
     void parseStatus2(uint8_t frameIn[]);
 

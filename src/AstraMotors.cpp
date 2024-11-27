@@ -156,6 +156,28 @@ void AstraMotors::UpdateForAcceleration() {
 #    endif
 }
 
+void AstraMotors::parseStatus0(uint8_t frameIn[]) {
+    // (A) Applied output is 16-bit and comes from [0] and [1]
+    uint16_t outputMSB = (frameIn[1] << 8);  // Full byte from [1]
+    uint16_t outputLSB = frameIn[0];  // Full byte from [0]
+    status0.appliedOutput = static_cast<float>(outputMSB | outputLSB) / 32767.0;  // No re-interpret
+
+    // (bits) Faults are 16-bit and come from [2] and [3]
+    status0.faults = (frameIn[3] << 8) | frameIn[2];
+
+    // (bits) Sticky faults are 16-bit and come from [4] and [5]
+    status0.stickyFaults = (frameIn[5] << 8) | frameIn[4];
+
+    // (bits) Lock is a dedicated bit in the data frame (7)
+    status0.lock = (frameIn[6] >> 2) & 0x3;
+
+    // (bit) Inverted is a dedicated bit in the data frame (7)
+    status0.isInverted = (frameIn[6] >> 1) & 0x1;
+
+    // (ms) Timestamp
+    status0.timestamp = millis();
+}
+
 void AstraMotors::parseStatus1(uint8_t frameIn[]) {
     // (RPM) Motor velocity is the first 32-bits, little endian IEEE 754 float
     uint32_t motorVel = (frameIn[3] << 24) | (frameIn[2] << 16) | (frameIn[1] << 8) | frameIn[0];
