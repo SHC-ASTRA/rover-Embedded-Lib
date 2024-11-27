@@ -232,6 +232,15 @@ enum class sparkMax_ConfigParameter : int32_t {
     NumParameters = 0x9E,
 };
 
+enum class ParameterStatus {
+    kOK = 0,
+    kInvalidID = 1,
+    kMismatchType = 2,
+    kAccessMode = 3,
+    kInvalid = 4,
+    kNotImplementedDeprecated = 5,
+};
+
 enum class sparkMax_IdleMode { kCoast = 0, kBrake = 1 };
 
 enum class sparkMax_faultID {
@@ -344,6 +353,8 @@ void CAN_sendPacket(uint8_t deviceId, int32_t apiId, uint8_t data[], uint8_t dat
 // Given direct values for the CAN packet
 // In AstraREVCAN.cpp, this is defined differently depending on mcu.
 void CAN_sendPacket(uint32_t messageID, uint8_t data[], uint8_t dataLen, AstraCAN& Can0);
+
+void printREVFrame(CanFrame frame);
 
 
 #endif  // End library check

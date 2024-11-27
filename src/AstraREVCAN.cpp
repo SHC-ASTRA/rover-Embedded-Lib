@@ -152,6 +152,28 @@ void CAN_sendPacket(uint8_t deviceId, int32_t apiId, uint8_t data[], uint8_t dat
     CAN_sendPacket(createdId, data, dataLen, Can0);
 }
 
+void printREVFrame(CanFrame frame) {
+    uint8_t deviceId = frame.identifier & 0x3F;
+    uint32_t apiId = (frame.identifier >> 6) & 0x3FF;
+
+    Serial.print(apiId, HEX);
+    Serial.print(" from ");
+    Serial.print(deviceId);
+    // Message data:
+    if (frame.data_length_code == 0)
+        Serial.print(" - no data.");
+    else {
+        Serial.print(" - data: (");
+        Serial.print(frame.data_length_code);
+        Serial.print(" B) ");
+        for (int i = 0; i < frame.data_length_code; i++) {
+            Serial.print(frame.data[i], HEX);
+            Serial.print(" ");
+        }
+    }
+    Serial.println();
+}
+
 
 //--------------------------------------------------------------------------//
 //   Microcontroller-specific                                               //
