@@ -131,6 +131,12 @@ class AstraMotors {
         // CAN_sendDutyCycle(motorID, currentDutyCycle, *canObject);
         sendDutyCycle(*canObject, motorID, currentDutyCycle);
     }
+
+    inline void sendSpeed() {
+#ifndef OLD_ASTRACAN_ENABLE
+        CAN_sendVelocity(motorID, currentMotorSpeed, *canObject);
+#endif
+    }
     
     void sendDuty(float val);    // Send this duty cycle to the motor (Bypasses acceleration)
     void accelerate();           // Run UpdateForAcceleration() and sendDuty()
