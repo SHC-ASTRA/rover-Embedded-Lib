@@ -31,6 +31,7 @@ class AstraMotors {
 
     int currentMotorSpeed;  // Current speed of the motor
     int targetMotorSpeed;   // What the speed of the motor should be
+    float speedAccel;
     int maxSpeed;
 
     float currentDutyCycle;

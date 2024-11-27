@@ -31,6 +31,7 @@ AstraMotors::AstraMotors(AstraCAN* setCanObject, int setMotorID, sparkMax_ctrlTy
 
     currentMotorSpeed = 0;
     targetMotorSpeed = 0;
+    speedAccel = 5;
     maxSpeed = setMaxSpeed;
 
     currentDutyCycle = 0;
@@ -151,6 +152,28 @@ void AstraMotors::UpdateForAcceleration() {
                 targetDutyCycle = 0;
             }
             currentDutyCycle = 0;
+        }
+    } else if (controlMode == sparkMax_ctrlType::kSmartVelocity) {
+        currentMotorSpeed = targetMotorSpeed;
+    } else {
+        const float threshold = 5;
+        const float current = currentMotorSpeed;
+        const float target = targetMotorSpeed;
+
+        if (abs(target - current) <= threshold) {  // if within threshold, just set it, don't gradually accelerate
+            currentMotorSpeed = targetMotorSpeed;
+        } else if (current < target - threshold) {  // increment if below set
+            currentMotorSpeed += speedAccel;
+        } else if (current > target + threshold) {  // decrement if above set
+            currentMotorSpeed -= speedAccel;
+        } else {
+            if ((current > 0 && target < 0) ||
+                (current < 0 && target > 0))  // if sticks in opposite direction, quick stop
+            {
+                currentMotorSpeed = 0;
+                targetMotorSpeed = 0;
+            }
+            currentMotorSpeed = 0;
         }
     }
 #    endif
