@@ -94,6 +94,10 @@ class AstraMotors {
         return motorID;
     }
 
+    inline int getGearBox() const {
+        return gearBox;
+    }
+
     //---------------------------------------------//
     //  Setters
     //---------------------------------------------//
