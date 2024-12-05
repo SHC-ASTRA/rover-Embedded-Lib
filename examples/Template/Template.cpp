@@ -100,7 +100,6 @@ void setup() {
 //    /////////      //////////    //              //
 //                                                 //
 //-------------------------------------------------//
-
 void loop() {
     //----------//
     //  Timers  //
@@ -144,7 +143,9 @@ void loop() {
         args[0].toLowerCase();          // Make command case-insensitive
         String command = args[0];       // To make processing code more readable
 
-
+        //--------//
+        //  Misc  //
+        //--------//
         /**/ if (command == "ping") {
             Serial.println("pong");
         }
@@ -163,8 +164,17 @@ void loop() {
                 digitalWrite(LED_BUILTIN, ledState);
             }
         }
+
+        //-----------//
+        //  Sensors  //
+        //-----------//
+
+        //----------//
+        //  Motors  //
+        //----------//
     }
 }
+
 
 //------------------------------------------------------------------------------------------------//
 //  Function definitions
