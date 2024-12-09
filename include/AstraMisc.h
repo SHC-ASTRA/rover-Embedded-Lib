@@ -23,6 +23,24 @@
 #define CMD_DELIM ','
 
 
+// Standard struct to consolidate timer variables
+// Example Usage:
+//
+// Timer ledBlink;
+// ledBlink.interval = 1000;
+// ...
+// if (millis() - ledBlink.lastMillis >= ledBlink.interval) {
+//     ledBlink.lastMillis = millis();
+//     ledBlink.state = !ledBlink.state;
+//     digitalWrite(LED_BUILTIN, ledBlink.state);
+// }
+struct Timer {
+    unsigned long lastMillis = 0;
+    unsigned long interval = 0;  // e.g. (millis() - lastMillis >= interval)
+    int state = 0;
+};
+
+
 // TODO: Maybe loopHeartbeats() can go here?
 // It could take AstraMotors*[] to address having multiple motors.
 // Using a for loop to iterate through the motors
