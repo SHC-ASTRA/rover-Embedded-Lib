@@ -22,6 +22,8 @@
 // All String messages for Astra embedded should use this delimiter
 #define CMD_DELIM ','
 
+typedef unsigned long ASTRA_TIME_T;
+
 
 // Standard struct to consolidate timer variables
 // Example Usage:
@@ -35,8 +37,8 @@
 //     digitalWrite(LED_BUILTIN, ledBlink.state);
 // }
 struct Timer {
-    unsigned long lastMillis = 0;
-    unsigned long interval = 0;  // e.g. (millis() - lastMillis >= interval)
+    ASTRA_TIME_T lastMillis = 0;
+    ASTRA_TIME_T interval = 0;  // e.g. (millis() - lastMillis >= interval)
     int state = 0;
 };
 
@@ -149,6 +151,144 @@ void parseInput(const String input, std::vector<String>& args, const char delim)
 
     // output is via vector<String>& args
 }
+
+
+// Whether or not to print on every stopwatch action
+#define STOPWATCH_PRINT
+// Serial(*) to use for stopwatch printouts
+#define STOPWATCH_SERIAL Serial
+
+class Stopwatch_t {
+private:
+    ASTRA_TIME_T start_time = 0;
+    ASTRA_TIME_T stop_time = 0;
+    std::vector<ASTRA_TIME_T> lap_times;
+
+public:
+    void printMicros(ASTRA_TIME_T stamp) const {
+        if (stamp < 2000) {  // < 2 ms
+            STOPWATCH_SERIAL.print(stamp);
+            STOPWATCH_SERIAL.print(" μs");
+        } else if (stamp < 2 * 1000 * 1000) {  // < 2 s
+            STOPWATCH_SERIAL.print(stamp / 1000.0);
+            STOPWATCH_SERIAL.print(" ms");
+        } else if (stamp < 2 * 1000 * 1000 * 60) {  // < 2 min
+            STOPWATCH_SERIAL.print(stamp / (1000.0 * 1000.0));
+            STOPWATCH_SERIAL.print(" s");
+        } else {  // >= 2 min
+            STOPWATCH_SERIAL.print(stamp / (1000.0 * 1000.0 * 60.0));
+            STOPWATCH_SERIAL.print(" min");
+        }
+    }
+
+    /**
+     * @brief Resets all values and starts stopwatch at current micros()
+     *
+     * @return ASTRA_TIME_T start_time = micros()
+     */
+    ASTRA_TIME_T start() {
+        start_time = micros();
+        stop_time = 0;
+        lap_times.clear();
+
+#ifdef STOPWATCH_PRINT
+        STOPWATCH_SERIAL.print("Stopwatch started at ");
+        printMicros(start_time);
+        STOPWATCH_SERIAL.println();
+#endif
+
+        return start_time;
+    }
+
+    /**
+     * @brief Records current micros() as a lap time
+     *
+     * @return ASTRA_TIME_T lap_time = micros()
+     */
+    ASTRA_TIME_T lap() {
+        ASTRA_TIME_T lap_time = micros();
+        lap_times.push_back(lap_time);
+
+#ifdef STOPWATCH_PRINT
+        STOPWATCH_SERIAL.print("Stopwatch lapped (");
+        STOPWATCH_SERIAL.print(lap_times.size()-1);
+        STOPWATCH_SERIAL.print(") at ");
+        printMicros(lap_time);
+        STOPWATCH_SERIAL.println();
+#endif
+
+        return lap_time;
+    }
+
+    /**
+     * @brief Records the current micros() as the stop time and prints summary
+     *
+     * @return ASTRA_TIME_T elapsed_time = micros() - start_time
+     */
+    ASTRA_TIME_T stop() {
+        stop_time = micros();
+
+#ifdef STOPWATCH_PRINT
+        STOPWATCH_SERIAL.print("Stopwatch stopped.");
+
+        printSummary();
+#endif
+
+        return stop_time - start_time;
+    }
+
+    /**
+     * @brief Prints stopwatch summary to STOPWATCH_SERIAL
+     * 
+     */
+    void printSummary() const {
+        STOPWATCH_SERIAL.println("Stopwatch status:");
+        STOPWATCH_SERIAL.print("Started at ");
+        printMicros(start_time);
+        STOPWATCH_SERIAL.println();
+
+        if (lap_times.size() > 0) {
+            for (const auto& i : lap_times) {
+                STOPWATCH_SERIAL.print("Lap ");
+                STOPWATCH_SERIAL.print(i + 1);
+                STOPWATCH_SERIAL.print(" at ");
+                printMicros(lap_times[i]);
+                STOPWATCH_SERIAL.print(": ");
+                if (i == 0)
+                    printMicros(lap_times[i] - start_time);
+                else
+                    printMicros(lap_times[i] - lap_times[i - 1]);
+                STOPWATCH_SERIAL.println();
+            }
+        }
+
+        STOPWATCH_SERIAL.print("Stopped at ");
+        printMicros(stop_time);
+        if (lap_times.size() > 0) {
+            STOPWATCH_SERIAL.print(": ");
+            printMicros(stop_time - lap_times.back());
+            STOPWATCH_SERIAL.println();
+        } else {
+            STOPWATCH_SERIAL.println();
+        }
+
+        STOPWATCH_SERIAL.print("Elapsed time: ");
+        printMicros(stop_time - start_time);
+        STOPWATCH_SERIAL.println();
+    }
+
+    ASTRA_TIME_T getStartTime() const {
+        return start_time;
+    }
+
+    ASTRA_TIME_T getStopTime() const {
+        return stop_time;
+    }
+
+    ASTRA_TIME_T getElapsedTime() const {
+        return stop_time - start_time;
+    }
+} stopwatch;
 
 
 #ifdef ARDUINO_RASPBERRY_PI_PICO
