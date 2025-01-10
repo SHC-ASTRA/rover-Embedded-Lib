@@ -11,6 +11,9 @@
 #else
 
 #include <Arduino.h>
+#include "Adafruit_NeoPixel.h"
+
+Adafruit_NeoPixel neopixel(1, 15);
 
 /**
  * @brief Pre-baked status codes for the NeoPixel.
@@ -44,7 +47,12 @@ class AstraNeoPixel {
     AstraNeoPixel(int pNeoPin);
     void setStatus(int pStatus);
     int getStatus(void);
-    void update(uint32_t time);  // Update the state of the physical NeoPixel based on status and time
+    void update(uint32_t time);  // Update the state of the physical NeoPixel based on status and millis()
 };
+
+void changeNeopixel(int red, int green, int blue) {
+    neopixel.setPixelColor(0, neopixel.Color(red, green, blue));
+    neopixel.show();
+}
 
 #endif  // __has_include()
