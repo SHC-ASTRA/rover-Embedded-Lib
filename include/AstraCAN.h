@@ -34,6 +34,19 @@
 
 typedef TwaiCAN AstraCAN;
 
+void printCANframe(CanFrame& frame) {
+    Serial.print("CAN: ");
+    Serial.print(frame.identifier, HEX);
+    Serial.print(" [");
+    Serial.print(frame.data_length_code);
+    Serial.print("] ");
+    for (int i = 0; i < frame.data_length_code; i++) {
+        Serial.print(frame.data[i], HEX);
+        Serial.print(" ");
+    }
+    Serial.println();
+}
+
 
 #    elif defined(CORE_TEENSY)
 //----------//
