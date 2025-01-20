@@ -7,20 +7,38 @@
  */
 #pragma once
 
-#ifdef OLD_ASTRACAN_ENABLE
-
 // Must have the CAN library corresponding to the current MCU
 #if defined(CORE_TEENSY) && !__has_include("FlexCAN_T4.h")  // If on Teensy, must have FlexCAN_T4
 #    error Missing library! Please add the following line to lib_deps in platformio.ini:  https://github.com/tonton81/FlexCAN_T4
 
-#elif defined(ESP32) && !__has_include("ESP32-TWAI-CAN.hpp")  // If on ESP32, must have ESP32-TWAI-CAN
+#elif defined(ESP32) && \
+    !__has_include("ESP32-TWAI-CAN.hpp")  // If on ESP32, must have ESP32-TWAI-CAN
 #    error Missing library! Please add the following line to lib_deps in platformio.ini:  handmade0octopus/ESP32-TWAI-CAN@^1.0.1
 
+#elif defined(ARDUINO_RASPBERRY_PI_PICO)
+#    error "Raspberry Pi Pico is not supported"
 
 #else  // We have the required library.
 
 
-#    if defined(CORE_TEENSY)
+//--------------------------------------------------------------------------//
+//   Microcontroller-specific                                               //
+//--------------------------------------------------------------------------//
+
+#    if defined(ESP32)
+//---------//
+//  ESP32  //
+//---------//
+
+#        include <ESP32-TWAI-CAN.hpp>  // handmade0octopus/ESP32-TWAI-CAN
+
+typedef TwaiCAN AstraCAN;
+
+
+#    elif defined(CORE_TEENSY)
+//----------//
+//  Teensy  //
+//----------//
 
 #        include <FlexCAN_T4.h>  // https://github.com/tonton81/FlexCAN_T4
 
@@ -32,34 +50,7 @@ typedef FlexCAN_T4<CAN1, RX_SIZE_256, TX_SIZE_16> AstraCAN;
 #        endif
 
 
-#    elif defined(ESP32)
+#    endif  // End microcontroller check
 
-#        include <ESP32-TWAI-CAN.hpp>  // handmade0octopus/ESP32-TWAI-CAN
-
-// Charles's stuff
-#        include <stdint.h>
-#        include <stdio.h>
-
-#        include <cstring>
-
-typedef TwaiCAN AstraCAN;
-
-#    endif
-
-
-// Convert float to little endian decimal representation
-void Float2LEDec(float x, uint8_t (&buffer_data)[8]);
-
-
-void identifyDevice(AstraCAN &Can0, int can_id);
-
-
-void sendDutyCycle(AstraCAN &Can0, int can_id, float duty_cycle);
-
-void sendHeartbeat(AstraCAN &Can0, int can_id);
-
-void setParameter(AstraCAN &Can0, int can_id, uint8_t paramID, uint32_t value);
-
-#endif  // __has_include()
 
 #endif
