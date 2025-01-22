@@ -11,8 +11,7 @@
 #if defined(CORE_TEENSY) && !__has_include("FlexCAN_T4.h")  // If on Teensy, must have FlexCAN_T4
 #    error Missing library! Please add the following line to lib_deps in platformio.ini:  https://github.com/tonton81/FlexCAN_T4
 
-#elif defined(ESP32) && \
-    !__has_include("ESP32-TWAI-CAN.hpp")  // If on ESP32, must have ESP32-TWAI-CAN
+#elif defined(ESP32) && !__has_include("ESP32-TWAI-CAN.hpp")  // If on ESP32, must have ESP32-TWAI-CAN
 #    error Missing library! Please add the following line to lib_deps in platformio.ini:  handmade0octopus/ESP32-TWAI-CAN@^1.0.1
 
 #elif defined(ARDUINO_RASPBERRY_PI_PICO)
@@ -66,4 +65,4 @@ typedef FlexCAN_T4<CAN1, RX_SIZE_256, TX_SIZE_16> AstraCAN;
 #    endif  // End microcontroller check
 
 
-#endif
+#endif  // End library check
