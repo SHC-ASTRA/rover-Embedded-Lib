@@ -193,7 +193,10 @@ enum class sparkMax_paramStatus {
     kNotImplementedDeprecated = 5,
 };
 
-enum class sparkMax_IdleMode { kCoast = 0, kBrake = 1 };
+enum class sparkMax_IdleMode {
+    kCoast = 0,
+    kBrake = 1
+};
 
 enum class sparkMax_faultID {
     kBrownout = 0,
