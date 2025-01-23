@@ -41,6 +41,19 @@ enum class DataParseType : uint8_t {
     DT_2f32
 };
 
+typedef enum CanCmdId : uint8_t {
+// General misc
+    CMD_TEST = 0,
+    CMD_PING,
+    CMD_B_LED,
+    CMD_SENSOR_RECON,
+// Misc control
+// Submodule-specific (omitted)
+// Motor control
+// Data request
+    CMD_DATA_IMU = 24  // i think?
+};
+
 class VicCanFrame {
    public:
     AstraCAN* Can0;
@@ -109,5 +122,32 @@ class VicCanFrame {
             return false;  // Not for this MCU
         
         return true;
+    }
+
+    void respond(uint8_t outDataType) {
+        // Create a CAN packet with stuff from recv'ed one
+        CanFrame outFrame;
+        outFrame.identifier = createId(mcuId, outDataType, cmdId);
+    }
+
+    bool isBuiltin() {
+        if (cmdId == 1 || cmdId == 2 || cmdId == 3)
+            return true;
+        else
+            return false;
+    }
+
+    void handleBuiltin() {
+        if (!isBuiltin())
+            return;
+        
+        if (cmdId == 1) {  // Ping
+            // Respond with ping
+        } else if (cmdId == 2) {  // Time
+            // Respond with millis
+        } else if (cmdId == 3) {  // LED ctrl
+            // if data is 0, turn off
+            // if data is 1, turn on
+        }
     }
 };
