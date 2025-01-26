@@ -10,18 +10,6 @@
 #    include "AstraMotors.h"
 
 
-double map(double x, double in_min, double in_max, double out_min, double out_max) {
-    const double run = in_max - in_min;
-    if (run == 0)
-    {
-	    return 0;  // in_min == in_max, error
-    }
-    const double rise = out_max - out_min;
-    const double delta = x - in_min;
-    return (delta * rise) / run + out_min;
-}
-
-
 AstraMotors::AstraMotors(AstraCAN* setCanObject, int setMotorID, sparkMax_ctrlType setCtrlMode, bool inv,
                          int setMaxSpeed, float setMaxDuty) {
     canObject = setCanObject;

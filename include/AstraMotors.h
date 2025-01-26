@@ -19,9 +19,6 @@ enum motorCtrlMode {
     CTRL_DUTYCYCLE = 1
 };
 
-// Clamps x between out_min and out_max using the expected input min and max
-// Used for controller input
-long map(long x, long in_min, long in_max, long out_min, long out_max);
 
 class AstraMotors {
     AstraCAN* canObject;
