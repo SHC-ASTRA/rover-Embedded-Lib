@@ -1,7 +1,7 @@
 /**
  * @file DIGIT.h
  * @author David Sharpe (ds0196@uah.edu)
- * @brief Digit
+ * @brief Digit PCB; controls end effector and wrist; attaches to end of arm
  *
  */
 #pragma once
@@ -9,10 +9,44 @@
 
 #if defined(ESP32)
 
-#    warning "ESP32 board for Digit is WIP!"
+//------------------------------------------------------------------------------------------------//
+//   Feather ESP32 (URC 2025)
+//------------------------------------------------------------------------------------------------//
+
+// Comms
+
+#define CAN_RX 14
+#define CAN_TX 32
+
+// Linear actuator
+
+#define LINAC_RIN 12
+#define LINAC_FIN 13
+
+// End Effector
+
+#define MOTOR_FAULT 5
+#define MOTOR_IN2 19
+#define MOTOR_IN1 21
+
+#define LASER_NMOS 25
+
+// ADC
+
+#define ADC_5V 34
+#define ADC_12V 39
+#define ADC_VBATT 36
+
+// Misc
+
+#define MCU_DEBUG 4
 
 
-#elif defined(CORE_TEENSY)  // URC 2024 setup
+#elif defined(CORE_TEENSY)
+
+//------------------------------------------------------------------------------------------------//
+//   Teensy 4.x (URC 2024)
+//------------------------------------------------------------------------------------------------//
 
 //------//
 // Pins //
