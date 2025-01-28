@@ -7,12 +7,9 @@
 #pragma once
 
 
-//------//
-// Pins //
-//------//
-
-
-// Both MCUs
+//-----------//
+// Both MCUs //
+//-----------//
 
 #define COMMS_UART Serial1  // UART between Main-Motor
 
@@ -20,11 +17,11 @@
 #define CAN_RX 12
 
 
-#if !defined(MOTORMCU)  // Main MCU  by default
+#if !defined(MOTORMCU)
 
-// UART defined for both by COMMS_UART above
-
-// CAN defined for both above
+//----------//
+// Main MCU //
+//----------//
 
 // Voltage Dividers
 #    define PIN_VDIV_5V 33
@@ -37,7 +34,11 @@
 #    define I2C_SDA 22
 
 
-#else  // Motor Controller MCU  otherwise
+#else
+
+//-----------//
+// Motor MCU //
+//-----------//
 
 #    define MOTOR_ID_FL 2  // REV motor ID for front left wheel
 #    define MOTOR_ID_FR 1  // REV motor ID for front right wheel
@@ -47,8 +48,3 @@
 #   define WHEEL_CIRCUMFERENCE 0.6168  // Wheel's circumference in meters
 
 #endif
-
-
-//-----------//
-// Constants //
-//-----------//
