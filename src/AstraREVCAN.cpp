@@ -13,7 +13,6 @@
 #if (defined(ESP32) && __has_include("ESP32-TWAI-CAN.hpp")) || \
      (defined(CORE_TEENSY) && __has_include("FlexCAN_T4.h"))
 #    include "AstraREVCAN.h"
-#endif
 
 
 /**
@@ -219,4 +218,6 @@ void CAN_sendPacket(uint32_t messageID, uint8_t data[], uint8_t dataLen, AstraCA
 
 #endif  // End microcontroller check
 
-#endif
+#endif  // End library check
+
+#endif  // End !OLD_ASTRACAN_ENABLE
