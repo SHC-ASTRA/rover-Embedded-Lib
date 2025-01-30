@@ -30,6 +30,8 @@ enum class McuId : uint8_t {
 #define SUBMODULE_CAN_ID McuId::MCU_FAERIE
 #elif defined(CITADEL)
 #define SUBMODULE_CAN_ID McuId::MCU_CITADEL
+#else
+#define SUBMODULE_CAN_ID McuId::MCU_BROADCAST
 #endif
 
 enum class DataParseType : uint8_t {
@@ -127,7 +129,7 @@ class VicCanFrame {
     void respond(uint8_t outDataType) {
         // Create a CAN packet with stuff from recv'ed one
         CanFrame outFrame;
-        outFrame.identifier = createId(mcuId, outDataType, cmdId);
+        // outFrame.identifier = createId(mcuId, outDataType, cmdId);
     }
 
     bool isBuiltin() {
