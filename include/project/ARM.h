@@ -36,8 +36,8 @@
 //-----------//
 
 #   define MOTOR_ID_A1 1
-#   define MOTOR_ID_A1 2
-#   define MOTOR_ID_A1 3
+#   define MOTOR_ID_A2 2
+#   define MOTOR_ID_A3 3
 
 #   warning "Motor IDs not set"
 
