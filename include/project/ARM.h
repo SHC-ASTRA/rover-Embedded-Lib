@@ -20,6 +20,7 @@
 //-----------//
 
 #    define COMMS_UART Serial1  // UART between Main-Motor
+#    define MOTOR_AMOUNT 3
 
 
 #    if !defined(MOTORMCU)
@@ -33,6 +34,14 @@
 //-----------//
 // Motor MCU //
 //-----------//
+
+#   define MOTOR_ID_A1 1
+#   define MOTOR_ID_A1 2
+#   define MOTOR_ID_A1 3
+
+#   warning "Motor IDs not set"
+
+Serial1.print("Wrong Motor IDs used, they were added to resolve error, but not correctly selected");
 
 #    endif
 
