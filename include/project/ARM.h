@@ -50,17 +50,6 @@
 #   define MOTOR_ID_A2 2
 #   define MOTOR_ID_A3 3
 
-struct IKS  // Inverse_Kinematics_Struct, instrucitons for IK
-{
-    // AxisXSpeed/Position
-    short int A1S;
-    short int A2S;
-    short int A3S;
-    short int A1P;
-    short int A2P;
-    short int A3P;
-};
-
 #   warning "Motor IDs not set"
 
 Serial1.print("Wrong Motor IDs used, they were added to resolve error, but not correctly selected");
