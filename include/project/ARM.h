@@ -59,7 +59,7 @@ struct IKS  // Inverse_Kinematics_Struct, instrucitons for IK
     short int A1P;
     short int A2P;
     short int A3P;
-}
+};
 
 #   warning "Motor IDs not set"
 
