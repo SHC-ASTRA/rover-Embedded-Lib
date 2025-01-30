@@ -144,8 +144,24 @@ class VicCanController {
         return true;
     }
 
-    void relayFromSerial(String command) {
+    void relayFromSerial(std::vector<String> args) {
+        CanFrame outCanFrame;
 
+        // Command layout: "can_relay, id, rtr, dlc, data"
+
+        if (args.size() < 3) {
+            Serial.println("Invalid command");
+            return;
+        }
+
+        outCanFrame.identifier = args[1].toInt();
+        outCanFrame.rtr = args[2].toInt();
+        outCanFrame.data_length_code = args[3].toInt();
+        for (int i = 0; i < outCanFrame.data_length_code; i++) {
+            outCanFrame.data[i] = args[i + 4].toInt();
+        }
+
+        ESP32Can.writeFrame(outCanFrame);
     }
 
     void respond(uint8_t outDataType) {
