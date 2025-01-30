@@ -11,30 +11,33 @@
 #include "AstraCAN.h"
 
 
+// Microcontroller VicCAN ID's based on submodule; use these instead of the raw numbers
 enum class McuId : uint8_t {
-    MCU_BROADCAST = 0,
-    MCU_CORE,
-    MCU_ARM,
-    MCU_DIGIT,
-    MCU_FAERIE,
-    MCU_CITADEL
+    BROADCAST = 0,
+    CORE,
+    ARM,
+    DIGIT,
+    FAERIE,
+    CITADEL
 };
 
+// Shorthand for the VicCAN ID used by the active MCU
 #if defined(CORE)
-#define SUBMODULE_CAN_ID McuId::MCU_CORE
+#    define SUBMODULE_CAN_ID McuId::CORE
 #elif defined(ARM)
-#define SUBMODULE_CAN_ID McuId::MCU_ARM
+#    define SUBMODULE_CAN_ID McuId::ARM
 #elif defined(DIGIT)
-#define SUBMODULE_CAN_ID McuId::MCU_DIGIT
+#    define SUBMODULE_CAN_ID McuId::DIGIT
 #elif defined(FAERIE)
-#define SUBMODULE_CAN_ID McuId::MCU_FAERIE
+#    define SUBMODULE_CAN_ID McuId::FAERIE
 #elif defined(CITADEL)
-#define SUBMODULE_CAN_ID McuId::MCU_CITADEL
-#else
-#define SUBMODULE_CAN_ID McuId::MCU_BROADCAST
+#    define SUBMODULE_CAN_ID McuId::CITADEL
+#else  // Default - no macro in platformio.ini; will only respond to broadcast messages
+#    define SUBMODULE_CAN_ID McuId::BROADCAST
 #endif
 
-enum class DataParseType : uint8_t {
+// Possible datatypes for a VicCAN frame; decides how to decode/encode data
+enum class CanDataType : uint8_t {
     DT_NA = 0,
     DT_1i64,
     DT_2i32,
@@ -43,28 +46,33 @@ enum class DataParseType : uint8_t {
     DT_2f32
 };
 
+// Command IDs for standard VicCAN commands
 typedef enum CanCmdId : uint8_t {
-// General misc
+    // General misc
     CMD_TEST = 0,
     CMD_PING,
     CMD_B_LED,
     CMD_SENSOR_RECON,
-// Misc control
-// Submodule-specific (omitted)
-// Motor control
-// Data request
+    // Misc control
+    // Submodule-specific (omitted)
+    // Motor control
+    // Data request
     CMD_DATA_IMU = 24  // i think?
 };
 
+
+//------------------------------------------------------------------------------------------------//
+//  VicCanFrame  -  Contains specific data used to create a CanFrame for inter-MCU comms
+//------------------------------------------------------------------------------------------------//
+
 class VicCanFrame {
    public:
-    AstraCAN* Can0;
     // Within CAN ID
-    McuId mcuId;  // 3 bits
-    DataParseType dataType;  // 3 bits
-    uint8_t cmdId;  // 5 bits
+    McuId mcuId;           // 3 bits
+    CanDataType dataType;  // 3 bits
+    uint8_t cmdId;         // 5 bits
     // Built-in to CAN frame
-    bool rtr;  // 1 bit
+    bool rtr;     // 1 bit
     uint8_t dlc;  // 4 bits
     uint8_t data[8];
 
@@ -73,15 +81,10 @@ class VicCanFrame {
         clear();
     }
 
-    VicCanFrame(AstraCAN* CanObj) {
-        Can0 = CanObj;
-        clear();
-    }
-
-    // Resets all data values for use with static keyword
+    // Resets all data values; for use with static keyword
     void clear() {
-        mcuId = McuId::MCU_BROADCAST;
-        dataType = DataParseType::DT_NA;
+        mcuId = McuId::BROADCAST;
+        dataType = CanDataType::DT_NA;
         cmdId = 0;
         rtr = false;
         dlc = 0;
@@ -93,63 +96,61 @@ class VicCanFrame {
     // Take a CAN ID and parse it into its components
     void parseCanId(uint32_t id) {
         mcuId = static_cast<McuId>(id & 0x7);
-        dataType = static_cast<DataParseType>((id >> 3) & 0x7);
+        dataType = static_cast<CanDataType>((id >> 3) & 0x7);
         cmdId = (id >> 6);
     }
 
+    // Take an entire CAN frame and parse it into its components
     void parseCanFrame(CanFrame& frame) {
         clear();
         parseCanId(frame.identifier);
-
         rtr = static_cast<bool>(frame.rtr);
-
         dlc = frame.data_length_code;
         for (int i = 0; i < dlc; i++) {
             data[i] = frame.data[i];
         }
     }
 
-    bool isForMe() {
-        return mcuId == SUBMODULE_CAN_ID || mcuId == McuId::MCU_BROADCAST;
+    inline bool isForMe() {
+        return mcuId == SUBMODULE_CAN_ID || mcuId == McuId::BROADCAST;
+    }
+};
+
+
+//------------------------------------------------------------------------------------------------//
+//  VicCanController  -  Handles reading and responding to VicCanFrames
+//------------------------------------------------------------------------------------------------//
+
+class VicCanController {
+    CanFrame inCanFrame;
+    VicCanFrame inVicCanFrame;
+
+    /**
+     * @brief Extends readCanFrame() to check destination of CAN Frame
+     * 
+     * @param timeout for ESP32Can.readFrame()
+     * @return true upon reading a CAN frame for this MCU;
+     * @return false upon not finding a CAN frame or reading one for a different MCU
+     */
+    bool readCan(int timeout = 0) {
+        if (!ESP32Can.readFrame(inCanFrame, (timeout < 0 ? 0 : timeout)))  // No negative timeouts
+            return false;  // No CAN frame received
+
+        inVicCanFrame.parseCanFrame(inCanFrame);  // Load data from CanFrame into VicCanFrame
+
+        if (!inVicCanFrame.isForMe())
+            return false;  // Not for this MCU
+
+        return true;
     }
 
-    bool readCan(int timeout = 0) {  // Extends readCanFrame()
-        static CanFrame rxFrame;
-        if (!Can0->readFrame(rxFrame, (timeout < 0 ? 0 : timeout)))
-            return false;  // No CAN frame received
-        
-        parseCanFrame(rxFrame);  // Load data from CanFrame into VicCanFrame
+    void relayFromSerial(String command) {
 
-        if (!isForMe())
-            return false;  // Not for this MCU
-        
-        return true;
     }
 
     void respond(uint8_t outDataType) {
         // Create a CAN packet with stuff from recv'ed one
         CanFrame outFrame;
         // outFrame.identifier = createId(mcuId, outDataType, cmdId);
-    }
-
-    bool isBuiltin() {
-        if (cmdId == 1 || cmdId == 2 || cmdId == 3)
-            return true;
-        else
-            return false;
-    }
-
-    void handleBuiltin() {
-        if (!isBuiltin())
-            return;
-        
-        if (cmdId == 1) {  // Ping
-            // Respond with ping
-        } else if (cmdId == 2) {  // Time
-            // Respond with millis
-        } else if (cmdId == 3) {  // LED ctrl
-            // if data is 0, turn off
-            // if data is 1, turn on
-        }
     }
 };
