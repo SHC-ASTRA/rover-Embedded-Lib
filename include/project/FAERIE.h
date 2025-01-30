@@ -13,7 +13,15 @@
 //   Feather ESP32 (URC 2025)
 //------------------------------------------------------------------------------------------------//
 
-#    warning "ESP32 board for FAERIE is WIP!"
+#    define COMMS_UART Serial1
+#    define COMMS_UART_NUM 4
+#   define PIN_CAN_RX 7
+#   define PIN_CAN_TX 8
+#   define PIN_LASERS 27
+#   define PIN_SPARKMAX_PWM 33
+#   define PIN_5V_ADC 34
+#   define PIN_BATT_ADC 36
+#   define PIN_12V_ADC 39
 
 
 #elif defined(CORE_TEENSY)
@@ -39,7 +47,7 @@
 // Constants //
 //-----------//
 
-#    define COMMS_UART Serial4
+#    define COMMS_UART Serial1
 #    define COMMS_UART_NUM 4
 
 
