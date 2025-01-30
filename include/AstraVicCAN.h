@@ -100,6 +100,16 @@ class VicCanFrame {
         cmdId = (id >> 6);
     }
 
+    int createCanId() {
+        return (static_cast<uint32_t>(mcuId) & 0x7) | ((static_cast<uint32_t>(dataType) & 0x7) << 3) |
+               (static_cast<uint32_t>(cmdId) << 6);
+    }
+
+    int createCanId(CanDataType pDataType) {
+        return (static_cast<uint32_t>(mcuId) & 0x7) | ((static_cast<uint32_t>(pDataType) & 0x7) << 3) |
+               (static_cast<uint32_t>(cmdId) << 6);
+    }
+
     // Take an entire CAN frame and parse it into its components
     void parseCanFrame(CanFrame& frame) {
         clear();
@@ -124,6 +134,7 @@ class VicCanFrame {
 class VicCanController {
     CanFrame inCanFrame;
     VicCanFrame inVicCanFrame;
+    CanFrame outFrame;
 
     /**
      * @brief Extends readCanFrame() to check destination of CAN Frame
@@ -164,9 +175,22 @@ class VicCanController {
         ESP32Can.writeFrame(outCanFrame);
     }
 
-    void respond(uint8_t outDataType) {
-        // Create a CAN packet with stuff from recv'ed one
-        CanFrame outFrame;
-        // outFrame.identifier = createId(mcuId, outDataType, cmdId);
+    void readyOutCanFrame(uint8_t dlc, CanDataType outDataType) {
+        outFrame.identifier = inVicCanFrame.createCanId(outDataType);
+        outFrame.rtr = false;
+        outFrame.data_length_code = dlc;
+    }
+
+    bool respond(int64_t data) {
+        readyOutCanFrame(1, CanDataType::DT_1i64);
+        outFrame.data[0] = data & 0xFF;
+        outFrame.data[1] = (data >> 8) & 0xFF;
+        outFrame.data[2] = (data >> 16) & 0xFF;
+        outFrame.data[3] = (data >> 24) & 0xFF;
+        outFrame.data[4] = (data >> 32) & 0xFF;
+        outFrame.data[5] = (data >> 40) & 0xFF;
+        outFrame.data[6] = (data >> 48) & 0xFF;
+        outFrame.data[7] = (data >> 56) & 0xFF;
+        ESP32Can.writeFrame(outFrame);
     }
 };
