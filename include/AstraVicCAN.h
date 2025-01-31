@@ -136,6 +136,7 @@ class VicCanController {
     VicCanFrame inVicCanFrame;
     CanFrame outFrame;
 
+   public:
     /**
      * @brief Extends readCanFrame() to check destination of CAN Frame
      * 
@@ -144,7 +145,7 @@ class VicCanController {
      * @return false upon not finding a CAN frame or reading one for a different MCU
      */
     bool readCan(int timeout = 0) {
-        if (!ESP32Can.readFrame(inCanFrame, (timeout < 0 ? 0 : timeout)))  // No negative timeouts
+        if (!ESP32Can.readFrame(inCanFrame, (timeout < 0 ? 0 : timeout)))
             return false;  // No CAN frame received
 
         inVicCanFrame.parseCanFrame(inCanFrame);  // Load data from CanFrame into VicCanFrame
@@ -153,6 +154,35 @@ class VicCanController {
             return false;  // Not for this MCU
 
         return true;
+    }
+
+    inline uint8_t getCmdId() {
+        return inVicCanFrame.cmdId;
+    }
+
+    inline CanDataType getDataType() {
+        return inVicCanFrame.dataType;
+    }
+
+    int parseData(std::vector<float>& outData, CanDataType dt) {
+        outData.clear();
+
+        /**/ if (dt == CanDataType::DT_NA)
+            return 0;
+        else if (dt == CanDataType::DT_1i64) {
+            uint64_t udata =
+               (static_cast<uint64_t>(inVicCanFrame.data[0]) << 56) |
+               (static_cast<uint64_t>(inVicCanFrame.data[1]) << 48) |
+               (static_cast<uint64_t>(inVicCanFrame.data[2]) << 40) |
+               (static_cast<uint64_t>(inVicCanFrame.data[3]) << 32) |
+               (static_cast<uint64_t>(inVicCanFrame.data[4]) << 24) |
+               (static_cast<uint64_t>(inVicCanFrame.data[5]) << 16) |
+               (static_cast<uint64_t>(inVicCanFrame.data[6]) << 8) |
+               (static_cast<uint64_t>(inVicCanFrame.data[7]) << 0);
+            outData.push_back(static_cast<float>(*reinterpret_cast<int64_t*>(&udata)));  // lil messy but will fix later
+            return 1;
+        }
+        // else if (dt == CanDataType::DT_2i32)
     }
 
     void relayFromSerial(std::vector<String> args) {
@@ -181,16 +211,21 @@ class VicCanController {
         outFrame.data_length_code = dlc;
     }
 
-    bool respond(int64_t data) {
-        readyOutCanFrame(1, CanDataType::DT_1i64);
-        outFrame.data[0] = data & 0xFF;
-        outFrame.data[1] = (data >> 8) & 0xFF;
-        outFrame.data[2] = (data >> 16) & 0xFF;
-        outFrame.data[3] = (data >> 24) & 0xFF;
-        outFrame.data[4] = (data >> 32) & 0xFF;
-        outFrame.data[5] = (data >> 40) & 0xFF;
-        outFrame.data[6] = (data >> 48) & 0xFF;
-        outFrame.data[7] = (data >> 56) & 0xFF;
+    void respond(int64_t data) {
+        readyOutCanFrame(8, CanDataType::DT_1i64);
+        outFrame.data[0] = (data >> 56) & 0xFF;
+        outFrame.data[1] = (data >> 48) & 0xFF;
+        outFrame.data[2] = (data >> 40) & 0xFF;
+        outFrame.data[3] = (data >> 32) & 0xFF;
+        outFrame.data[4] = (data >> 24) & 0xFF;
+        outFrame.data[5] = (data >> 16) & 0xFF;
+        outFrame.data[6] = (data >> 8) & 0xFF;
+        outFrame.data[7] = data & 0xFF;
         ESP32Can.writeFrame(outFrame);
     }
-};
+} vicCAN;
+
+inline bool dtIsInt(CanDataType dt) {
+    return dt == CanDataType::DT_1i64 || dt == CanDataType::DT_2i32 || dt == CanDataType::DT_4i16 ||
+           dt == CanDataType::DT_8i8;
+}
