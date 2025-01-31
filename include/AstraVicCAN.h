@@ -180,7 +180,7 @@ class VicCanController {
                (static_cast<uint64_t>(inVicCanFrame.data[5]) << 16) |
                (static_cast<uint64_t>(inVicCanFrame.data[6]) << 8) |
                (static_cast<uint64_t>(inVicCanFrame.data[7]) << 0);
-            outData.push_back(static_cast<double>(*reinterpret_cast<int64_t*>(&udata)));  // lil messy but will fix later
+            outData.push_back(static_cast<double>(*reinterpret_cast<int64_t*>(&udata)));
         }
         else if (inVicCanFrame.dataType == CanDataType::DT_2i32) {
             uint32_t udata =
@@ -255,6 +255,10 @@ class VicCanController {
         ESP32Can.writeFrame(outCanFrame);
     }
 
+    //------------//
+    // Responding //
+    //------------//
+
     void readyOutCanFrame(uint8_t dlc, CanDataType outDataType) {
         outFrame.identifier = inVicCanFrame.createCanId(outDataType);
         outFrame.rtr = false;
@@ -263,14 +267,90 @@ class VicCanController {
 
     void respond(int64_t data) {
         readyOutCanFrame(8, CanDataType::DT_1i64);
-        outFrame.data[0] = (data >> 56) & 0xFF;
-        outFrame.data[1] = (data >> 48) & 0xFF;
-        outFrame.data[2] = (data >> 40) & 0xFF;
-        outFrame.data[3] = (data >> 32) & 0xFF;
-        outFrame.data[4] = (data >> 24) & 0xFF;
-        outFrame.data[5] = (data >> 16) & 0xFF;
-        outFrame.data[6] = (data >> 8) & 0xFF;
-        outFrame.data[7] = data & 0xFF;
+        uint64_t udata = *reinterpret_cast<uint64_t*>(&data);
+        outFrame.data[0] = (udata >> 56) & 0xFF;
+        outFrame.data[1] = (udata >> 48) & 0xFF;
+        outFrame.data[2] = (udata >> 40) & 0xFF;
+        outFrame.data[3] = (udata >> 32) & 0xFF;
+        outFrame.data[4] = (udata >> 24) & 0xFF;
+        outFrame.data[5] = (udata >> 16) & 0xFF;
+        outFrame.data[6] = (udata >> 8) & 0xFF;
+        outFrame.data[7] = udata & 0xFF;
+        ESP32Can.writeFrame(outFrame);
+    }
+
+    void respond(int32_t data1, int32_t data2) {
+        readyOutCanFrame(8, CanDataType::DT_2i32);
+        uint32_t udata = *reinterpret_cast<uint32_t*>(&data1);
+        outFrame.data[0] = (udata >> 24) & 0xFF;
+        outFrame.data[1] = (udata >> 16) & 0xFF;
+        outFrame.data[2] = (udata >> 8) & 0xFF;
+        outFrame.data[3] = udata & 0xFF;
+        udata = *reinterpret_cast<uint32_t*>(&data2);
+        outFrame.data[4] = (udata >> 24) & 0xFF;
+        outFrame.data[5] = (udata >> 16) & 0xFF;
+        outFrame.data[6] = (udata >> 8) & 0xFF;
+        outFrame.data[7] = udata & 0xFF;
+        ESP32Can.writeFrame(outFrame);
+    }
+
+    void respond(int16_t data1, int16_t data2, int16_t data3, int16_t data4 = 0) {
+        readyOutCanFrame(8, CanDataType::DT_4i16);
+        uint16_t udata = *reinterpret_cast<uint16_t*>(&data1);
+        outFrame.data[0] = (udata >> 8) & 0xFF;
+        outFrame.data[1] = udata & 0xFF;
+        udata = *reinterpret_cast<uint16_t*>(&data2);
+        outFrame.data[2] = (udata >> 8) & 0xFF;
+        outFrame.data[3] = udata & 0xFF;
+        udata = *reinterpret_cast<uint16_t*>(&data3);
+        outFrame.data[4] = (udata >> 8) & 0xFF;
+        outFrame.data[5] = udata & 0xFF;
+        udata = *reinterpret_cast<uint16_t*>(&data4);
+        outFrame.data[6] = (udata >> 8) & 0xFF;
+        outFrame.data[7] = udata & 0xFF;
+        ESP32Can.writeFrame(outFrame);
+    }
+
+    void respond(int8_t data1, int8_t data2, int8_t data3, int8_t data4, int8_t data5, int8_t data6 = 0, int8_t data7 = 0,
+                 int8_t data8 = 0) {
+        readyOutCanFrame(8, CanDataType::DT_8i8);
+        outFrame.data[0] = *reinterpret_cast<uint8_t*>(&data1);
+        outFrame.data[1] = *reinterpret_cast<uint8_t*>(&data2);
+        outFrame.data[2] = *reinterpret_cast<uint8_t*>(&data3);
+        outFrame.data[3] = *reinterpret_cast<uint8_t*>(&data4);
+        outFrame.data[4] = *reinterpret_cast<uint8_t*>(&data5);
+        outFrame.data[5] = *reinterpret_cast<uint8_t*>(&data6);
+        outFrame.data[6] = *reinterpret_cast<uint8_t*>(&data7);
+        outFrame.data[7] = *reinterpret_cast<uint8_t*>(&data8);
+        ESP32Can.writeFrame(outFrame);
+    }
+
+    void respond(double data) {
+        readyOutCanFrame(8, CanDataType::DT_1i64);
+        uint64_t udata = *reinterpret_cast<uint64_t*>(&data);
+        outFrame.data[0] = (udata >> 56) & 0xFF;
+        outFrame.data[1] = (udata >> 48) & 0xFF;
+        outFrame.data[2] = (udata >> 40) & 0xFF;
+        outFrame.data[3] = (udata >> 32) & 0xFF;
+        outFrame.data[4] = (udata >> 24) & 0xFF;
+        outFrame.data[5] = (udata >> 16) & 0xFF;
+        outFrame.data[6] = (udata >> 8) & 0xFF;
+        outFrame.data[7] = udata & 0xFF;
+        ESP32Can.writeFrame(outFrame);
+    }
+
+    void respond(float data1, float data2) {
+        readyOutCanFrame(8, CanDataType::DT_2f32);
+        uint32_t udata = *reinterpret_cast<uint32_t*>(&data1);
+        outFrame.data[0] = (udata >> 24) & 0xFF;
+        outFrame.data[1] = (udata >> 16) & 0xFF;
+        outFrame.data[2] = (udata >> 8) & 0xFF;
+        outFrame.data[3] = udata & 0xFF;
+        udata = *reinterpret_cast<uint32_t*>(&data2);
+        outFrame.data[4] = (udata >> 24) & 0xFF;
+        outFrame.data[5] = (udata >> 16) & 0xFF;
+        outFrame.data[6] = (udata >> 8) & 0xFF;
+        outFrame.data[7] = udata & 0xFF;
         ESP32Can.writeFrame(outFrame);
     }
 } vicCAN;
