@@ -57,7 +57,9 @@ typedef enum CanCmdId : uint8_t {
     // Submodule-specific (omitted)
     // Motor control
     // Data request
-    CMD_DATA_IMU = 24  // i think?
+    CMD_DATA_IMU = 24,
+    CMD_DATA_TEMP,
+    CMD_DATA_GPS
 };
 
 
