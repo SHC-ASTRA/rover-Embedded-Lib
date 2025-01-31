@@ -259,6 +259,12 @@ class VicCanController {
     // Responding //
     //------------//
 
+    void readyTxFrame(uint8_t dlc, CanDataType outDataType, uint8_t cmdId) {
+        outFrame.identifier = inVicCanFrame.createCanId(outDataType);
+        outFrame.rtr = false;
+        outFrame.data_length_code = dlc;
+    }
+
     void encodeData(uint8_t canData[8], int64_t data1) {
         uint64_t udata = *reinterpret_cast<uint64_t*>(&data1);
         canData[0] = (udata >> 56) & 0xFF;
@@ -334,12 +340,6 @@ class VicCanController {
         canData[5] = (udata >> 16) & 0xFF;
         canData[6] = (udata >> 8) & 0xFF;
         canData[7] = udata & 0xFF;
-    }
-
-    void readyTxFrame(uint8_t dlc, CanDataType outDataType, uint8_t cmdId) {
-        outFrame.identifier = inVicCanFrame.createCanId(outDataType);
-        outFrame.rtr = false;
-        outFrame.data_length_code = dlc;
     }
 
     void respond(int64_t data) {
