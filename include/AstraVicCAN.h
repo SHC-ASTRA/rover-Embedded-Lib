@@ -164,12 +164,13 @@ class VicCanController {
         return inVicCanFrame.dataType;
     }
 
-    int parseData(std::vector<float>& outData, CanDataType dt) {
+    void parseData(std::vector<double>& outData) {
         outData.clear();
 
-        /**/ if (dt == CanDataType::DT_NA)
-            return 0;
-        else if (dt == CanDataType::DT_1i64) {
+        /**/ if (inVicCanFrame.dataType == CanDataType::DT_NA) {
+            // There is nothing to do
+        }
+        else if (inVicCanFrame.dataType == CanDataType::DT_1i64) {
             uint64_t udata =
                (static_cast<uint64_t>(inVicCanFrame.data[0]) << 56) |
                (static_cast<uint64_t>(inVicCanFrame.data[1]) << 48) |
@@ -179,10 +180,59 @@ class VicCanController {
                (static_cast<uint64_t>(inVicCanFrame.data[5]) << 16) |
                (static_cast<uint64_t>(inVicCanFrame.data[6]) << 8) |
                (static_cast<uint64_t>(inVicCanFrame.data[7]) << 0);
-            outData.push_back(static_cast<float>(*reinterpret_cast<int64_t*>(&udata)));  // lil messy but will fix later
-            return 1;
+            outData.push_back(static_cast<double>(*reinterpret_cast<int64_t*>(&udata)));  // lil messy but will fix later
         }
-        // else if (dt == CanDataType::DT_2i32)
+        else if (inVicCanFrame.dataType == CanDataType::DT_2i32) {
+            uint32_t udata =
+               (static_cast<uint32_t>(inVicCanFrame.data[0]) << 24) |
+               (static_cast<uint32_t>(inVicCanFrame.data[1]) << 16) |
+               (static_cast<uint32_t>(inVicCanFrame.data[2]) << 8) |
+               (static_cast<uint32_t>(inVicCanFrame.data[3]) << 0);
+            outData.push_back(static_cast<double>(*reinterpret_cast<int32_t*>(&udata)));
+            udata =
+               (static_cast<uint32_t>(inVicCanFrame.data[4]) << 24) |
+               (static_cast<uint32_t>(inVicCanFrame.data[5]) << 16) |
+               (static_cast<uint32_t>(inVicCanFrame.data[6]) << 8) |
+               (static_cast<uint32_t>(inVicCanFrame.data[7]) << 0);
+            outData.push_back(static_cast<double>(*reinterpret_cast<int32_t*>(&udata)));
+        }
+        else if (inVicCanFrame.dataType == CanDataType::DT_4i16) {
+            uint16_t udata =
+               (static_cast<uint16_t>(inVicCanFrame.data[0]) << 8) |
+               (static_cast<uint16_t>(inVicCanFrame.data[1]) << 0);
+            outData.push_back(static_cast<double>(*reinterpret_cast<int16_t*>(&udata)));
+            udata =
+               (static_cast<uint16_t>(inVicCanFrame.data[2]) << 8) |
+               (static_cast<uint16_t>(inVicCanFrame.data[3]) << 0);
+            outData.push_back(static_cast<double>(*reinterpret_cast<int16_t*>(&udata)));
+            udata =
+               (static_cast<uint16_t>(inVicCanFrame.data[4]) << 8) |
+               (static_cast<uint16_t>(inVicCanFrame.data[5]) << 0);
+            outData.push_back(static_cast<double>(*reinterpret_cast<int16_t*>(&udata)));
+            udata =
+               (static_cast<uint16_t>(inVicCanFrame.data[6]) << 8) |
+               (static_cast<uint16_t>(inVicCanFrame.data[7]) << 0);
+            outData.push_back(static_cast<double>(*reinterpret_cast<int16_t*>(&udata)));
+        }
+        else if (inVicCanFrame.dataType == CanDataType::DT_8i8) {
+            for (int i = 0; i < 8; i++) {
+                outData.push_back(static_cast<double>(inVicCanFrame.data[i]));
+            }
+        }
+        else if (inVicCanFrame.dataType == CanDataType::DT_2f32) {
+            uint32_t udata =
+               (static_cast<uint32_t>(inVicCanFrame.data[0]) << 24) |
+               (static_cast<uint32_t>(inVicCanFrame.data[1]) << 16) |
+               (static_cast<uint32_t>(inVicCanFrame.data[2]) << 8) |
+               (static_cast<uint32_t>(inVicCanFrame.data[3]) << 0);
+            outData.push_back(static_cast<double>(*reinterpret_cast<float*>(&udata)));
+            udata =
+               (static_cast<uint32_t>(inVicCanFrame.data[4]) << 24) |
+               (static_cast<uint32_t>(inVicCanFrame.data[5]) << 16) |
+               (static_cast<uint32_t>(inVicCanFrame.data[6]) << 8) |
+               (static_cast<uint32_t>(inVicCanFrame.data[7]) << 0);
+            outData.push_back(static_cast<double>(*reinterpret_cast<float*>(&udata)));
+        }
     }
 
     void relayFromSerial(std::vector<String> args) {
