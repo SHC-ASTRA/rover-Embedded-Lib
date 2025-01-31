@@ -378,6 +378,31 @@ class VicCanController {
         encodeData(outFrame.data, data1, data2);
         ESP32Can.writeFrame(outFrame);
     }
+
+    void send(uint8_t cmdId, int64_t data) {
+        readyTxFrame(8, CanDataType::DT_1i64, cmdId);
+        encodeData(outFrame.data, data);
+        ESP32Can.writeFrame(outFrame);
+    }
+
+    void send(uint8_t cmdId, int32_t data1, int32_t data2) {
+        readyTxFrame(8, CanDataType::DT_2i32, cmdId);
+        encodeData(outFrame.data, data1, data2);
+        ESP32Can.writeFrame(outFrame);
+    }
+
+    void send(uint8_t cmdId, int16_t data1, int16_t data2, int16_t data3, int16_t data4 = 0) {
+        readyTxFrame(8, CanDataType::DT_4i16, cmdId);
+        encodeData(outFrame.data, data1, data2, data3, data4);
+        ESP32Can.writeFrame(outFrame);
+    }
+
+    void send(uint8_t cmdId, int8_t data1, int8_t data2, int8_t data3, int8_t data4, int8_t data5, int8_t data6 = 0,
+              int8_t data7 = 0, int8_t data8 = 0) {
+        readyTxFrame(8, CanDataType::DT_8i8, cmdId);
+        encodeData(outFrame.data, data1, data2, data3, data4, data5, data6, data7, data8);
+        ESP32Can.writeFrame(outFrame);
+    }
 } vicCAN;
 
 inline bool dtIsInt(CanDataType dt) {
