@@ -13,27 +13,27 @@
 
 // Microcontroller VicCAN ID's based on submodule; use these instead of the raw numbers
 enum class McuId : uint8_t {
-    BROADCAST = 0,
-    CORE,
-    ARM,
-    DIGIT,
-    FAERIE,
-    CITADEL
+    MCU_BROADCAST = 0,
+    MCU_CORE,
+    MCU_ARM,
+    MCU_DIGIT,
+    MCU_FAERIE,
+    MCU_CITADEL
 };
 
 // Shorthand for the VicCAN ID used by the active MCU
 #if defined(CORE)
-#    define SUBMODULE_CAN_ID McuId::CORE
+#    define SUBMODULE_CAN_ID McuId::MCU_CORE
 #elif defined(ARM)
-#    define SUBMODULE_CAN_ID McuId::ARM
+#    define SUBMODULE_CAN_ID McuId::MCU_ARM
 #elif defined(DIGIT)
-#    define SUBMODULE_CAN_ID McuId::DIGIT
+#    define SUBMODULE_CAN_ID McuId::MCU_DIGIT
 #elif defined(FAERIE)
-#    define SUBMODULE_CAN_ID McuId::FAERIE
+#    define SUBMODULE_CAN_ID McuId::MCU_FAERIE
 #elif defined(CITADEL)
-#    define SUBMODULE_CAN_ID McuId::CITADEL
+#    define SUBMODULE_CAN_ID McuId::MCU_CITADEL
 #else  // Default - no macro in platformio.ini; will only respond to broadcast messages
-#    define SUBMODULE_CAN_ID McuId::BROADCAST
+#    define SUBMODULE_CAN_ID McuId::MCU_BROADCAST
 #endif
 
 // Possible datatypes for a VicCAN frame; decides how to decode/encode data
@@ -85,7 +85,7 @@ class VicCanFrame {
 
     // Resets all data values; for use with static keyword
     void clear() {
-        mcuId = McuId::BROADCAST;
+        mcuId = McuId::MCU_BROADCAST;
         dataType = CanDataType::DT_NA;
         cmdId = 0;
         rtr = false;
@@ -124,7 +124,7 @@ class VicCanFrame {
     }
 
     inline bool isForMe() {
-        return mcuId == SUBMODULE_CAN_ID || mcuId == McuId::BROADCAST;
+        return mcuId == SUBMODULE_CAN_ID || mcuId == McuId::MCU_BROADCAST;
     }
 };
 
