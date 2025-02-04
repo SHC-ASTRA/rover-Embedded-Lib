@@ -13,13 +13,12 @@
 //   Feather ESP32 (URC 2025)
 //------------------------------------------------------------------------------------------------//
 
-#    warning "ESP32 board for Arm is WIP!"
-
 //-----------//
 // Both MCUs //
 //-----------//
 
 #    define COMMS_UART Serial1  // UART between Main-Motor
+#    define MOTOR_AMOUNT 3
 
 
 #    if !defined(MOTORMCU)
@@ -28,11 +27,28 @@
 // Main MCU //
 //----------//
 
+#        define ENCODER_AXIS0_PIN 22
+#        define ENCODER_AXIS1_PIN 5
+#        define ENCODER_AXIS2_PIN 6
+#        define ENCODER_AXIS3_PIN 10
+
+#        define CAN_TX 24
+#        define CAN_RX 25
+
+#        define LYNX_TX 17
+#        define LYNX_RX 18
+
 #    else
 
 //-----------//
 // Motor MCU //
 //-----------//
+
+#        define MOTOR_ID_A1 1
+#        define MOTOR_ID_A2 2
+#        define MOTOR_ID_A3 3
+
+#        warning "Motor IDs not set"
 
 #    endif
 
