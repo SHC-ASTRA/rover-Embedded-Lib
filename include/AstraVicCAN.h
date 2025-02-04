@@ -254,16 +254,6 @@ class VicCanController {
         ESP32Can.writeFrame(outCanFrame);
     }
 
-    //------------//
-    // Responding //
-    //------------//
-
-    void readyTxFrame(uint8_t dlc, CanDataType outDataType, uint8_t cmdId) {
-        outFrame.identifier = inVicCanFrame.createCanId(outDataType);
-        outFrame.rtr = false;
-        outFrame.data_length_code = dlc;
-    }
-
 
     // DT_1f64
     void encodeData(uint8_t canData[8], double data1) {
@@ -321,30 +311,14 @@ class VicCanController {
         canData[7] = *reinterpret_cast<uint8_t*>(&data8);
     }
 
+    //------------//
+    // Responding //
+    //------------//
 
-    void respond(double data) {
-        readyTxFrame(8, CanDataType::DT_1f64, inVicCanFrame.cmdId);
-        encodeData(outFrame.data, data);
-        ESP32Can.writeFrame(outFrame);
-    }
-
-    void respond(float data1, float data2) {
-        readyTxFrame(8, CanDataType::DT_2f32, inVicCanFrame.cmdId);
-        encodeData(outFrame.data, data1, data2);
-        ESP32Can.writeFrame(outFrame);
-    }
-
-    void respond(int16_t data1, int16_t data2, int16_t data3, int16_t data4 = 0) {
-        readyTxFrame(8, CanDataType::DT_4i16, inVicCanFrame.cmdId);
-        encodeData(outFrame.data, data1, data2, data3, data4);
-        ESP32Can.writeFrame(outFrame);
-    }
-
-    void respond(int8_t data1, int8_t data2, int8_t data3, int8_t data4, int8_t data5, int8_t data6 = 0, int8_t data7 = 0,
-                 int8_t data8 = 0) {
-        readyTxFrame(8, CanDataType::DT_8i8, inVicCanFrame.cmdId);
-        encodeData(outFrame.data, data1, data2, data3, data4, data5, data6, data7, data8);
-        ESP32Can.writeFrame(outFrame);
+    void readyTxFrame(uint8_t dlc, CanDataType outDataType, uint8_t cmdId) {
+        outFrame.identifier = inVicCanFrame.createCanId(outDataType);
+        outFrame.rtr = false;
+        outFrame.data_length_code = dlc;
     }
 
 
@@ -371,5 +345,23 @@ class VicCanController {
         readyTxFrame(8, CanDataType::DT_8i8, cmdId);
         encodeData(outFrame.data, data1, data2, data3, data4, data5, data6, data7, data8);
         ESP32Can.writeFrame(outFrame);
+    }
+
+
+    inline void respond(double data) {
+        send(inVicCanFrame.cmdId, data);
+    }
+
+    inline void respond(float data1, float data2) {
+        send(inVicCanFrame.cmdId, data1, data2);
+    }
+
+    inline void respond(int16_t data1, int16_t data2, int16_t data3, int16_t data4 = 0) {
+        send(inVicCanFrame.cmdId, data1, data2, data3, data4);
+    }
+
+    inline void respond(int8_t data1, int8_t data2, int8_t data3, int8_t data4, int8_t data5,
+                        int8_t data6 = 0, int8_t data7 = 0, int8_t data8 = 0) {
+        send(inVicCanFrame.cmdId, data1, data2, data3, data4, data5, data6, data7, data8);
     }
 } vicCAN;
