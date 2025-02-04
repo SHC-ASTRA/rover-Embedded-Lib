@@ -38,13 +38,13 @@ void Float2LEDec(float x, uint8_t (&buffer_data)[8]) {
 //   Specific REV Commands                                                  //
 //--------------------------------------------------------------------------//
 
-void CAN_enumerate(AstraCAN& Can0) {
+void CAN_enumerate() {
     uint8_t frame[8] = {0};
-    CAN_sendPacket(0, 0x99, frame, 0, Can0);
+    CAN_sendPacket(0, 0x99, frame, 0);
     delay(80);  // Let devices finish enumeration; they will wait ID * 1ms before responding
 }
 
-void CAN_sendDutyCycle(uint8_t deviceId, float dutyCycle, AstraCAN& Can0) {
+void CAN_sendDutyCycle(uint8_t deviceId, float dutyCycle) {
     // DO NOT USE THE NEW CAN FUNCTIONS FOR THIS. SEE COMMENT BELOW.
     // Ask David, Tristan, or Maddy. We don't fucking know why.
     CanFrame msg = {0};
@@ -54,47 +54,47 @@ void CAN_sendDutyCycle(uint8_t deviceId, float dutyCycle, AstraCAN& Can0) {
 
     Float2LEDec(dutyCycle, msg.data);
 
-    Can0.writeFrame(msg);
+    ESP32Can.writeFrame(msg);
 
     // WARNING: DO NOT USE THIS CODE. THE MOTORS WILL HAVE A SEIZURE.
     // uint8_t frame[8] = {0};
     // Float2LEDec(dutyCycle, frame);
-    // CAN_sendPacket(deviceId, 0x02, frame, 8, Can0);
+    // CAN_sendPacket(deviceId, 0x02, frame, 8);
 }
 
-void CAN_sendVelocity(uint8_t deviceId, float speed, AstraCAN& Can0) {
+void CAN_sendVelocity(uint8_t deviceId, float speed) {
     uint8_t frame[8] = {0};
     Float2LEDec(speed, frame);
-    CAN_sendPacket(deviceId, 0x12, frame, 8, Can0);
+    CAN_sendPacket(deviceId, 0x12, frame, 8);
 }
 
-void CAN_sendSmartVelocity(uint8_t deviceId, float speed, AstraCAN& Can0) {
+void CAN_sendSmartVelocity(uint8_t deviceId, float speed) {
     uint8_t frame[8] = {0};
     Float2LEDec(speed, frame);
-    CAN_sendPacket(deviceId, 0x13, frame, 8, Can0);
+    CAN_sendPacket(deviceId, 0x13, frame, 8);
 }
 
-void CAN_sendPosition(uint8_t deviceId, float position, AstraCAN& Can0) {
+void CAN_sendPosition(uint8_t deviceId, float position) {
     uint8_t frame[8] = {0};
     Float2LEDec(position, frame);
-    CAN_sendPacket(deviceId, 0x32, frame, 8, Can0);
+    CAN_sendPacket(deviceId, 0x32, frame, 8);
 }
 
 
-void CAN_sendHeartbeat(uint8_t deviceId, AstraCAN& Can0) {
+void CAN_sendHeartbeat(uint8_t deviceId) {
     uint8_t frame[8] = {0};
     frame[0] = pow(2, deviceId);
-    CAN_sendPacket(0, 0xB2, frame, 8, Can0);  // Heartbeat is weird...
+    CAN_sendPacket(0, 0xB2, frame, 8);  // Heartbeat is weird...
 }
 
-void CAN_identifySparkMax(uint8_t deviceId, AstraCAN& Can0) {
+void CAN_identifySparkMax(uint8_t deviceId) {
     uint8_t frame[8] = {0};
-    CAN_sendPacket(deviceId, 0x76, frame, 0, Can0);
+    CAN_sendPacket(deviceId, 0x76, frame, 0);
 }
 
 
 void CAN_setParameter(uint8_t deviceId, sparkMax_ConfigParameter parameterID,
-                      sparkMax_ParameterType type, uint32_t value, AstraCAN& Can0) {
+                      sparkMax_ParameterType type, uint32_t value) {
     uint8_t frame[8] = {0};  // First 32 bits of frame are value, next 8 bits are type
     frame[4] = static_cast<uint8_t>(type);
 
@@ -110,13 +110,13 @@ void CAN_setParameter(uint8_t deviceId, sparkMax_ConfigParameter parameterID,
         frame[0] = value ? 1 : 0;
     }
 
-    CAN_sendPacket(deviceId, static_cast<uint8_t>(parameterID) | 0x300, frame, 5, Can0);
+    CAN_sendPacket(deviceId, static_cast<uint8_t>(parameterID) | 0x300, frame, 5);
 }
 
-void CAN_reqParameter(uint8_t deviceId, sparkMax_ConfigParameter parameterID, AstraCAN& Can0) {
+void CAN_reqParameter(uint8_t deviceId, sparkMax_ConfigParameter parameterID) {
     uint8_t frame[8] = {0};
 
-    CAN_sendPacket(deviceId, static_cast<uint8_t>(parameterID) | 0x300, frame, 0, Can0);
+    CAN_sendPacket(deviceId, static_cast<uint8_t>(parameterID) | 0x300, frame, 0);
 }
 
 
@@ -125,8 +125,7 @@ void CAN_reqParameter(uint8_t deviceId, sparkMax_ConfigParameter parameterID, As
 //--------------------------------------------------------------------------//
 
 // Using target device REV ID and REV API ID
-void CAN_sendPacket(uint8_t deviceId, int32_t apiId, uint8_t data[], uint8_t dataLen,
-                    AstraCAN& Can0) {
+void CAN_sendPacket(uint8_t deviceId, int32_t apiId, uint8_t data[], uint8_t dataLen) {
     uint32_t createdId = 0x2050000;
     // createdId |= (static_cast<int32_t>(storage->deviceType) & 0x1F) << 24;
     // createdId |= (static_cast<int32_t>(storage->manufacturer) & 0xFF) << 16;
@@ -148,7 +147,7 @@ void CAN_sendPacket(uint8_t deviceId, int32_t apiId, uint8_t data[], uint8_t dat
     }
 #endif
 
-    CAN_sendPacket(createdId, data, dataLen, Can0);
+    CAN_sendPacket(createdId, data, dataLen);
 }
 
 void printREVFrame(CanFrame frame) {
@@ -185,7 +184,7 @@ void printREVFrame(CanFrame frame) {
 //---------//
 
 // Given direct values for the CAN packet
-void CAN_sendPacket(uint32_t messageID, uint8_t data[], uint8_t dataLen, AstraCAN& Can0) {
+void CAN_sendPacket(uint32_t messageID, uint8_t data[], uint8_t dataLen) {
     CanFrame outMsg;
     outMsg.extd = 1;  // All REV CAN messages are extended
     outMsg.data_length_code = dataLen;
@@ -193,7 +192,7 @@ void CAN_sendPacket(uint32_t messageID, uint8_t data[], uint8_t dataLen, AstraCA
     outMsg.data[0] = 0;  // Just in case... TODO: needed???
     for (uint8_t i = 0; i < dataLen; i++)
         outMsg.data[i] = data[i];
-    Can0.writeFrame(outMsg);
+    ESP32Can.writeFrame(outMsg);
 }
 
 
@@ -204,7 +203,7 @@ void CAN_sendPacket(uint32_t messageID, uint8_t data[], uint8_t dataLen, AstraCA
 //----------//
 
 // Given direct values for the CAN packet
-void CAN_sendPacket(uint32_t messageID, uint8_t data[], uint8_t dataLen, AstraCAN& Can0) {
+void CAN_sendPacket(uint32_t messageID, uint8_t data[], uint8_t dataLen) {
     CAN_message_t outMsg;
     outMsg.flags.extended = 1;  // All REV CAN messages are extended
     outMsg.len = dataLen;
@@ -212,7 +211,7 @@ void CAN_sendPacket(uint32_t messageID, uint8_t data[], uint8_t dataLen, AstraCA
     outMsg.bug[0] = 0;  // Just in case... TODO: needed???
     for (uint8_t i = 0; i < dataLen; i++)
         outMsg.buf[i] = data[i];
-    Can0.write(outMsg);
+    ESP32Can.write(outMsg);
 }
 
 

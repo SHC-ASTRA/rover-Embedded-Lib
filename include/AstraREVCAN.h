@@ -254,27 +254,27 @@ struct motorStatus2 {
 //   Specific REV Commands                                                  //
 //--------------------------------------------------------------------------//
 
-void CAN_enumerate(AstraCAN& Can0);
+void CAN_enumerate();
 
 
-void CAN_sendDutyCycle(uint8_t deviceId, float dutyCycle, AstraCAN& Can0);
+void CAN_sendDutyCycle(uint8_t deviceId, float dutyCycle);
 
-void CAN_sendVelocity(uint8_t deviceId, float speed, AstraCAN& Can0);
+void CAN_sendVelocity(uint8_t deviceId, float speed);
 
-void CAN_sendSmartVelocity(uint8_t deviceId, float speed, AstraCAN& Can0);
+void CAN_sendSmartVelocity(uint8_t deviceId, float speed);
 
-void CAN_sendPosition(uint8_t deviceId, float position, AstraCAN& Can0);
+void CAN_sendPosition(uint8_t deviceId, float position);
 
 
-void CAN_sendHeartbeat(uint8_t deviceId, AstraCAN& Can0);
+void CAN_sendHeartbeat(uint8_t deviceId);
 
-void CAN_identifySparkMax(uint8_t deviceId, AstraCAN& Can0);
+void CAN_identifySparkMax(uint8_t deviceId);
 
 
 void CAN_setParameter(uint8_t deviceId, sparkMax_ConfigParameter parameterID, sparkMax_ParameterType type,
-                      uint32_t value, AstraCAN& Can0);
+                      uint32_t value);
 
-void CAN_reqParameter(uint8_t deviceId, sparkMax_ConfigParameter parameterID, AstraCAN& Can0);
+void CAN_reqParameter(uint8_t deviceId, sparkMax_ConfigParameter parameterID);
 
 
 //-------------------------------------//
@@ -282,15 +282,15 @@ void CAN_reqParameter(uint8_t deviceId, sparkMax_ConfigParameter parameterID, As
 //-------------------------------------//
 
 inline void identifyDevice(AstraCAN& Can0, int can_id) {
-    CAN_identifySparkMax(can_id, Can0);
+    CAN_identifySparkMax(can_id);
 }
 
 inline void sendDutyCycle(AstraCAN& Can0, int can_id, float duty_cycle) {
-    CAN_sendDutyCycle(can_id, duty_cycle, Can0);
+    CAN_sendDutyCycle(can_id, duty_cycle);
 }
 
 inline void sendHeartbeat(AstraCAN& Can0, int can_id) {
-    CAN_sendHeartbeat(can_id, Can0);
+    CAN_sendHeartbeat(can_id);
 }
 
 inline void setParameter(AstraCAN& Can0, int can_id, uint8_t paramID, uint32_t value) {
@@ -312,10 +312,10 @@ void Float2LEDec(float x, uint8_t (&buffer_data)[8]);
 
 
 // Using target device REV ID and REV API ID
-void CAN_sendPacket(uint8_t deviceId, int32_t apiId, uint8_t data[], uint8_t dataLen, AstraCAN& Can0);
+void CAN_sendPacket(uint8_t deviceId, int32_t apiId, uint8_t data[], uint8_t dataLen);
 
 // Given direct values for the CAN packet
 // In AstraREVCAN.cpp, this is defined differently depending on mcu.
-void CAN_sendPacket(uint32_t messageID, uint8_t data[], uint8_t dataLen, AstraCAN& Can0);
+void CAN_sendPacket(uint32_t messageID, uint8_t data[], uint8_t dataLen);
 
 void printREVFrame(CanFrame frame);

@@ -21,7 +21,6 @@ enum motorCtrlMode {
 
 
 class AstraMotors {
-    AstraCAN* canObject;
     int motorID;  // REV motor ID
     sparkMax_ctrlType controlMode;  // 0 - Duty cycle  1 - Speed
     bool inverted;  // Inverts the speed of the motor, this should be true for right wheels
@@ -52,14 +51,13 @@ class AstraMotors {
     /**
      * @brief Default constructor for a REV motor controller
      * 
-     * @param setCanObject Can0 or TwaiCan
      * @param setMotorID REV motor ID for this motor
      * @param setCtrlMode Either CTRL_SPEED or CTRL_DUTYCYCLE for controlling via RPM or percent speed
      * @param inv Whether or not to invert the motor's direction (right wheels)
      * @param setMaxSpeed Max RPM for speed control mode
      * @param setMaxDuty Max percent speed for duty cycle control mode [-1, 1]
      */
-    AstraMotors(AstraCAN* setCanObject, int setMotorID, sparkMax_ctrlType setCtrlMode = sparkMax_ctrlType::kDutyCycle, bool inv = false, int setMaxSpeed = 100, float setMaxDuty = 1.0);
+    AstraMotors(int setMotorID, sparkMax_ctrlType setCtrlMode = sparkMax_ctrlType::kDutyCycle, bool inv = false, int setMaxSpeed = 100, float setMaxDuty = 1.0);
 
     /**
      * @brief Clamps a joystick value between max and min speed or duty
@@ -121,24 +119,30 @@ class AstraMotors {
     
     // Send the identify command to the motor
     inline void identify() {
-        // CAN_identifySparkMax(motorID, *canObject);
-        identifyDevice(*canObject, motorID);
+#ifndef OLD_ASTRACAN_ENABLE
+        CAN_identifySparkMax(motorID);
+#else
+        identifyDevice(ESP32Can, motorID);
+#endif
     }
     // Enable either brake (true) or coast (false) idle mode
     inline void setBrake(bool enable) {
 #ifndef OLD_ASTRACAN_ENABLE
-        CAN_setParameter(motorID, sparkMax_ConfigParameter::kIdleMode, sparkMax_ParameterType::kUint32, static_cast<uint32_t>(enable), *canObject);
+        CAN_setParameter(motorID, sparkMax_ConfigParameter::kIdleMode, sparkMax_ParameterType::kUint32, static_cast<uint32_t>(enable));
 #endif
     }
     // Send the currently tracked duty cycle to the motor
     inline void sendDuty() {
-        // CAN_sendDutyCycle(motorID, currentDutyCycle, *canObject);
-        sendDutyCycle(*canObject, motorID, currentDutyCycle);
+#ifndef OLD_ASTRACAN_ENABLE
+        CAN_sendDutyCycle(motorID, currentDutyCycle);
+#else
+        sendDutyCycle(ESP32Can, motorID, currentDutyCycle);
+#endif
     }
 
     inline void sendSpeed() {
 #ifndef OLD_ASTRACAN_ENABLE
-        CAN_sendVelocity(motorID, currentMotorSpeed, *canObject);
+        CAN_sendVelocity(motorID, currentMotorSpeed);
 #endif
     }
     

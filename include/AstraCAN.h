@@ -31,6 +31,7 @@
 
 #        include <ESP32-TWAI-CAN.hpp>  // handmade0octopus/ESP32-TWAI-CAN
 
+// DEPRECATED: Use ESP32Can instead
 typedef TwaiCAN AstraCAN;
 
 void printCANframe(CanFrame& frame);

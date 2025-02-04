@@ -10,9 +10,8 @@
 #    include "AstraMotors.h"
 
 
-AstraMotors::AstraMotors(AstraCAN* setCanObject, int setMotorID, sparkMax_ctrlType setCtrlMode, bool inv,
+AstraMotors::AstraMotors(int setMotorID, sparkMax_ctrlType setCtrlMode, bool inv,
                          int setMaxSpeed, float setMaxDuty) {
-    canObject = setCanObject;
     motorID = setMotorID;
     controlMode = setCtrlMode;  // 0-Speed 1-Duty Cycle
     inverted = inv;
