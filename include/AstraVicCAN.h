@@ -86,6 +86,7 @@ class VicCanFrame {
     uint8_t dlc;      // 4 bits
     uint8_t data[8];  // 0..8 bytes
 
+
     // Constructor
     VicCanFrame() {
         clear();
@@ -103,19 +104,17 @@ class VicCanFrame {
         }
     }
 
+    // Should this mcu care about this CAN frame
+    inline bool isForMe() {
+        return mcuId == SUBMODULE_CAN_ID || mcuId == McuId::MCU_BROADCAST;
+    }
+
+
     // Take a CAN ID and parse it into its components
     void parseCanId(uint32_t id) {
         mcuId = static_cast<McuId>((id >> 8) & 0x7);
         dataType = static_cast<CanDataType>((id >> 6) & 0x3);
         cmdId = id & 0x3F;
-    }
-
-    inline int createCanId() {
-        return createCanId(dataType);
-    }
-
-    int createCanId(CanDataType pDataType) {
-        return (static_cast<uint8_t>(mcuId) << 8) | (static_cast<uint8_t>(pDataType) << 6) | cmdId;
     }
 
     // Take an entire CAN frame and parse it into its components
@@ -129,8 +128,22 @@ class VicCanFrame {
         }
     }
 
-    inline bool isForMe() {
-        return mcuId == SUBMODULE_CAN_ID || mcuId == McuId::MCU_BROADCAST;
+
+    inline int createCanId() {
+        return createCanId(dataType);
+    }
+
+    int createCanId(CanDataType pDataType) {
+        return (static_cast<uint8_t>(mcuId) << 8) | (static_cast<uint8_t>(pDataType) << 6) | cmdId;
+    }
+
+    void createCanFrame(CanFrame& frame) {
+        frame.identifier = createCanId();
+        frame.rtr = rtr;
+        frame.data_length_code = dlc;
+        for (int i = 0; i < 8; i++) {
+            frame.data[i] = data[i];
+        }
     }
 };
 
@@ -140,11 +153,19 @@ class VicCanFrame {
 //------------------------------------------------------------------------------------------------//
 
 class VicCanController {
+   private:
     CanFrame inCanFrame;
     VicCanFrame inVicCanFrame;
     CanFrame outFrame;
+    bool relayMode;
+    bool relayFrameWaiting;
+
 
    public:
+    inline uint8_t getCmdId() {
+        return inVicCanFrame.cmdId;
+    }
+
     /**
      * @brief Extends readCanFrame() to check destination of CAN Frame
      * 
@@ -153,25 +174,30 @@ class VicCanController {
      * @return false upon not finding a CAN frame or reading one for a different MCU
      */
     bool readCan(int timeout = 0) {
+        if (relayMode && relayFrameWaiting) {
+            relayFrameWaiting = false;
+            return true;
+        }
+
         if (!ESP32Can.readFrame(inCanFrame, (timeout < 0 ? 0 : timeout)))
             return false;  // No CAN frame received
 
         inVicCanFrame.parseCanFrame(inCanFrame);  // Load data from CanFrame into VicCanFrame
 
-        if (!inVicCanFrame.isForMe())
+        if (!inVicCanFrame.isForMe()) {
+            if (relayMode)
+                relayToSerial(inVicCanFrame);
             return false;  // Not for this MCU
+        }
 
         return true;
     }
 
-    inline uint8_t getCmdId() {
-        return inVicCanFrame.cmdId;
-    }
-
-    inline CanDataType getDataType() {
-        return inVicCanFrame.dataType;
-    }
-
+    /**
+     * @brief Automatically parse data from incoming CanFrame into a std::vector<double>.
+     *
+     * @param outData std::vector<double>; is automatically cleared.
+     */
     void parseData(std::vector<double>& outData) {
         outData.clear();
 
@@ -234,26 +260,79 @@ class VicCanController {
         }
     }
 
+    //-------//
+    // Relay //
+    //-------//
+
+    // From vic can to Serial
+    void relayToSerial(VicCanFrame& vicFrame) {
+        Serial.print("can_relay_fromvic,");
+        Serial.print(static_cast<int>(vicFrame.mcuId));
+        Serial.print(",");
+        Serial.print(vicFrame.cmdId);
+        for (int i = 0; i < vicFrame.dlc; i++) {
+            Serial.print(",");
+            Serial.print(vicFrame.data[i]);
+        }
+        Serial.println();
+    }
+
+    // From Serial to vic can
     void relayFromSerial(std::vector<String> args) {
-        CanFrame outCanFrame;
 
-        // Command layout: "can_relay, id, rtr, dlc, data"
+        // Command layout: "can_relay_tovic, mcuId, cmdId, data..."
 
-        if (args.size() < 3) {
+        if (args.size() < 3 || args.size() > 11) {
             Serial.println("Invalid command");
             return;
         }
 
-        outCanFrame.identifier = args[1].toInt();
-        outCanFrame.rtr = args[2].toInt();
-        outCanFrame.data_length_code = args[3].toInt();
-        for (int i = 0; i < outCanFrame.data_length_code; i++) {
-            outCanFrame.data[i] = args[i + 4].toInt();
+        VicCanFrame outVicFrame;
+
+        outVicFrame.mcuId = static_cast<McuId>(args[1].toInt());
+        outVicFrame.cmdId = args[2].toInt();
+        outVicFrame.dlc = 8;
+        if (args.size() != 3) {  // If we have data to include; if not, default is no data
+            // I know this is ugly but it will work for now
+            /**/ if (args.size() - 3 == 1) {
+                outVicFrame.dataType = CanDataType::DT_1f64;
+                encodeData(outVicFrame.data, args[3].toDouble());
+            }
+            else if (args.size() - 3 == 2) {
+                outVicFrame.dataType = CanDataType::DT_2f32;
+                encodeData(outVicFrame.data, args[3].toFloat(), args[4].toFloat());
+            }
+            else if (args.size() - 3 == 4) {
+                outVicFrame.dataType = CanDataType::DT_4i16;
+                encodeData(outVicFrame.data, args[3].toInt(), args[4].toInt(), args[5].toInt(), args[6].toInt());
+            }
+            else if (args.size() - 3 == 8) {
+                outVicFrame.dataType = CanDataType::DT_8i8;
+                encodeData(outVicFrame.data, args[3].toInt(), args[4].toInt(), args[5].toInt(), args[6].toInt(),
+                           args[7].toInt(), args[8].toInt(), args[9].toInt(), args[10].toInt());
+            }
+            else {
+                Serial.println("Invalid data length");
+                return;
+            }
         }
 
-        ESP32Can.writeFrame(outCanFrame);
+        outVicFrame.createCanFrame(outFrame);
+
+        if (outVicFrame.mcuId == SUBMODULE_CAN_ID || outVicFrame.mcuId == McuId::MCU_BROADCAST) {
+            relayFrameWaiting = true;
+            inVicCanFrame = outVicFrame;
+        }
+        
+        if (outVicFrame.mcuId != SUBMODULE_CAN_ID) {
+            ESP32Can.writeFrame(outFrame);
+        }
     }
 
+
+    //-------------------------//
+    // CAN Frame data encoding //
+    //-------------------------//
 
     // DT_1f64
     void encodeData(uint8_t canData[8], double data1) {
@@ -311,40 +390,50 @@ class VicCanController {
         canData[7] = *reinterpret_cast<uint8_t*>(&data8);
     }
 
-    //------------//
-    // Responding //
-    //------------//
+    //-----------------------------//
+    // Sending back to basestation //
+    //-----------------------------//
 
-    void readyTxFrame(uint8_t dlc, CanDataType outDataType, uint8_t cmdId) {
-        outFrame.identifier = inVicCanFrame.createCanId(outDataType);
-        outFrame.rtr = false;
-        outFrame.data_length_code = dlc;
+    void something(VicCanFrame& outVicFrame, uint8_t cmdId) {
+        outVicFrame.mcuId = SUBMODULE_CAN_ID;
+        outVicFrame.cmdId = cmdId;
+        outVicFrame.dlc = 8;
+        if (relayMode) {
+            relayToSerial(outVicFrame);
+        } else {
+            outVicFrame.createCanFrame(outFrame);
+            ESP32Can.writeFrame(outFrame);
+        }
     }
 
 
     void send(uint8_t cmdId, double data) {
-        readyTxFrame(8, CanDataType::DT_1f64, cmdId);
-        encodeData(outFrame.data, data);
-        ESP32Can.writeFrame(outFrame);
+        VicCanFrame outVicFrame;
+        outVicFrame.dataType = CanDataType::DT_1f64;
+        encodeData(outVicFrame.data, data);
+        something(outVicFrame, cmdId);
     }
 
     void send(uint8_t cmdId, float data1, float data2) {
-        readyTxFrame(8, CanDataType::DT_2f32, cmdId);
-        encodeData(outFrame.data, data1, data2);
-        ESP32Can.writeFrame(outFrame);
+        VicCanFrame outVicFrame;
+        outVicFrame.dataType = CanDataType::DT_2f32;
+        encodeData(outVicFrame.data, data1, data2);
+        something(outVicFrame, cmdId);
     }
 
     void send(uint8_t cmdId, int16_t data1, int16_t data2, int16_t data3, int16_t data4 = 0) {
-        readyTxFrame(8, CanDataType::DT_4i16, cmdId);
-        encodeData(outFrame.data, data1, data2, data3, data4);
-        ESP32Can.writeFrame(outFrame);
+        VicCanFrame outVicFrame;
+        outVicFrame.dataType = CanDataType::DT_4i16;
+        encodeData(outVicFrame.data, data1, data2, data3, data4);
+        something(outVicFrame, cmdId);
     }
 
     void send(uint8_t cmdId, int8_t data1, int8_t data2, int8_t data3, int8_t data4, int8_t data5, int8_t data6 = 0,
               int8_t data7 = 0, int8_t data8 = 0) {
-        readyTxFrame(8, CanDataType::DT_8i8, cmdId);
-        encodeData(outFrame.data, data1, data2, data3, data4, data5, data6, data7, data8);
-        ESP32Can.writeFrame(outFrame);
+        VicCanFrame outVicFrame;
+        outVicFrame.dataType = CanDataType::DT_8i8;
+        encodeData(outVicFrame.data, data1, data2, data3, data4, data5, data6, data7, data8);
+        something(outVicFrame, cmdId);
     }
 
 
