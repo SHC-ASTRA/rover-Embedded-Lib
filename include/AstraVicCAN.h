@@ -162,6 +162,14 @@ class VicCanController {
 
 
    public:
+    inline void relayOn() {
+        relayMode = true;
+    }
+
+    inline void relayOff() {
+        relayMode = false;
+    }
+
     inline uint8_t getCmdId() {
         return inVicCanFrame.cmdId;
     }
@@ -174,9 +182,9 @@ class VicCanController {
      * @return false upon not finding a CAN frame or reading one for a different MCU
      */
     bool readCan(int timeout = 0) {
-        if (relayMode && relayFrameWaiting) {
+        if (relayFrameWaiting) {
             relayFrameWaiting = false;
-            return true;
+            return true;  // Use inVicCanFrame already set by relayFromSerial()
         }
 
         if (!ESP32Can.readFrame(inCanFrame, (timeout < 0 ? 0 : timeout)))
