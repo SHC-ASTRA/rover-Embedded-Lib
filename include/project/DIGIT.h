@@ -41,6 +41,12 @@
 
 #define MCU_DEBUG 4
 
+// Lynxmotion Smart Servo
+
+#define LSS_SERIAL Serial1
+#define LSS_TOP_ID 0  // TODO: default is 0; change
+#define LSS_BOTTOM_ID 1  // TODO: ditto
+
 
 #elif defined(CORE_TEENSY)
 
