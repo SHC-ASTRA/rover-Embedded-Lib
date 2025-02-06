@@ -60,7 +60,9 @@ typedef enum CanCmdId : uint8_t {
     // Misc physical control
     CMD_LSS_TURNBY_DEG = 24,
     CMD_PWMSERVO_SET_DEG,
-    CMD_DCMOTOR_SET_SPEED,
+    CMD_DCMOTOR_CTRL,
+    CMD_STEPPER_CTRL,
+    CMD_LASER_CTRL,
     // Submodule-specific (omitted)
     // Data request
     CMD_GNSS_LAT = 48,
