@@ -18,7 +18,7 @@
 //-----------//
 
 #    define COMMS_UART Serial1  // UART between Main-Motor
-#    define MOTOR_AMOUNT 3
+
 
 
 #    if !defined(MOTORMCU)
@@ -38,6 +38,8 @@
 #        define LYNX_TX 17
 #        define LYNX_RX 18
 
+#        define MOTOR_AMOUNT 4
+
 #    else
 
 //-----------//
@@ -47,6 +49,8 @@
 #        define MOTOR_ID_A1 1
 #        define MOTOR_ID_A2 2
 #        define MOTOR_ID_A3 3
+
+#        define MOTOR_AMOUNT 3
 
 #        warning "Motor IDs not set"
 
