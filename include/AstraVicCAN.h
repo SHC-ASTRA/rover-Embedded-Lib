@@ -204,8 +204,15 @@ class VicCanController {
         inVicCanFrame.parseCanFrame(inCanFrame);  // Load data from CanFrame into VicCanFrame
 
         if (!inVicCanFrame.isForMe()) {
-            if (relayMode)
+            if (relayMode) {
+#ifdef DEBUG
+                Serial.println("Relaying from CAN to Serial:");
+                CanFrame tempFrame;
+                inVicCanFrame.createCanFrame(tempFrame);
+                printCANframe(tempFrame);
+#endif
                 relayToSerial(inVicCanFrame);
+            }
             return false;  // Not for this MCU
         }
 
