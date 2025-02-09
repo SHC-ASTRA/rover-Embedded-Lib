@@ -186,11 +186,20 @@ class VicCanController {
     bool readCan(int timeout = 0) {
         if (relayFrameWaiting) {
             relayFrameWaiting = false;
+#ifdef DEBUG
+            Serial.println("Using frame waiting from serial relay");
+#endif
             return true;  // Use inVicCanFrame already set by relayFromSerial()
         }
 
         if (!ESP32Can.readFrame(inCanFrame, (timeout < 0 ? 0 : timeout)))
             return false;  // No CAN frame received
+
+#ifdef DEBUG
+        Serial.println("Received CAN frame: ");
+        printCANframe(inCanFrame);
+#endif
+
 
         inVicCanFrame.parseCanFrame(inCanFrame);  // Load data from CanFrame into VicCanFrame
 
@@ -332,9 +341,16 @@ class VicCanController {
         if (outVicFrame.mcuId == SUBMODULE_CAN_ID || outVicFrame.mcuId == McuId::MCU_BROADCAST) {
             relayFrameWaiting = true;
             inVicCanFrame = outVicFrame;
+#ifdef DEBUG
+            Serial.println("Queuing frame from Serial.");
+#endif
         }
         
         if (outVicFrame.mcuId != SUBMODULE_CAN_ID) {
+#ifdef DEBUG
+            Serial.println("Relaying from Serial to CAN:");
+            printCANframe(outFrame);
+#endif
             ESP32Can.writeFrame(outFrame);
         }
     }
