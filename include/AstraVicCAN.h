@@ -432,9 +432,19 @@ class VicCanController {
         outVicFrame.cmdId = cmdId;
         outVicFrame.dlc = 8;
         if (relayMode) {
+#ifdef DEBUG
+            Serial.println("Relaying from CAN to Serial:");
+            CanFrame tempFrame;
+            outVicFrame.createCanFrame(tempFrame);
+            printCANframe(tempFrame);
+#endif
             relayToSerial(outVicFrame);
         } else {
             outVicFrame.createCanFrame(outFrame);
+#ifdef DEBUG
+            Serial.println("Sending CAN frame:");
+            printCANframe(outFrame);
+#endif
             ESP32Can.writeFrame(outFrame);
         }
     }
