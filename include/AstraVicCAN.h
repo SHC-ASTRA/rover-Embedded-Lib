@@ -63,7 +63,14 @@ typedef enum CanCmdId : uint8_t {
     CMD_DCMOTOR_CTRL,
     CMD_STEPPER_CTRL,
     CMD_LASER_CTRL,
-    // Submodule-specific (omitted)
+    // Submodule-specific
+    CMD_ARM_IK_CTRL = 32,
+    CMD_ARM_IK_TTG,
+    CMD_DIGIT_EF_CTRL,
+    CMD_DIGIT_LINAC_CTRL,
+    CMD_DIGIT_IK_CTRL,
+    CMD_FAERIE_SKAKE,
+    CMD_FAERIE_UVLED,
     // Data request
     CMD_GNSS_LAT = 48,
     CMD_GNSS_LON,
