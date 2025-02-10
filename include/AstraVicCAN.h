@@ -48,8 +48,8 @@ enum class CanDataType : uint8_t {
 // Command IDs for standard VicCAN commands
 typedef enum CanCmdId : uint8_t {
     // General misc
-    CMD_TEST = 0,
-    CMD_PING,
+    CMD_PING = 1,
+    CMD_TIME,
     CMD_B_LED,
     CMD_SENSOR_RECON,
     // REV Motor control
