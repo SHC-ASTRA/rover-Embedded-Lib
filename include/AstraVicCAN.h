@@ -458,7 +458,7 @@ class VicCanController {
     // Sending back to basestation //
     //-----------------------------//
 
-    void something(VicCanFrame& outVicFrame, uint8_t cmdId) {
+    void sendFrame(VicCanFrame& outVicFrame, uint8_t cmdId) {
         outVicFrame.mcuId = SUBMODULE_CAN_ID;
         outVicFrame.cmdId = cmdId;
         outVicFrame.dlc = 8;
@@ -485,21 +485,21 @@ class VicCanController {
         VicCanFrame outVicFrame;
         outVicFrame.dataType = CanDataType::DT_1f64;
         encodeData(outVicFrame.data, data);
-        something(outVicFrame, cmdId);
+        sendFrame(outVicFrame, cmdId);
     }
 
     void send(uint8_t cmdId, float data1, float data2) {
         VicCanFrame outVicFrame;
         outVicFrame.dataType = CanDataType::DT_2f32;
         encodeData(outVicFrame.data, data1, data2);
-        something(outVicFrame, cmdId);
+        sendFrame(outVicFrame, cmdId);
     }
 
     void send(uint8_t cmdId, int16_t data1, int16_t data2, int16_t data3, int16_t data4 = 0) {
         VicCanFrame outVicFrame;
         outVicFrame.dataType = CanDataType::DT_4i16;
         encodeData(outVicFrame.data, data1, data2, data3, data4);
-        something(outVicFrame, cmdId);
+        sendFrame(outVicFrame, cmdId);
     }
 
     void send(uint8_t cmdId, int8_t data1, int8_t data2, int8_t data3, int8_t data4, int8_t data5, int8_t data6 = 0,
@@ -507,7 +507,7 @@ class VicCanController {
         VicCanFrame outVicFrame;
         outVicFrame.dataType = CanDataType::DT_8i8;
         encodeData(outVicFrame.data, data1, data2, data3, data4, data5, data6, data7, data8);
-        something(outVicFrame, cmdId);
+        sendFrame(outVicFrame, cmdId);
     }
 
 
