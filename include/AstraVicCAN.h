@@ -45,6 +45,17 @@ enum class CanDataType : uint8_t {
     DT_8i8
 };
 
+/**
+ * @brief Which datatype ID to use for no data; corresponds to dlc = 0.
+ *
+ * This is here to attempt to allow arbitration to work even the rest of the CAN ID is the same;
+ * ideally, there will not be CAN frames with identical IDs being sent by two different sources
+ * at the same time. If the relay requests telemetry at the same time a MCU provides it,
+ * the DT should be different so that instead of an error, arbitration can use the different DT
+ * to decide which frame should be sent first.
+ */
+#define DT_NA CanDataType::DT_8i8
+
 // Command IDs for standard VicCAN commands
 typedef enum CanCmdId : uint8_t {
     // General misc
@@ -104,7 +115,7 @@ class VicCanFrame {
     // Resets all data values; for use with static keyword
     void clear() {
         mcuId = McuId::MCU_BROADCAST;
-        dataType = CanDataType::DT_1f64;
+        dataType = DT_NA;
         cmdId = 0;
         rtr = false;
         dlc = 0;
@@ -291,16 +302,21 @@ class VicCanController {
         }
     }
 
+
     //-------//
     // Relay //
     //-------//
 
     // From vic can to Serial
     void relayToSerial(VicCanFrame& vicFrame) {
+
+        // String layout: "can_relay_fromvic, mcuId, cmdId, data[0-8]..."
+
         Serial.print("can_relay_fromvic,");
         Serial.print(static_cast<int>(vicFrame.mcuId));
         Serial.print(",");
         Serial.print(vicFrame.cmdId);
+        // TODO: parse data before sending over Serial... because we can do that (why tf didn't I do that before???)
         for (int i = 0; i < vicFrame.dlc; i++) {
             Serial.print(",");
             Serial.print(vicFrame.data[i]);
@@ -311,7 +327,7 @@ class VicCanController {
     // From Serial to vic can
     void relayFromSerial(std::vector<String> args) {
 
-        // Command layout: "can_relay_tovic, mcuId, cmdId, data..."
+        // Command layout: "can_relay_tovic, mcuId, cmdId, data[0-8]..."
 
         if (args.size() < 3 || args.size() > 11) {
             Serial.println("Invalid command");
@@ -322,8 +338,9 @@ class VicCanController {
 
         outVicFrame.mcuId = static_cast<McuId>(args[1].toInt());
         outVicFrame.cmdId = args[2].toInt();
-        outVicFrame.dlc = 8;
-        if (args.size() != 3) {  // If we have data to include; if not, default is no data
+        if (args.size() > 3) {  // If we have data to include; if not, default is no data
+            outVicFrame.dlc = 8;
+
             // I know this is ugly but it will work for now
             /**/ if (args.size() - 3 == 1) {
                 outVicFrame.dataType = CanDataType::DT_1f64;
@@ -427,6 +444,7 @@ class VicCanController {
         canData[6] = *reinterpret_cast<uint8_t*>(&data7);
         canData[7] = *reinterpret_cast<uint8_t*>(&data8);
     }
+
 
     //-----------------------------//
     // Sending back to basestation //
