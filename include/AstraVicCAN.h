@@ -12,6 +12,9 @@
 #include <vector>
 
 
+// How many decimal places to include in data from rover
+#define FEEDBACK_PRECISION 7
+
 // Microcontroller VicCAN ID's based on submodule; use these instead of the raw numbers
 enum class McuId : uint8_t {
     MCU_BROADCAST = 0,
@@ -316,11 +319,16 @@ class VicCanController {
         Serial.print(static_cast<int>(vicFrame.mcuId));
         Serial.print(",");
         Serial.print(vicFrame.cmdId);
-        // TODO: parse data before sending over Serial... because we can do that (why tf didn't I do that before???)
-        for (int i = 0; i < vicFrame.dlc; i++) {
-            Serial.print(",");
-            Serial.print(vicFrame.data[i]);
+
+        static std::vector<double> canData;
+        parseData(canData);
+        if (canData.size() > 0) {
+            for (const double& data : canData) {
+                Serial.print(",");
+                Serial.print(data, FEEDBACK_PRECISION);
+            }
         }
+
         Serial.println();
     }
 
