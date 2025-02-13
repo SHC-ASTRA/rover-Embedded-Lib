@@ -187,10 +187,12 @@ class VicCanController {
    public:
     inline void relayOn() {
         relayMode = true;
+        Serial.println("can_relay_ready");
     }
 
     inline void relayOff() {
         relayMode = false;
+        Serial.println("can_relay_off");
     }
 
     inline uint8_t getCmdId() {
