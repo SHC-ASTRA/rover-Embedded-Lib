@@ -17,7 +17,7 @@
 
 // Microcontroller VicCAN ID's based on submodule; use these instead of the raw numbers
 enum class McuId : uint8_t {
-    MCU_BROADCAST = 0,
+    MCU_BROADCAST = 1,
     MCU_CORE,
     MCU_ARM,
     MCU_DIGIT,
@@ -92,6 +92,59 @@ typedef enum CanCmdId : uint8_t {
     CMD_DATA_TEMP,
     CMD_DATA_IMU
 };
+
+/**
+ * @brief Takes a MCU name in string form (i.e., "core"), and turns it into a MCU ID enum, if valid
+ * 
+ * @param str String containing only the MCU name, all lower case
+ * @param mcuID McuId enum output corresponding to MCU name, if valid
+ * @return true on valid MCU name;
+ * @return false otherwise
+ */
+bool mcuIdFromString(const String& str, McuId* mcuID) {
+    if (str.length() == 0)
+        return false;
+    
+    /**/ if (str == "broadcast")
+        *mcuID = McuId::MCU_BROADCAST;
+    else if (str == "core")
+        *mcuID = McuId::MCU_CORE;
+    else if (str == "arm")
+        *mcuID = McuId::MCU_ARM;
+    else if (str == "digit")
+        *mcuID = McuId::MCU_DIGIT;
+    else if (str == "faerie")
+        *mcuID = McuId::MCU_FAERIE;
+    else if (str == "citadel")
+        *mcuID = McuId::MCU_CITADEL;
+    else
+        return false;
+    
+    return true;
+}
+
+/**
+ * @brief Takes a MCU ID enum and converts it into a MCU name in String form (i.e., "core")
+ * 
+ * @param mcuID MCU ID enum
+ * @return String containing only the name of the MCU
+ */
+String mcuIdToString(const McuId mcuID) {
+    /**/ if (mcuID == McuId::MCU_BROADCAST)
+        return "broadcast";
+    else if (mcuID == McuId::MCU_CORE)
+        return "core";
+    else if (mcuID == McuId::MCU_ARM)
+        return "arm";
+    else if (mcuID == McuId::MCU_DIGIT)
+        return "digit";
+    else if (mcuID == McuId::MCU_FAERIE)
+        return "faerie";
+    else if (mcuID == McuId::MCU_CITADEL)
+        return "citadel";
+    else
+        return "error_mcu";
+}
 
 
 //------------------------------------------------------------------------------------------------//
@@ -315,10 +368,10 @@ class VicCanController {
     // From vic can to Serial
     void relayToSerial(VicCanFrame& vicFrame) {
 
-        // String layout: "can_relay_fromvic, mcuId, cmdId, data[0-8]..."
+        // String layout: "can_relay_fromvic, mcu, cmdId, data[0-8]..."
 
         Serial.print("can_relay_fromvic,");
-        Serial.print(static_cast<int>(vicFrame.mcuId));
+        Serial.print(mcuIdToString(vicFrame.mcuId));
         Serial.print(",");
         Serial.print(vicFrame.cmdId);
 
@@ -337,7 +390,7 @@ class VicCanController {
     // From Serial to vic can
     void relayFromSerial(std::vector<String> args) {
 
-        // Command layout: "can_relay_tovic, mcuId, cmdId, data[0-8]..."
+        // Command layout: "can_relay_tovic, mcu, cmdId, data[0-8]..."
 
         if (args.size() < 3 || args.size() > 11) {
             Serial.println("Invalid command");
@@ -346,8 +399,17 @@ class VicCanController {
 
         VicCanFrame outVicFrame;
 
-        outVicFrame.mcuId = static_cast<McuId>(args[1].toInt());
         outVicFrame.cmdId = args[2].toInt();
+
+        // Interpret MCU ID either as number or name
+        if (args[1].toInt() != 0) {  // MCU ID given as number
+            outVicFrame.mcuId = static_cast<McuId>(args[1].toInt());
+        }
+        else if (!mcuIdFromString(args[1], &outVicFrame.mcuId)) {  // MCU ID given as string (invalid triggers error)
+            Serial.println("Error: Invalid MCU ID");
+            return;
+        }
+
         if (args.size() > 3) {  // If we have data to include; if not, default is no data
             outVicFrame.dlc = 8;
 
