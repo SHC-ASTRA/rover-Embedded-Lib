@@ -142,7 +142,7 @@ String mcuIdToString(const McuId mcuID) {
         return "faerie";
     else if (mcuID == McuId::MCU_CITADEL)
         return "citadel";
-    else
+    else  // Should never run unless an MCU is added and included in this function
         return "error_mcu";
 }
 
@@ -240,12 +240,14 @@ class VicCanController {
    public:
     inline void relayOn() {
         relayMode = true;
-        Serial.println("can_relay_ready");
+        Serial.print("can_relay_ready,");
+        Serial.println(mcuIdToString(SUBMODULE_CAN_ID));
     }
 
     inline void relayOff() {
         relayMode = false;
-        Serial.println("can_relay_off");
+        Serial.print("can_relay_off,");
+        Serial.println(mcuIdToString(SUBMODULE_CAN_ID));
     }
 
     inline uint8_t getCmdId() {
