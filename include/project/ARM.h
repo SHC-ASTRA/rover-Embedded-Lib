@@ -40,6 +40,8 @@
 
 #        define MOTOR_AMOUNT 4
 
+#        define AX0_CS 15
+
 #    else
 
 //-----------//
