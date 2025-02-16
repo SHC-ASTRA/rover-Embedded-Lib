@@ -72,7 +72,7 @@ void AstraMotors::setDuty(float val) {  // controller input value
     if (abs(val) <= 0.02) {
         targetDutyCycle = 0;
     } else {
-        targetDutyCycle = convertControllerValue(val);
+        targetDutyCycle = val;
     }
 #    endif
 }
