@@ -42,6 +42,9 @@
 
 #        define AX0_CS 15
 
+#        define TURNRIGHT 1
+#        define TURNLEFT 0
+
 #    else
 
 //-----------//
