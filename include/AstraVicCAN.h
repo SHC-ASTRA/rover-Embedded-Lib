@@ -85,14 +85,15 @@ typedef enum CanCmdId : uint8_t {
     CMD_DIGIT_IK_CTRL,
     CMD_FAERIE_SKAKE,
     CMD_FAERIE_UVLED,
-    CMD_ARM_MOTOR_FEEDBACK,
-    CMD_ARM_MANUAL,
+    CMD_ARM_MANUAL = 40,
     // Data request
     CMD_GNSS_LAT = 48,
     CMD_GNSS_LON,
     CMD_GNSS_SAT,
-    CMD_DATA_TEMP,
-    CMD_DATA_IMU
+    CMD_DATA_TEMP_HUM,
+    CMD_DATA_IMU,
+    CMD_REVMOTOR_FEEDBACK,
+    CMD_POWER_VOLTAGE
 };
 
 /**
