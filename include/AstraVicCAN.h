@@ -80,8 +80,8 @@ typedef enum CanCmdId : uint8_t {
     // Submodule-specific
     CMD_ARM_IK_CTRL = 32,
     CMD_ARM_IK_TTG,
-    CMD_DIGIT_EF_CTRL,
     CMD_DIGIT_LINAC_CTRL,
+    CMD_DIGIT_WRIST_ROLL,
     CMD_DIGIT_IK_CTRL,
     CMD_FAERIE_SKAKE,
     CMD_FAERIE_UVLED,
