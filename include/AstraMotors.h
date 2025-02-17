@@ -7,7 +7,6 @@
 #pragma once
 
 #include <cmath>
-#include "AstraMisc.h"
 
 #ifdef OLD_ASTRACAN_ENABLE
 #   include "AstraCAN.h"
