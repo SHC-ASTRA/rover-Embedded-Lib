@@ -52,7 +52,7 @@ struct Timer {
 
 // Clamps x between out_min and out_max using the expected input min and max
 // Used for controller input
-double map(double x, double in_min, double in_max, double out_min, double out_max) {
+double map_d(double x, double in_min, double in_max, double out_min, double out_max) {
     const double run = in_max - in_min;
     if (run == 0)
     {
