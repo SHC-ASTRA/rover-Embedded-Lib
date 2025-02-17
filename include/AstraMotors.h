@@ -8,11 +8,7 @@
 
 #include <cmath>
 
-#ifdef OLD_ASTRACAN_ENABLE
-#   include "AstraCAN.h"
-#else
-#   include "AstraREVCAN.h"
-#endif
+#include "AstraREVCAN.h"
 
 enum motorCtrlMode {
     CTRL_SPEED = 0,
@@ -42,11 +38,9 @@ class AstraMotors {
 
    public:
 
-#ifndef OLD_ASTRACAN_ENABLE
     motorStatus0 status0;
     motorStatus1 status1;  // Keep public for now for testing
     motorStatus2 status2;
-#endif
     
     /**
      * @brief Default constructor for a REV motor controller
@@ -119,31 +113,19 @@ class AstraMotors {
     
     // Send the identify command to the motor
     inline void identify() {
-#ifndef OLD_ASTRACAN_ENABLE
         CAN_identifySparkMax(motorID);
-#else
-        identifyDevice(ESP32Can, motorID);
-#endif
     }
     // Enable either brake (true) or coast (false) idle mode
     inline void setBrake(bool enable) {
-#ifndef OLD_ASTRACAN_ENABLE
         CAN_setParameter(motorID, sparkMax_ConfigParameter::kIdleMode, sparkMax_ParameterType::kUint32, static_cast<uint32_t>(enable));
-#endif
     }
     // Send the currently tracked duty cycle to the motor
     inline void sendDuty() {
-#ifndef OLD_ASTRACAN_ENABLE
         CAN_sendDutyCycle(motorID, currentDutyCycle);
-#else
-        sendDutyCycle(ESP32Can, motorID, currentDutyCycle);
-#endif
     }
 
     inline void sendSpeed() {
-#ifndef OLD_ASTRACAN_ENABLE
         CAN_sendVelocity(motorID, currentMotorSpeed);
-#endif
     }
     
     void sendDuty(float val);    // Send this duty cycle to the motor (Bypasses acceleration)

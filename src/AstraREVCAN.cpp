@@ -5,8 +5,6 @@
  *
  */
 
-#ifndef OLD_ASTRACAN_ENABLE
-
 // Don't require a platformio project to download a MCU CAN library if not using CAN
 // (AstraREVCAN.h will only be included if main.cpp includes it or we have the required MCU CAN
 // library)
@@ -218,5 +216,3 @@ void CAN_sendPacket(uint32_t messageID, uint8_t data[], uint8_t dataLen) {
 #endif  // End microcontroller check
 
 #endif  // End library check
-
-#endif  // End !OLD_ASTRACAN_ENABLE
