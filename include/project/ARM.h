@@ -27,16 +27,16 @@
 // Main MCU //
 //----------//
 
-#        define ENCODER_AXIS0_PIN 22
-#        define ENCODER_AXIS1_PIN 5
-#        define ENCODER_AXIS2_PIN 6
-#        define ENCODER_AXIS3_PIN 10
+#        define ENCODER_AXIS0_PIN 33
+#        define ENCODER_AXIS1_PIN 26
+#        define ENCODER_AXIS2_PIN 25
+#        define ENCODER_AXIS3_PIN 4
 
-#        define CAN_TX 24
-#        define CAN_RX 25
+#        define CAN_TX 13
+#        define CAN_RX 12
 
-#        define LYNX_TX 17
-#        define LYNX_RX 18
+#        define LYNX_TX 22
+#        define LYNX_RX 20
 
 #        define MOTOR_AMOUNT 4
 
@@ -54,6 +54,9 @@
 #        define MOTOR_ID_A1 1
 #        define MOTOR_ID_A2 2
 #        define MOTOR_ID_A3 3
+
+#        define CAN_RX 12
+#        define CAN_TX 13
 
 #        define MOTOR_AMOUNT 3
 
