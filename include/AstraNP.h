@@ -6,11 +6,9 @@
  */
 #pragma once
 
-#if !__has_include("Adafruit_NeoPixel.h")
-#    error Missing library! Please add the following line to lib_deps in platformio.ini:  adafruit/Adafruit NeoPixel
-#else
-
 #include <Arduino.h>
+
+#error "Do not use AstraNP.h yet!!! This library is 100% WIP and is not ready for use at all..."
 
 /**
  * @brief Pre-baked status codes for the NeoPixel.
@@ -50,5 +48,3 @@ class AstraNeoPixel {
 void update(uint32_t time) {
     neopixelWrite(RGB_BUILTIN, 0, RGB_BRIGHTNESS, 0);
 }
-
-#endif  // __has_include()
