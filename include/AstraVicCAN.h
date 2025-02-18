@@ -397,7 +397,7 @@ class VicCanController {
      * 
      * @param vicFrame The VicCanFrame to be relayed
      */
-    void relayToSerial(VicCanFrame& vicFrame) {  // TODO: change to const vicFrame
+    void relayToSerial(const VicCanFrame& vicFrame) {
         Serial.print("can_relay_fromvic,");
         Serial.print(mcuIdToString(vicFrame.mcuId));
         Serial.print(",");
@@ -405,8 +405,7 @@ class VicCanController {
 
         static std::vector<double> canData;
         parseData(canData);  // Load data from vicFrame into canData
-        if (canData.size() > 0) {  // Only print out data if there is any
-            // TODO: change to !canData.empty()
+        if (!canData.empty()) {  // Only print out data if there is any
             for (const double& data : canData) {
                 Serial.print(",");
                 Serial.print(data, FEEDBACK_PRECISION);
@@ -423,7 +422,7 @@ class VicCanController {
      * 
      * @param args std::vector<String> containing the Serial input
      */
-    void relayFromSerial(std::vector<String> args) {  // TODO: change to const args
+    void relayFromSerial(const std::vector<String>& args) {
         if (args.size() < 3 || args.size() > 11) {
             Serial.println("Error: Invalid command");
             return;
@@ -556,7 +555,7 @@ class VicCanController {
     //------------------------//
 
     // Move this code out of send(...) because it's all the exact same
-    void sendFrame(VicCanFrame& outVicFrame, uint8_t cmdId) {  // TODO: make const
+    void sendFrame(VicCanFrame& outVicFrame, uint8_t cmdId) {
         outVicFrame.mcuId = SUBMODULE_CAN_ID;
         outVicFrame.cmdId = cmdId;
         outVicFrame.dlc = 8;
