@@ -13,7 +13,26 @@
 //   Feather ESP32 (URC 2025)
 //------------------------------------------------------------------------------------------------//
 
-#    warning "ESP32 board for Citadel has not been designed yet!"
+#ifndef MOTORMCU
+
+#warning "Pins not added for main MCU yet..."
+
+#else
+
+#   define PIN_STEP_1_DIR 14
+#   define PIN_STEP_1_STEP 32
+#   define PIN_STEP_2_DIR 15
+#   define PIN_STEP_2_STEP 33
+#   define PIN_STEP_3_STEP 12
+#   define PIN_STEP_3_DIR 27
+
+#   define PIN_STEP_4_STEP 22
+#   define PIN_STEP_4_DIR 20
+
+#   define PIN_M0 5
+#   define PIN_M1 19
+
+#endif
 
 
 #elif defined(CORE_TEENSY)
