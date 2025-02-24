@@ -89,7 +89,8 @@ enum class CanDataType : uint8_t {
     CMD_DIGIT_IK_CTRL,
     CMD_FAERIE_SKAKE,
     CMD_FAERIE_UVLED,
-    CMD_ARM_MANUAL = 40,
+    CMD_ARM_MANUAL,
+    CMD_CITADEL_FAN_CTRL,
     // Data request
     CMD_GNSS_LAT = 48,
     CMD_GNSS_LON,
