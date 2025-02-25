@@ -15,16 +15,40 @@
 
 #ifndef MOTORMCU
 
-#warning "Pins not added for main MCU yet..."
+// Main MCU
+
+#define PIN_FAN_1 14
+#define PIN_FAN_2 32
+#define PIN_FAN_3 15
+#define PIN_LYNX_RX 33
+#define PIN_LYNX_TX 27
+#define PIN_VIBMOTOR 13
+
+#define PIN_PWMSERVO_1 5
+#define PIN_PWMSERVO_2 19
+#define PIN_PWMSERVO_3 21
+
+#define PIN_CRX 22
+#define PIN_CTX 20
+
+// These are purposefully flipped! The schematic is from the perspective of the Raspi.
+#define PIN_PI_TX 26
+#define PIN_PI_RX 25
+
+#define PIN_ADC_VBATT 34
+#define PIN_ADC_12V 39
+#define PIN_ADC_5V 36
 
 #else
+
+// Motor MCU
 
 #   define PIN_STEP_1_DIR 14
 #   define PIN_STEP_1_STEP 32
 #   define PIN_STEP_2_DIR 15
 #   define PIN_STEP_2_STEP 33
-#   define PIN_STEP_3_STEP 12
-#   define PIN_STEP_3_DIR 27
+#   define PIN_STEP_3_DIR 12
+#   define PIN_STEP_3_STEP 27
 
 #   define PIN_STEP_4_STEP 22
 #   define PIN_STEP_4_DIR 20
