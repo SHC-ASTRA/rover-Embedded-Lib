@@ -192,6 +192,73 @@ class VicCanFrame {
         }
     }
 
+    /**
+     * @brief Automatically parse frame's data into a std::vector<double>.
+     *
+     * @param outData std::vector<double>; is automatically cleared.
+     */
+    void parseData(std::vector<double>& outData) {
+        outData.clear();
+
+        // The idea behind this method of encoding data into a can frame is that there is no
+        // type noercion--the data is stored bit-by-bit in data[8] as if it was one cohesive
+        // 64-bit memory address. re-interpret_cast is used to accomplish this as C++ is
+        // not going to mess with an unsigned int.
+
+        /**/ if (dlc == 0) {
+            // No data to parse
+        }
+        else if (dataType == CanDataType::DT_1f64) {  // 1 double
+            uint64_t udata =
+               (static_cast<uint64_t>(data[0]) << 56) |
+               (static_cast<uint64_t>(data[1]) << 48) |
+               (static_cast<uint64_t>(data[2]) << 40) |
+               (static_cast<uint64_t>(data[3]) << 32) |
+               (static_cast<uint64_t>(data[4]) << 24) |
+               (static_cast<uint64_t>(data[5]) << 16) |
+               (static_cast<uint64_t>(data[6]) << 8) |
+               (static_cast<uint64_t>(data[7]) << 0);
+            outData.push_back(static_cast<double>(*reinterpret_cast<double*>(&udata)));  // shut up, ik
+        }
+        else if (dataType == CanDataType::DT_2f32) {  // 2 floats
+            uint32_t udata =
+               (static_cast<uint32_t>(data[0]) << 24) |
+               (static_cast<uint32_t>(data[1]) << 16) |
+               (static_cast<uint32_t>(data[2]) << 8) |
+               (static_cast<uint32_t>(data[3]) << 0);
+            outData.push_back(static_cast<double>(*reinterpret_cast<float*>(&udata)));
+            udata =
+               (static_cast<uint32_t>(data[4]) << 24) |
+               (static_cast<uint32_t>(data[5]) << 16) |
+               (static_cast<uint32_t>(data[6]) << 8) |
+               (static_cast<uint32_t>(data[7]) << 0);
+            outData.push_back(static_cast<double>(*reinterpret_cast<float*>(&udata)));
+        }
+        else if (dataType == CanDataType::DT_4i16) {  // 4 ints
+            uint16_t udata =
+               (static_cast<uint16_t>(data[0]) << 8) |
+               (static_cast<uint16_t>(data[1]) << 0);
+            outData.push_back(static_cast<double>(*reinterpret_cast<int16_t*>(&udata)));
+            udata =
+               (static_cast<uint16_t>(data[2]) << 8) |
+               (static_cast<uint16_t>(data[3]) << 0);
+            outData.push_back(static_cast<double>(*reinterpret_cast<int16_t*>(&udata)));
+            udata =
+               (static_cast<uint16_t>(data[4]) << 8) |
+               (static_cast<uint16_t>(data[5]) << 0);
+            outData.push_back(static_cast<double>(*reinterpret_cast<int16_t*>(&udata)));
+            udata =
+               (static_cast<uint16_t>(data[6]) << 8) |
+               (static_cast<uint16_t>(data[7]) << 0);
+            outData.push_back(static_cast<double>(*reinterpret_cast<int16_t*>(&udata)));
+        }
+        else if (dataType == CanDataType::DT_8i8) {  // 8 ints
+            for (int i = 0; i < 8; i++) {
+                outData.push_back(static_cast<double>(data[i]));
+            }
+        }
+    }
+
 
     // Whether this mcu should care about this CAN frame
     inline bool isForMe() {
@@ -324,66 +391,8 @@ class VicCanController {
      *
      * @param outData std::vector<double>; is automatically cleared.
      */
-    void parseData(std::vector<double>& outData) {
-        outData.clear();
-
-        // The idea behind this method of encoding data into a can frame is that there is no
-        // type noercion--the data is stored bit-by-bit in data[8] as if it was one cohesive
-        // 64-bit memory address. re-interpret_cast is used to accomplish this as C++ is
-        // not going to mess with an unsigned int.
-
-        /**/ if (inVicCanFrame.dlc == 0) {
-            // No data to parse
-        }
-        else if (inVicCanFrame.dataType == CanDataType::DT_1f64) {  // 1 double
-            uint64_t udata =
-               (static_cast<uint64_t>(inVicCanFrame.data[0]) << 56) |
-               (static_cast<uint64_t>(inVicCanFrame.data[1]) << 48) |
-               (static_cast<uint64_t>(inVicCanFrame.data[2]) << 40) |
-               (static_cast<uint64_t>(inVicCanFrame.data[3]) << 32) |
-               (static_cast<uint64_t>(inVicCanFrame.data[4]) << 24) |
-               (static_cast<uint64_t>(inVicCanFrame.data[5]) << 16) |
-               (static_cast<uint64_t>(inVicCanFrame.data[6]) << 8) |
-               (static_cast<uint64_t>(inVicCanFrame.data[7]) << 0);
-            outData.push_back(static_cast<double>(*reinterpret_cast<double*>(&udata)));  // shut up, ik
-        }
-        else if (inVicCanFrame.dataType == CanDataType::DT_2f32) {  // 2 floats
-            uint32_t udata =
-               (static_cast<uint32_t>(inVicCanFrame.data[0]) << 24) |
-               (static_cast<uint32_t>(inVicCanFrame.data[1]) << 16) |
-               (static_cast<uint32_t>(inVicCanFrame.data[2]) << 8) |
-               (static_cast<uint32_t>(inVicCanFrame.data[3]) << 0);
-            outData.push_back(static_cast<double>(*reinterpret_cast<float*>(&udata)));
-            udata =
-               (static_cast<uint32_t>(inVicCanFrame.data[4]) << 24) |
-               (static_cast<uint32_t>(inVicCanFrame.data[5]) << 16) |
-               (static_cast<uint32_t>(inVicCanFrame.data[6]) << 8) |
-               (static_cast<uint32_t>(inVicCanFrame.data[7]) << 0);
-            outData.push_back(static_cast<double>(*reinterpret_cast<float*>(&udata)));
-        }
-        else if (inVicCanFrame.dataType == CanDataType::DT_4i16) {  // 4 ints
-            uint16_t udata =
-               (static_cast<uint16_t>(inVicCanFrame.data[0]) << 8) |
-               (static_cast<uint16_t>(inVicCanFrame.data[1]) << 0);
-            outData.push_back(static_cast<double>(*reinterpret_cast<int16_t*>(&udata)));
-            udata =
-               (static_cast<uint16_t>(inVicCanFrame.data[2]) << 8) |
-               (static_cast<uint16_t>(inVicCanFrame.data[3]) << 0);
-            outData.push_back(static_cast<double>(*reinterpret_cast<int16_t*>(&udata)));
-            udata =
-               (static_cast<uint16_t>(inVicCanFrame.data[4]) << 8) |
-               (static_cast<uint16_t>(inVicCanFrame.data[5]) << 0);
-            outData.push_back(static_cast<double>(*reinterpret_cast<int16_t*>(&udata)));
-            udata =
-               (static_cast<uint16_t>(inVicCanFrame.data[6]) << 8) |
-               (static_cast<uint16_t>(inVicCanFrame.data[7]) << 0);
-            outData.push_back(static_cast<double>(*reinterpret_cast<int16_t*>(&udata)));
-        }
-        else if (inVicCanFrame.dataType == CanDataType::DT_8i8) {  // 8 ints
-            for (int i = 0; i < 8; i++) {
-                outData.push_back(static_cast<double>(inVicCanFrame.data[i]));
-            }
-        }
+    inline void parseData(std::vector<double>& outData) {
+        inVicCanFrame.parseData(outData);
     }
 
 
