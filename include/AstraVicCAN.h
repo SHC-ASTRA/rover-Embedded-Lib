@@ -259,6 +259,25 @@ class VicCanFrame {
         }
     }
 
+    String toStr() {
+        String res;
+        res.reserve(30);
+        res += mcuIdToString(mcuId);
+        res += " [";
+        res += cmdId;
+        res += "]";
+        static std::vector<double> canData;
+        parseData(canData);
+        if (canData.size() > 0) {
+            for (const double& data : canData) {
+                res += data;
+                res += ", ";
+            }
+        }
+        res += '\n';
+        return res;
+    }
+
 
     // Whether this mcu should care about this CAN frame
     inline bool isForMe() {
@@ -284,6 +303,15 @@ class VicCanFrame {
         }
     }
 
+    bool readCan() {
+        static CanFrame inFrame;
+        if (!ESP32Can.readFrame(inFrame, 0))
+            return false;  // No CAN frame received
+
+        parseCanFrame(inFrame);
+        return true;
+    }
+
 
     inline int createCanId() {
         return createCanId(dataType);
@@ -302,6 +330,13 @@ class VicCanFrame {
             frame.data[i] = data[i];
         }
     }
+
+    void sendCan() {
+        static CanFrame outFrame;
+        createCanFrame(outFrame);
+
+        ESP32Can.writeFrame(outFrame);
+    }
 };
 
 
@@ -311,9 +346,7 @@ class VicCanFrame {
 
 class VicCanController {
    private:
-    CanFrame inCanFrame;        // For ESP32Can.readFrame() or relayFromSerial()
-    VicCanFrame inVicCanFrame;  // Translated from inCanFrame
-    CanFrame outFrame;          // For ESP32Can.writeFrame()
+    VicCanFrame inVicCanFrame;  // Translated from ESP32Can.readFrame()
     bool relayMode;             // Whether to relay stray CAN frames to Serial
     bool relayFrameWaiting;     // Whether to use a queued frame from relayFromSerial()
 
@@ -357,25 +390,20 @@ class VicCanController {
         }
 
         // Check CAN network for a frame
-        if (!ESP32Can.readFrame(inCanFrame, 0))
+        if (!inVicCanFrame.readCan())
             return false;  // No CAN frame received
 
 #ifdef DEBUG
         Serial.println("Received CAN frame: ");
-        printCANframe(inCanFrame);
+        Serial.println(inVicCanFrame.toStr());
 #endif
-
-        // Load data from CanFrame into VicCanFrame
-        inVicCanFrame.parseCanFrame(inCanFrame);
 
         // Relay stray CAN frames to Serial if relayMode is on
         if (!inVicCanFrame.isForMe()) {
             if (relayMode) {
 #ifdef DEBUG
                 Serial.println("Relaying from CAN to Serial:");
-                CanFrame tempFrame;
-                inVicCanFrame.createCanFrame(tempFrame);
-                printCANframe(tempFrame);
+                Serial.println(inVicCanFrame.toStr());
 #endif
                 relayToSerial(inVicCanFrame);
             }
@@ -477,8 +505,6 @@ class VicCanController {
             }
         }
 
-        outVicFrame.createCanFrame(outFrame);
-
         // If this CAN frame is for this MCU, queue it to act on it
         if (outVicFrame.mcuId == SUBMODULE_CAN_ID || outVicFrame.mcuId == McuId::MCU_BROADCAST) {
             relayFrameWaiting = true;
@@ -492,9 +518,9 @@ class VicCanController {
         if (outVicFrame.mcuId != SUBMODULE_CAN_ID) {
 #ifdef DEBUG
             Serial.println("Relaying from Serial to CAN:");
-            printCANframe(outFrame);
+            printCANframe(outVicFrame.toStr());
 #endif
-            ESP32Can.writeFrame(outFrame);
+            outVicFrame.sendCan();
         }
     }
 
@@ -573,18 +599,15 @@ class VicCanController {
         if (relayMode) {
 #ifdef DEBUG
             Serial.println("Relaying from CAN to Serial:");
-            CanFrame tempFrame;
-            outVicFrame.createCanFrame(tempFrame);
-            printCANframe(tempFrame);
+            printCANframe(outVicFrame.toStr());
 #endif
             relayToSerial(outVicFrame);
         } else {
-            outVicFrame.createCanFrame(outFrame);
 #ifdef DEBUG
             Serial.println("Sending CAN frame:");
-            printCANframe(outFrame);
+            printCANframe(outVicFrame.toStr());
 #endif
-            ESP32Can.writeFrame(outFrame);
+            outVicFrame.sendCan();
         }
     }
 
