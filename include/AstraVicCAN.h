@@ -18,6 +18,10 @@
 // How many decimal places to include in data from rover
 #define FEEDBACK_PRECISION 7
 
+#if (defined(ESP32) && __has_include("ESP32-TWAI-CAN.hpp"))  // || (defined(CORE_TEENSY) && __has_include("FlexCAN_T4.h"))
+#   define CAN_AVAILABLE
+#endif
+
 // Microcontroller VicCAN ID's based on submodule; use these instead of the raw numbers
 enum class McuId : uint8_t {
     MCU_BROADCAST = 1,
@@ -293,6 +297,7 @@ class VicCanFrame {
     }
 
     // Take an entire CAN frame and parse it into its components
+#ifdef CAN_AVAILABLE
     void parseCanFrame(CanFrame& frame) {
         clear();
         parseCanId(frame.identifier);
@@ -302,7 +307,9 @@ class VicCanFrame {
             data[i] = frame.data[i];
         }
     }
+#endif
 
+#ifdef CAN_AVAILABLE
     bool readCan() {
         static CanFrame inFrame;
         if (!ESP32Can.readFrame(inFrame, 0))
@@ -311,6 +318,7 @@ class VicCanFrame {
         parseCanFrame(inFrame);
         return true;
     }
+#endif
 
 
     inline int createCanId() {
@@ -322,6 +330,7 @@ class VicCanFrame {
         return (static_cast<uint8_t>(mcuId) << 8) | (static_cast<uint8_t>(pDataType) << 6) | cmdId;
     }
 
+#ifdef CAN_AVAILABLE
     void createCanFrame(CanFrame& frame) {
         frame.identifier = createCanId();
         frame.rtr = rtr;
@@ -330,13 +339,16 @@ class VicCanFrame {
             frame.data[i] = data[i];
         }
     }
+#endif
 
+#ifdef CAN_AVAILABLE
     void sendCan() {
         static CanFrame outFrame;
         createCanFrame(outFrame);
 
         ESP32Can.writeFrame(outFrame);
     }
+#endif
 };
 
 
@@ -389,22 +401,23 @@ class VicCanController {
             return true;  // Use inVicCanFrame already set by relayFromSerial()
         }
 
+#ifdef CAN_AVAILABLE
         // Check CAN network for a frame
         if (!inVicCanFrame.readCan())
             return false;  // No CAN frame received
 
-#ifdef DEBUG
+#   ifdef DEBUG
         Serial.println("Received CAN frame: ");
         Serial.println(inVicCanFrame.toStr());
-#endif
+#   endif
 
         // Relay stray CAN frames to Serial if relayMode is on
         if (!inVicCanFrame.isForMe()) {
             if (relayMode) {
-#ifdef DEBUG
+#   ifdef DEBUG
                 Serial.println("Relaying from CAN to Serial:");
                 Serial.println(inVicCanFrame.toStr());
-#endif
+#   endif
                 relayToSerial(inVicCanFrame);
             }
             return false;  // Not for this MCU
@@ -412,6 +425,9 @@ class VicCanController {
 
         // We have a CAN command that we should act on.
         return true;
+#else
+        return false;
+#endif
     }
 
     /**
@@ -514,14 +530,16 @@ class VicCanController {
 #endif
         }
 
+#ifdef CAN_AVAILABLE
         // If this CAN frame is not for this MCU, relay it to the CAN network (purposefully no else)
         if (outVicFrame.mcuId != SUBMODULE_CAN_ID) {
-#ifdef DEBUG
+#   ifdef DEBUG
             Serial.println("Relaying from Serial to CAN:");
             printCANframe(outVicFrame.toStr());
-#endif
+#   endif
             outVicFrame.sendCan();
         }
+#endif
     }
 
 
@@ -602,13 +620,16 @@ class VicCanController {
             printCANframe(outVicFrame.toStr());
 #endif
             relayToSerial(outVicFrame);
-        } else {
-#ifdef DEBUG
+        }
+#ifdef CAN_AVAILABLE
+        else {
+#   ifdef DEBUG
             Serial.println("Sending CAN frame:");
             printCANframe(outVicFrame.toStr());
-#endif
+#   endif
             outVicFrame.sendCan();
         }
+#endif
     }
 
 
