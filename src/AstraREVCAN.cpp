@@ -187,7 +187,6 @@ void CAN_sendPacket(uint32_t messageID, uint8_t data[], uint8_t dataLen) {
     outMsg.extd = 1;  // All REV CAN messages are extended
     outMsg.data_length_code = dataLen;
     outMsg.identifier = messageID;
-    outMsg.data[0] = 0;  // Just in case... TODO: needed???
     for (uint8_t i = 0; i < dataLen; i++)
         outMsg.data[i] = data[i];
     ESP32Can.writeFrame(outMsg);
@@ -206,7 +205,6 @@ void CAN_sendPacket(uint32_t messageID, uint8_t data[], uint8_t dataLen) {
     outMsg.flags.extended = 1;  // All REV CAN messages are extended
     outMsg.len = dataLen;
     outMsg.id = messageID;
-    outMsg.bug[0] = 0;  // Just in case... TODO: needed???
     for (uint8_t i = 0; i < dataLen; i++)
         outMsg.buf[i] = data[i];
     ESP32Can.write(outMsg);

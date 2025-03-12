@@ -43,13 +43,6 @@ struct Timer {
 };
 
 
-// TODO: Maybe loopHeartbeats() can go here?
-// It could take AstraMotors*[] to address having multiple motors.
-// Using a for loop to iterate through the motors
-
-// void loopHeartbeatsNew(AstraMotors* motors[], const int numMotors);
-
-
 // Clamps x between out_min and out_max using the expected input min and max
 // Used for controller input
 double map_d(double x, double in_min, double in_max, double out_min, double out_max) {
@@ -303,92 +296,3 @@ public:
         return stop_time - start_time;
     }
 } stopwatch;
-
-
-#ifdef ARDUINO_RASPBERRY_PI_PICO
-unsigned hwPinToGPIO(unsigned hwPin) {
-    switch (hwPin) {
-        case 1:
-            return 0;
-            break;
-        case 2:
-            return 1;
-            break;
-        case 4:
-            return 2;
-            break;
-        case 5:
-            return 3;
-            break;
-        case 6:
-            return 4;
-            break;
-        case 7:
-            return 5;
-            break;
-        case 9:
-            return 6;
-            break;
-        case 10:
-            return 7;
-            break;
-        case 11:
-            return 8;
-            break;
-        case 12:
-            return 9;
-            break;
-        case 14:
-            return 10;
-            break;
-        case 15:
-            return 11;
-            break;
-        case 16:
-            return 12;
-            break;
-        case 17:
-            return 13;
-            break;
-        case 19:
-            return 14;
-            break;
-        case 20:
-            return 15;
-            break;
-        case 21:
-            return 16;
-            break;
-        case 22:
-            return 17;
-            break;
-        case 24:
-            return 18;
-            break;
-        case 25:
-            return 19;
-            break;
-        case 26:
-            return 20;
-            break;
-        case 27:
-            return 21;
-            break;
-        case 29:
-            return 22;
-            break;
-        case 31:
-            return 26;
-            break;
-        case 32:
-            return 27;
-            break;
-        case 34:
-            return 28;
-            break;
-        default:
-            return 0;
-            break;
-    }
-}
-#endif
