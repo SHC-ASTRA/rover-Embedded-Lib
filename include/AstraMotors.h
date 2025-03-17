@@ -99,6 +99,11 @@ class AstraMotors {
     // Set the targetMotorSpeed variable
     void setSpeed(float val);
     void setDuty(float val);
+    inline void setCurrent(float val) {  // No acceleration for current control
+        if (controlMode != sparkMax_ctrlType::kCurrent)
+            return;
+        CAN_sendControl(motorID, sparkMax_ctrlType::kCurrent, val);
+    }
 
     // Update the current speed to try and match targetMotorSpeed
     void UpdateForAcceleration();
@@ -121,11 +126,11 @@ class AstraMotors {
     }
     // Send the currently tracked duty cycle to the motor
     inline void sendDuty() {
-        CAN_sendDutyCycle(motorID, currentDutyCycle);
+        CAN_sendControl(motorID, sparkMax_ctrlType::kDutyCycle, currentDutyCycle);
     }
 
     inline void sendSpeed() {
-        CAN_sendVelocity(motorID, currentMotorSpeed);
+        CAN_sendControl(motorID, sparkMax_ctrlType::kVelocity, currentMotorSpeed);
     }
     
     void sendDuty(float val);    // Send this duty cycle to the motor (Bypasses acceleration)

@@ -13,7 +13,7 @@
 AstraMotors::AstraMotors(int setMotorID, sparkMax_ctrlType setCtrlMode, bool inv,
                          int setMaxSpeed, float setMaxDuty) {
     motorID = setMotorID;
-    controlMode = setCtrlMode;  // 0-Speed 1-Duty Cycle
+    controlMode = setCtrlMode;
     inverted = inv;
 
     currentMotorSpeed = 0;
@@ -85,6 +85,9 @@ void AstraMotors::sendDuty(float val) {
 }
 
 void AstraMotors::accelerate() {
+    if (controlMode == sparkMax_ctrlType::kCurrent || controlMode == sparkMax_ctrlType::kVoltage)
+        return;  // No acceleration for current or voltage control
+
     UpdateForAcceleration();
     if (controlMode == sparkMax_ctrlType::kDutyCycle)  // Duty cycle mode
         sendDuty();
@@ -142,7 +145,7 @@ void AstraMotors::UpdateForAcceleration() {
         }
     } else if (controlMode == sparkMax_ctrlType::kSmartVelocity) {
         currentMotorSpeed = targetMotorSpeed;
-    } else {
+    } else if (controlMode == sparkMax_ctrlType::kVelocity) {
         const float threshold = 5;
         const float current = currentMotorSpeed;
         const float target = targetMotorSpeed;
@@ -162,7 +165,7 @@ void AstraMotors::UpdateForAcceleration() {
             }
             currentMotorSpeed = 0;
         }
-    }
+    }  // else do nothing
 #    endif
 }
 

@@ -33,13 +33,14 @@ enum class sparkMax_faultID {
 };
 
 enum class sparkMax_ctrlType {
-    kDutyCycle = 0,
-    kVelocity = 1,
-    kVoltage = 2,
-    kPosition = 3,
-    kSmartMotion = 4,
-    kCurrent = 5,
-    kSmartVelocity = 6
+    kSetpoint = 0x01,
+    kDutyCycle = 0x02,
+    kVelocity = 0x12,
+    kSmartVelocity = 0x13,
+    kPosition = 0x32,
+    kVoltage = 0x42,
+    kCurrent = 0x43,
+    kSmartMotion = 0x52
 };
 
 struct motorStatus0 {

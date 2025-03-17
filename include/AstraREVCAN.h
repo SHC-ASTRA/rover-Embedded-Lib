@@ -19,13 +19,7 @@
 void CAN_enumerate();
 
 
-void CAN_sendDutyCycle(uint8_t deviceId, float dutyCycle);
-
-void CAN_sendVelocity(uint8_t deviceId, float speed);
-
-void CAN_sendSmartVelocity(uint8_t deviceId, float speed);
-
-void CAN_sendPosition(uint8_t deviceId, float position);
+void CAN_sendControl(uint8_t deviceId, sparkMax_ctrlType ctrlType, float value);
 
 
 void CAN_sendHeartbeat(uint8_t deviceId);
@@ -48,7 +42,7 @@ inline void identifyDevice(TwaiCAN& Can0, int can_id) {
 }
 
 inline void sendDutyCycle(TwaiCAN& Can0, int can_id, float duty_cycle) {
-    CAN_sendDutyCycle(can_id, duty_cycle);
+    CAN_sendControl(can_id, sparkMax_ctrlType::kDutyCycle, duty_cycle);
 }
 
 inline void sendHeartbeat(TwaiCAN& Can0, int can_id) {

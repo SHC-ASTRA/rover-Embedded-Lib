@@ -42,40 +42,24 @@ void CAN_enumerate() {
     delay(80);  // Let devices finish enumeration; they will wait ID * 1ms before responding
 }
 
-void CAN_sendDutyCycle(uint8_t deviceId, float dutyCycle) {
-    // DO NOT USE THE NEW CAN FUNCTIONS FOR THIS. SEE COMMENT BELOW.
-    // Ask David, Tristan, or Maddy. We don't fucking know why.
+void CAN_sendControl(uint8_t deviceId, sparkMax_ctrlType ctrlType, float value) {
+    // DO NOT USE THE NEW CAN FUNCTIONS FOR THIS (specifically duty cycle). SEE COMMENT BELOW.
+
     CanFrame msg = {0};
-    msg.identifier = 0x2050080 + deviceId;
+    msg.identifier = 0x2050000 + deviceId;
+    msg.identifier |= static_cast<uint32_t>(ctrlType) << 6;
     msg.extd = 1;
     msg.data_length_code = 8;
 
-    Float2LEDec(dutyCycle, msg.data);
+    Float2LEDec(value, msg.data);
 
     ESP32Can.writeFrame(msg);
 
     // WARNING: DO NOT USE THIS CODE. THE MOTORS WILL HAVE A SEIZURE.
+    //          Ask David, Tristan, or Maddy. We don't fucking know why.
     // uint8_t frame[8] = {0};
-    // Float2LEDec(dutyCycle, frame);
-    // CAN_sendPacket(deviceId, 0x02, frame, 8);
-}
-
-void CAN_sendVelocity(uint8_t deviceId, float speed) {
-    uint8_t frame[8] = {0};
-    Float2LEDec(speed, frame);
-    CAN_sendPacket(deviceId, 0x12, frame, 8);
-}
-
-void CAN_sendSmartVelocity(uint8_t deviceId, float speed) {
-    uint8_t frame[8] = {0};
-    Float2LEDec(speed, frame);
-    CAN_sendPacket(deviceId, 0x13, frame, 8);
-}
-
-void CAN_sendPosition(uint8_t deviceId, float position) {
-    uint8_t frame[8] = {0};
-    Float2LEDec(position, frame);
-    CAN_sendPacket(deviceId, 0x32, frame, 8);
+    // Float2LEDec(value, frame);
+    // CAN_sendPacket(deviceId, static_cast<uint32_t>(ctrlType), frame, 8);
 }
 
 
@@ -207,7 +191,7 @@ void CAN_sendPacket(uint32_t messageID, uint8_t data[], uint8_t dataLen) {
     outMsg.id = messageID;
     for (uint8_t i = 0; i < dataLen; i++)
         outMsg.buf[i] = data[i];
-    ESP32Can.write(outMsg);
+    Can0.write(outMsg);
 }
 
 
