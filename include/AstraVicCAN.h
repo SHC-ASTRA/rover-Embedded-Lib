@@ -18,7 +18,7 @@
 // How many decimal places to include in data from rover
 #define FEEDBACK_PRECISION 7
 
-#if (defined(ESP32) && __has_include("ESP32-TWAI-CAN.hpp"))  // || (defined(CORE_TEENSY) && __has_include("FlexCAN_T4.h"))
+#if (defined(ESP32) && __has_include("ESP32-TWAI-CAN.hpp"))
 #   define CAN_AVAILABLE
 #endif
 
@@ -117,7 +117,7 @@ bool mcuIdFromString(const String& str, McuId* mcuID) {
     if (str.length() == 0)
         return false;
     
-    /**/ if (str == "broadcast")
+    if (str == "broadcast")
         *mcuID = McuId::MCU_BROADCAST;
     else if (str == "core")
         *mcuID = McuId::MCU_CORE;
@@ -142,7 +142,7 @@ bool mcuIdFromString(const String& str, McuId* mcuID) {
  * @return String containing only the name of the MCU
  */
 String mcuIdToString(const McuId mcuID) {
-    /**/ if (mcuID == McuId::MCU_BROADCAST)
+    if (mcuID == McuId::MCU_BROADCAST)
         return "broadcast";
     else if (mcuID == McuId::MCU_CORE)
         return "core";

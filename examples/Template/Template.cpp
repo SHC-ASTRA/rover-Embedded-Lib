@@ -146,7 +146,7 @@ void loop() {
         //--------//
         //  Misc  //
         //--------//
-        /**/ if (command == "ping") {
+        if (command == "ping") {
             Serial.println("pong");
         }
 
