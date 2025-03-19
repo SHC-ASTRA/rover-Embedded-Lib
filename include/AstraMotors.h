@@ -52,14 +52,6 @@ class AstraMotors {
      * @param setMaxDuty Max percent speed for duty cycle control mode [-1, 1]
      */
     AstraMotors(int setMotorID, sparkMax_ctrlType setCtrlMode = sparkMax_ctrlType::kDutyCycle, bool inv = false, int setMaxSpeed = 100, float setMaxDuty = 1.0);
-
-    /**
-     * @brief Clamps a joystick value between max and min speed or duty
-     * 
-     * @param stickvalue Input value from the controller joystick between -1 and 1
-     * @return float Clamped value able to be sent to the motors
-     */
-    float convertControllerValue(float stickvalue);
     
     //---------------------------------------------//
     //  Getters

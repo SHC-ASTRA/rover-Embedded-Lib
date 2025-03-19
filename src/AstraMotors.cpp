@@ -34,47 +34,21 @@ AstraMotors::AstraMotors(int setMotorID, sparkMax_ctrlType setCtrlMode, bool inv
     rotatingToPos = false;
 }
 
-float AstraMotors::convertControllerValue(float stickValue) {
-    float output = stickValue;
-
-    if (!inverted) {
-        output *= -1;
-    }
-
-    if (controlMode == sparkMax_ctrlType::kVelocity)  // speed Control mode
-    {
-#    ifdef ARM
-        return 0;  // speed control not implemented
-#    else
-        output = map(output, -1, 1, (-1 * maxSpeed), maxSpeed);
-#    endif
-    } else {  // duty cycle control mode
-        output = map(output, -1, 1, (-1 * maxDuty), maxDuty);
-    }
-
-    return output;
-}
-
 
 void AstraMotors::setSpeed(float val) {  // controller input value
     if (abs(val) <= 0.02) {
         targetMotorSpeed = 0;
     } else {
-        targetMotorSpeed = convertControllerValue(val);
+        targetMotorSpeed = val;
     }
 }
 
 void AstraMotors::setDuty(float val) {  // controller input value
-#    ifdef ARM
-    currentDutyCycle = val;
-    targetDutyCycle = val;
-#    else
     if (abs(val) <= 0.02) {
         targetDutyCycle = 0;
     } else {
         targetDutyCycle = val;
     }
-#    endif
 }
 
 
@@ -103,10 +77,6 @@ void AstraMotors::accelerate() {
 
 
 void AstraMotors::UpdateForAcceleration() {
-#    ifdef ARM
-    currentDutyCycle = targetDutyCycle;
-#    else
-
     if (controlMode == sparkMax_ctrlType::kDutyCycle && targetDutyCycle == 0) {
         currentDutyCycle = 0;
         return;
@@ -122,9 +92,9 @@ void AstraMotors::UpdateForAcceleration() {
             || (direction() == -1 && status2.sensorPosition < targetPos + 1))
         {
             stop();
-#ifdef DEBUG
+#   ifdef DEBUG
             Serial.println("Stopping rotation.");
-#endif
+#   endif
         }
         return;
     }
@@ -172,7 +142,6 @@ void AstraMotors::UpdateForAcceleration() {
             currentMotorSpeed = 0;
         }
     }  // else do nothing
-#    endif
 }
 
 void AstraMotors::parseStatus0(uint8_t frameIn[]) {
