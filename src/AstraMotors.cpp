@@ -84,6 +84,12 @@ void AstraMotors::sendDuty(float val) {
     sendDuty();
 }
 
+void AstraMotors::sendSpeed(float val) {
+    setSpeed(val);
+    currentMotorSpeed = targetMotorSpeed;
+    sendSpeed();
+}
+
 void AstraMotors::accelerate() {
     if (controlMode == sparkMax_ctrlType::kCurrent || controlMode == sparkMax_ctrlType::kVoltage)
         return;  // No acceleration for current or voltage control

@@ -133,7 +133,8 @@ class AstraMotors {
         CAN_sendControl(motorID, sparkMax_ctrlType::kVelocity, currentMotorSpeed);
     }
     
-    void sendDuty(float val);    // Send this duty cycle to the motor (Bypasses acceleration)
+    void sendDuty(float val);    // Send this duty cycle to the motor (bypasses acceleration)
+    void sendSpeed(float val);    // Send this speed to the motor (bypasses acceleration)
     void accelerate();           // Run UpdateForAcceleration() and sendDuty()
 
     void turnByDeg(float deg);     // Turn the motor by deg degrees
