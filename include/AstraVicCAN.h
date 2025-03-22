@@ -85,6 +85,7 @@ enum CanCmdId : uint8_t {
     CMD_DCMOTOR_CTRL,
     CMD_STEPPER_CTRL,
     CMD_LASER_CTRL,
+    CMD_LSS_RESET,
     // Submodule-specific
     CMD_ARM_IK_CTRL = 32,
     CMD_ARM_IK_TTG,
@@ -102,7 +103,8 @@ enum CanCmdId : uint8_t {
     CMD_DATA_TEMP_HUM,
     CMD_DATA_IMU,
     CMD_REVMOTOR_FEEDBACK,
-    CMD_POWER_VOLTAGE
+    CMD_POWER_VOLTAGE,
+    CMD_ARM_ENCODER_ANGLES
 };
 
 /**
