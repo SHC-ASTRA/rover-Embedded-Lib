@@ -144,6 +144,17 @@ void AstraMotors::UpdateForAcceleration() {
     }  // else do nothing
 }
 
+
+void AstraMotors::parseStatus(uint32_t apiId, uint8_t frameIn[]) {
+    if (apiId == 0x60) {
+        parseStatus0(frameIn);
+    } else if (apiId == 0x61) {
+        parseStatus1(frameIn);
+    } else if (apiId == 0x62) {
+        parseStatus2(frameIn);
+    }
+}
+
 void AstraMotors::parseStatus0(uint8_t frameIn[]) {
     // (A) Applied output is 16-bit and comes from [0] and [1]
     uint16_t outputMSB = (frameIn[1] << 8);  // Full byte from [1]

@@ -155,6 +155,7 @@ class AstraMotors {
     // Update the current speed to try and match targetMotorSpeed
     void UpdateForAcceleration();
 
+    void parseStatus(uint32_t apiId, uint8_t frameIn[]);
     void parseStatus0(uint8_t frameIn[]);
     void parseStatus1(uint8_t frameIn[]);
     void parseStatus2(uint8_t frameIn[]);
