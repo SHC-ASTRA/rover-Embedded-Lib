@@ -10,6 +10,16 @@
 
 #include "AstraREVCAN.h"
 
+struct MotorOptions {
+    sparkMax_ctrlType controlMode = sparkMax_ctrlType::kDutyCycle;
+    bool inverted = false;  // Should be true for right wheels
+    int maxSpeed = 100;
+    float maxDuty = 1;
+    float speedAccel = 5;
+    float dutyCycleAccel = 0.05;
+    int gearBox = 1;  // Gearbox ratio attached to motor; e.g. for 64:1, use 64
+} defaultMotorOpts;
+
 
 void printREVParameter(CanFrame rxFrame) {
     uint8_t deviceId = rxFrame.identifier & 0x3F;
@@ -73,7 +83,7 @@ void printREVParameter(CanFrame rxFrame) {
 
 class AstraMotors {
     int motorID;  // REV motor ID
-    sparkMax_ctrlType controlMode;  // 0 - Duty cycle  1 - Speed
+    sparkMax_ctrlType controlMode;
     bool inverted;  // Inverts the speed of the motor, this should be true for right wheels
 
     int currentMotorSpeed;  // Current speed of the motor
@@ -86,7 +96,7 @@ class AstraMotors {
     float dutyCycleAccel;
     float maxDuty;
 
-    int gearBox;  // Gearbox ratio attached to motor; e.g. for 64:1, use 64
+    int gearBox;
 
     bool rotatingToPos;
     float targetPos;
@@ -107,6 +117,8 @@ class AstraMotors {
      * @param setMaxDuty Max percent speed for duty cycle control mode [-1, 1]
      */
     AstraMotors(int setMotorID, sparkMax_ctrlType setCtrlMode = sparkMax_ctrlType::kDutyCycle, bool inv = false, int setMaxSpeed = 100, float setMaxDuty = 1.0);
+
+    AstraMotors(int setMotorID = 0, MotorOptions options = defaultMotorOpts);
     
     //---------------------------------------------//
     //  Getters

@@ -34,6 +34,25 @@ AstraMotors::AstraMotors(int setMotorID, sparkMax_ctrlType setCtrlMode, bool inv
     rotatingToPos = false;
 }
 
+AstraMotors::AstraMotors(int setMotorID, MotorOptions setOptions) {
+    motorID = setMotorID;
+    controlMode = setOptions.controlMode;
+    inverted = setOptions.inverted;
+
+    currentMotorSpeed = 0;
+    targetMotorSpeed = 0;
+    speedAccel = setOptions.speedAccel;
+    maxSpeed = setOptions.maxSpeed;
+
+    currentDutyCycle = 0;
+    targetDutyCycle = 0;
+    dutyCycleAccel = setOptions.dutyCycleAccel;
+    maxDuty = setOptions.maxDuty;
+
+    gearBox = setOptions.gearBox;
+    rotatingToPos = false;
+}
+
 
 void AstraMotors::setSpeed(float val) {  // controller input value
     if (abs(val) <= 0.02) {
