@@ -75,3 +75,5 @@ void CAN_sendPacket(uint8_t deviceId, int32_t apiId, uint8_t data[], uint8_t dat
 void CAN_sendPacket(uint32_t messageID, uint8_t data[], uint8_t dataLen);
 
 void printREVFrame(CanFrame frame);
+
+void printREVParameter(CanFrame rxFrame);

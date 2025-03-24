@@ -18,67 +18,9 @@ struct MotorOptions {
     float speedAccel = 5;
     float dutyCycleAccel = 0.05;
     int gearBox = 1;  // Gearbox ratio attached to motor; e.g. for 64:1, use 64
-} defaultMotorOpts;
+};
 
-
-void printREVParameter(CanFrame rxFrame) {
-    uint8_t deviceId = rxFrame.identifier & 0x3F;
-    uint32_t apiId = (rxFrame.identifier >> 6) & 0x3FF;
-
-    Serial.print("Parameter 0x");
-    Serial.print(apiId & 0xFF, HEX);
-    Serial.print(" for: ");
-    Serial.print(deviceId);
-    Serial.print(" (type ");
-    Serial.print(rxFrame.data[4]);
-    Serial.print("): ");
-    //  uint32_t
-    if (rxFrame.data[4] == static_cast<uint8_t>(sparkMax_ParameterType::kUint32)) {
-        uint32_t val = (rxFrame.data[3] << 24) | (rxFrame.data[2] << 16) | (rxFrame.data[1] << 8) | rxFrame.data[0];
-        Serial.print(val);
-    //  int32_t  - Not sure if this one is actually right, copilot wrote it
-    } else if (rxFrame.data[4] == static_cast<uint8_t>(sparkMax_ParameterType::kInt32)) {
-        int32_t val = (rxFrame.data[3] << 24) | (rxFrame.data[2] << 16) | (rxFrame.data[1] << 8) | rxFrame.data[0];
-        Serial.print(val);
-    // float
-    } else if (rxFrame.data[4] == static_cast<uint8_t>(sparkMax_ParameterType::kFloat32)) {
-        uint32_t val = (rxFrame.data[3] << 24) | (rxFrame.data[2] << 16) | (rxFrame.data[1] << 8) | rxFrame.data[0];
-        Serial.print(*reinterpret_cast<float*>(&val));
-    // bool
-    } else if (rxFrame.data[4] == static_cast<uint8_t>(sparkMax_ParameterType::kBool)) {
-        Serial.print(rxFrame.data[0] ? "True" : "False");
-    }
-    // Error check
-    if (rxFrame.data[5] != static_cast<uint8_t>(sparkMax_paramStatus::kOK)) {
-        Serial.print(" - Error: ");
-        switch (static_cast<sparkMax_paramStatus>(rxFrame.data[5])) {
-        case sparkMax_paramStatus::kInvalidID:
-            Serial.print("Invalid ID");
-            break;
-        
-        case sparkMax_paramStatus::kMismatchType:
-            Serial.print("Mismatched Type");
-            break;
-        
-        case sparkMax_paramStatus::kAccessMode:
-            Serial.print("Access Mode");
-            break;
-        
-        case sparkMax_paramStatus::kInvalid:
-            Serial.print("Invalid");
-            break;
-        
-        case sparkMax_paramStatus::kNotImplementedDeprecated:
-            Serial.print("Deprecated or Not Implemented");
-            break;
-        
-        default:
-            Serial.print("Unknown");
-            break;
-        }
-    }
-    Serial.println();
-}
+const MotorOptions defaultMotorOpts;
 
 
 class AstraMotors {
@@ -116,6 +58,7 @@ class AstraMotors {
      * @param setMaxSpeed Max RPM for speed control mode
      * @param setMaxDuty Max percent speed for duty cycle control mode [-1, 1]
      */
+    [[deprecated("Use MotorOptions constructor instead")]]
     AstraMotors(int setMotorID, sparkMax_ctrlType setCtrlMode = sparkMax_ctrlType::kDutyCycle, bool inv = false, int setMaxSpeed = 100, float setMaxDuty = 1.0);
 
     AstraMotors(int setMotorID = 0, MotorOptions options = defaultMotorOpts);
