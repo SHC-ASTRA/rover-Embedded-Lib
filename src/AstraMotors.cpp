@@ -10,46 +10,22 @@
 #    include "AstraMotors.h"
 
 
-AstraMotors::AstraMotors(int setMotorID, sparkMax_ctrlType setCtrlMode, bool inv,
-                         int setMaxSpeed, float setMaxDuty) {
+AstraMotors::AstraMotors(int setMotorID, sparkMax_ctrlType setCtrlMode, bool SetInverted, int setGearBox) {
     motorID = setMotorID;
     controlMode = setCtrlMode;
-    inverted = inv;
+    inverted = SetInverted;
 
     currentMotorSpeed = 0;
     targetMotorSpeed = 0;
     speedAccel = 5;
-    maxSpeed = setMaxSpeed;
+    maxSpeed = 1000;
 
     currentDutyCycle = 0;
     targetDutyCycle = 0;
     dutyCycleAccel = 0.05;
-    maxDuty = setMaxDuty;
+    maxDuty = 1;
 
-#   ifdef TESTBED
-    gearBox = 64;  // default to 64:1 for Testbed
-#   else
-    gearBox = 100;  // default to 100:1 for Core
-#   endif
-    rotatingToPos = false;
-}
-
-AstraMotors::AstraMotors(int setMotorID, MotorOptions setOptions) {
-    motorID = setMotorID;
-    controlMode = setOptions.controlMode;
-    inverted = setOptions.inverted;
-
-    currentMotorSpeed = 0;
-    targetMotorSpeed = 0;
-    speedAccel = setOptions.speedAccel;
-    maxSpeed = setOptions.maxSpeed;
-
-    currentDutyCycle = 0;
-    targetDutyCycle = 0;
-    dutyCycleAccel = setOptions.dutyCycleAccel;
-    maxDuty = setOptions.maxDuty;
-
-    gearBox = setOptions.gearBox;
+    gearBox = setGearBox;
     rotatingToPos = false;
 }
 
