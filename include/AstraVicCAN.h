@@ -664,14 +664,16 @@ class VicCanController {
         outVicFrame.cmdId = cmdId;
         outVicFrame.dlc = 8;
 
+#ifdef CAN_AVAILABLE
         if (relayMode) {
+#endif
 #ifdef DEBUG
             Serial.println("Relaying from CAN to Serial:");
             Serial.println(outVicFrame.toStr());
 #endif
             relayToSerial(outVicFrame);
-        }
 #ifdef CAN_AVAILABLE
+        }
         else {
 #   ifdef DEBUG
             Serial.println("Sending CAN frame:");
