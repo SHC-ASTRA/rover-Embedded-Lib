@@ -206,7 +206,7 @@ class VicCanFrame {
      *
      * @param outData std::vector<double>; is automatically cleared.
      */
-    void parseData(std::vector<double>& outData) {
+    void parseData(std::vector<double>& outData) const {
         outData.clear();
 
         // The idea behind this method of encoding data into a can frame is that there is no
@@ -507,7 +507,7 @@ class VicCanController {
         Serial.print(vicFrame.cmdId);
 
         static std::vector<double> canData;
-        parseData(canData);  // Load data from vicFrame into canData
+        vicFrame.parseData(canData);  // Load data from vicFrame into canData
         if (!canData.empty()) {  // Only print out data if there is any
             for (const double& data : canData) {
                 Serial.print(",");
