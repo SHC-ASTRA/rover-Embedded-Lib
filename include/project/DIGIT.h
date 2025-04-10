@@ -9,8 +9,54 @@
 
 #if defined(ESP32)
 
+#   if !defined(ARDUINO_ADAFRUIT_FEATHER_ESP32_V2)
+
 //------------------------------------------------------------------------------------------------//
-//   Feather ESP32 (URC 2025)
+//   DOIT ESP32 Devkit V1 (URC 2025, Digit+FAERIE V2)
+//------------------------------------------------------------------------------------------------//
+
+// Comms
+
+#define CAN_RX 27
+#define CAN_TX 14
+
+// Linear actuator
+
+#define LINAC_RIN 19
+#define LINAC_FIN 18
+
+// End Effector
+
+#define MOTOR_IN1 33
+#define MOTOR_IN2 25
+#define MOTOR_FAULT 4
+
+#define LASER_NMOS 23  // same for faerie
+
+// ADC
+
+#define ADC_5V 35
+#define ADC_12V 36
+#define ADC_VBATT 39
+
+// FAERIE
+
+#define SPARK_PWM 26
+
+// Misc
+
+#define PIN_NEOPIXEL 13
+
+// LSS
+
+#define LSS_SERIAL Serial2
+// Leaving LSS IDs for main.cpp
+
+
+#   elif defined(ARDUINO_ADAFRUIT_FEATHER_ESP32_V2)
+
+//------------------------------------------------------------------------------------------------//
+//   Feather ESP32 (URC 2025, Digit V1)
 //------------------------------------------------------------------------------------------------//
 
 // Comms
@@ -46,6 +92,8 @@
 #define LSS_SERIAL Serial1
 #define LSS_TOP_ID 0  // TODO: default is 0; change
 #define LSS_BOTTOM_ID 1  // TODO: ditto
+
+#   endif
 
 
 #elif defined(CORE_TEENSY)
