@@ -16,7 +16,9 @@
 
 
 // How many decimal places to include in data from rover
-#define FEEDBACK_PRECISION 7
+#ifndef FEEDBACK_PRECISION
+#   define FEEDBACK_PRECISION 7
+#endif
 
 #if (defined(ESP32) && __has_include("ESP32-TWAI-CAN.hpp"))
 #   define CAN_AVAILABLE
