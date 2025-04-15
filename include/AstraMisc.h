@@ -123,6 +123,7 @@ void parseInput(const String input, std::vector<String>& args) {
  * @author David Sharpe, for ASTRA
  * @deprecated Use function without delim parameter
  */
+[[deprecated("Use function without `delim` parameter")]]
 void parseInput(const String input, std::vector<String>& args, const char delim) {
     // Modified from
     // https://forum.arduino.cc/t/how-to-split-a-string-with-space-and-store-the-items-in-array/888813/9
