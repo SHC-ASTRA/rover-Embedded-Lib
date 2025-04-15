@@ -37,20 +37,9 @@ void CAN_reqParameter(uint8_t deviceId, sparkMax_ConfigParameter parameterID);
 //  Backwards Compatibility Functions  //
 //-------------------------------------//
 
-inline void identifyDevice(TwaiCAN& Can0, int can_id) {
-    CAN_identifySparkMax(can_id);
-}
-
-inline void sendDutyCycle(TwaiCAN& Can0, int can_id, float duty_cycle) {
-    CAN_sendControl(can_id, sparkMax_ctrlType::kDutyCycle, duty_cycle);
-}
-
+[[deprecated("Use CAN_sendHeartbeat(uint8_t deviceId) instead")]]
 inline void sendHeartbeat(TwaiCAN& Can0, int can_id) {
     CAN_sendHeartbeat(can_id);
-}
-
-inline void setParameter(TwaiCAN& Can0, int can_id, uint8_t paramID, uint32_t value) {
-    Serial.println("ERROR: setParameter is deprecated. Please use CAN_setParameter.");
 }
 
 
