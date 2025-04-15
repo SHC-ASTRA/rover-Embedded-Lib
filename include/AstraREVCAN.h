@@ -16,20 +16,54 @@
 //   Specific REV Commands                                                  //
 //--------------------------------------------------------------------------//
 
+/**
+ * @brief Sends a broadcast CAN message which all SparkMaxes will respond to after [ID] ms
+ *
+ */
 void CAN_enumerate();
 
 
+/**
+ * @brief Sends a control command to the specified SparkMax device
+ *
+ * @param deviceId The REV ID to send the control command to
+ * @param ctrlType The type of control command to send (i.e., duty cycle, velocity, etc.)
+ * @param value The float value to set the control mode to
+ */
 void CAN_sendControl(uint8_t deviceId, sparkMax_ctrlType ctrlType, float value);
 
-
+/**
+ * @brief Sends a heartbeat frame to the specified REV ID; required for each SparkMax atleast every 25 ms (i think)
+ *
+ * @param deviceId REV ID
+ */
 void CAN_sendHeartbeat(uint8_t deviceId);
 
+/**
+ * @brief Makes the light on the specified SparkMax flash like this: https://docs.revrobotics.com/brushless/spark-max/status-led
+ *
+ * @param deviceId REV ID
+ */
 void CAN_identifySparkMax(uint8_t deviceId);
 
 
+/**
+ * @brief Sets a parameter on the specified SparkMax device. If incorrect type, then SparkMax will return an error
+ *
+ * @param deviceId REV ID
+ * @param parameterID The parameter ID to set
+ * @param type The type of the parameter (ie., int32, float, etc.)
+ * @param value The value to set for the parameter
+ */
 void CAN_setParameter(uint8_t deviceId, sparkMax_ConfigParameter parameterID, sparkMax_ParameterType type,
                       uint32_t value);
 
+/**
+ * @brief Request the value (and type) of a parameter from the specified SparkMax device
+ *
+ * @param deviceId REV ID
+ * @param parameterID The ID of the parameter to request
+ */
 void CAN_reqParameter(uint8_t deviceId, sparkMax_ConfigParameter parameterID);
 
 
@@ -59,10 +93,26 @@ void Float2LEDec(float x, uint8_t (&buffer_data)[8]);
 // Using target device REV ID and REV API ID
 void CAN_sendPacket(uint8_t deviceId, int32_t apiId, uint8_t data[], uint8_t dataLen);
 
-// Given direct values for the CAN packet
-// In AstraREVCAN.cpp, this is defined differently depending on mcu.
+/**
+ * @brief Compose and send a CAN Frame using direct values; allows platform-independent code
+ * 
+ * @param messageID CAN Frame ID (extended, 29-bits)
+ * @param data Size 8 array of bytes
+ * @param dataLen CAN Frame DLC (Data length code, 0..8)
+ */
 void CAN_sendPacket(uint32_t messageID, uint8_t data[], uint8_t dataLen);
 
+
+/**
+ * @brief Parses and prints a REV CAN Frame to Serial for debugging
+ *
+ * @param frame The CAN frame to be printed
+ */
 void printREVFrame(CanFrame frame);
 
+/**
+ * @brief Parses and prints a REV CAN Frame including parameter information
+ *
+ * @param rxFrame The CAN frame to be printed
+ */
 void printREVParameter(CanFrame rxFrame);
