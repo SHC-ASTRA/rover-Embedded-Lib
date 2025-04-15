@@ -83,9 +83,9 @@ inline void sendHeartbeat(TwaiCAN& Can0, int can_id) {
 
 /**
  * @brief Convert float to little endian decimal representation
- *
- * @param[in] x
- * @param buffer_data 64-bit buffer corresponding the data frame of a CAN packet
+ * 
+ * @param[in] x Float in big endian to be converted
+ * @param buffer_data 64-bit buffer corresponding to the data frame of a CAN packet
  */
 void Float2LEDec(float x, uint8_t (&buffer_data)[8]);
 

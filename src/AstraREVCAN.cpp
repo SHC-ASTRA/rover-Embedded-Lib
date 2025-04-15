@@ -1,35 +1,14 @@
 /**
  * @file AstraREVCAN.cpp
  * @author David Sharpe (ds0196@uah.edu)
- * @brief ASTRA's utilities for interfacing with the REV Sparkmax over CAN
+ * @brief ASTRA's utilities for interfacing with the REV SparkMax over CAN
  *
  */
 
-// Don't require a platformio project to download a MCU CAN library if not using CAN
-// (AstraREVCAN.h will only be included if main.cpp includes it or we have the required MCU CAN
-// library)
 #if (defined(ESP32) && __has_include("ESP32-TWAI-CAN.hpp")) || \
      (defined(CORE_TEENSY) && __has_include("FlexCAN_T4.h"))
+
 #    include "AstraREVCAN.h"
-
-
-/**
- * @brief Convert float to little endian decimal representation
- * 
- * @param[in] x 
- * @param buffer_data 64-bit buffer corresponding the data frame of a CAN packet
- */
-void Float2LEDec(float x, uint8_t (&buffer_data)[8]) {
-    unsigned char b[8] = {0};
-    memcpy(b, &x, 4);
-    // int* buffer_data[4];
-    for (int i = 0; i < 4; i++) {
-        buffer_data[i] = b[i];
-    }
-    for (int i = 4; i < 8; i++) {
-        buffer_data[i] = 0;
-    }
-}
 
 
 //--------------------------------------------------------------------------//
@@ -61,7 +40,6 @@ void CAN_sendControl(uint8_t deviceId, sparkMax_ctrlType ctrlType, float value) 
     // Float2LEDec(value, frame);
     // CAN_sendPacket(deviceId, static_cast<uint32_t>(ctrlType), frame, 8);
 }
-
 
 void CAN_sendHeartbeat(uint8_t deviceId) {
     uint8_t frame[8] = {0};
@@ -97,7 +75,6 @@ void CAN_setParameter(uint8_t deviceId, sparkMax_ConfigParameter parameterID,
 
 void CAN_reqParameter(uint8_t deviceId, sparkMax_ConfigParameter parameterID) {
     uint8_t frame[8] = {0};
-
     CAN_sendPacket(deviceId, static_cast<uint8_t>(parameterID) | 0x300, frame, 0);
 }
 
@@ -106,11 +83,23 @@ void CAN_reqParameter(uint8_t deviceId, sparkMax_ConfigParameter parameterID) {
 //   Basic Helper functions                                                 //
 //--------------------------------------------------------------------------//
 
-// Using target device REV ID and REV API ID
+void Float2LEDec(float x, uint8_t (&buffer_data)[8]) {
+    unsigned char b[8] = {0};
+    memcpy(b, &x, 4);
+    for (int i = 0; i < 4; i++) {
+        buffer_data[i] = b[i];
+    }
+    for (int i = 4; i < 8; i++) {
+        buffer_data[i] = 0;
+    }
+}
+
+
 void CAN_sendPacket(uint8_t deviceId, int32_t apiId, uint8_t data[], uint8_t dataLen) {
-    uint32_t createdId = 0x2050000;
+    // uint32_t createdId = 0;
     // createdId |= (static_cast<int32_t>(storage->deviceType) & 0x1F) << 24;
     // createdId |= (static_cast<int32_t>(storage->manufacturer) & 0xFF) << 16;
+    uint32_t createdId = 0x2050000;
     createdId |= (apiId & 0x3FF) << 6;
     createdId |= (deviceId & 0x3F);
 
@@ -154,6 +143,7 @@ void printREVFrame(CanFrame frame) {
     Serial.println();
 }
 
+
 void printREVParameter(CanFrame rxFrame) {
     uint8_t deviceId = rxFrame.identifier & 0x3F;
     uint32_t apiId = (rxFrame.identifier >> 6) & 0x3FF;
@@ -165,14 +155,15 @@ void printREVParameter(CanFrame rxFrame) {
     Serial.print(" (type ");
     Serial.print(rxFrame.data[4]);
     Serial.print("): ");
+
     //  uint32_t
     if (rxFrame.data[4] == static_cast<uint8_t>(sparkMax_ParameterType::kUint32)) {
         uint32_t val = (rxFrame.data[3] << 24) | (rxFrame.data[2] << 16) | (rxFrame.data[1] << 8) | rxFrame.data[0];
         Serial.print(val);
-    //  int32_t  - Not sure if this one is actually right, copilot wrote it
+    //  int32_t
     } else if (rxFrame.data[4] == static_cast<uint8_t>(sparkMax_ParameterType::kInt32)) {
-        int32_t val = (rxFrame.data[3] << 24) | (rxFrame.data[2] << 16) | (rxFrame.data[1] << 8) | rxFrame.data[0];
-        Serial.print(val);
+        uint32_t val = (rxFrame.data[3] << 24) | (rxFrame.data[2] << 16) | (rxFrame.data[1] << 8) | rxFrame.data[0];
+        Serial.print(static_cast<int32_t>(val));
     // float
     } else if (rxFrame.data[4] == static_cast<uint8_t>(sparkMax_ParameterType::kFloat32)) {
         uint32_t val = (rxFrame.data[3] << 24) | (rxFrame.data[2] << 16) | (rxFrame.data[1] << 8) | rxFrame.data[0];
@@ -181,6 +172,7 @@ void printREVParameter(CanFrame rxFrame) {
     } else if (rxFrame.data[4] == static_cast<uint8_t>(sparkMax_ParameterType::kBool)) {
         Serial.print(rxFrame.data[0] ? "True" : "False");
     }
+
     // Error check
     if (rxFrame.data[5] != static_cast<uint8_t>(sparkMax_paramStatus::kOK)) {
         Serial.print(" - Error: ");
@@ -210,6 +202,7 @@ void printREVParameter(CanFrame rxFrame) {
             break;
         }
     }
+
     Serial.println();
 }
 
@@ -218,14 +211,8 @@ void printREVParameter(CanFrame rxFrame) {
 //   Microcontroller-specific                                               //
 //--------------------------------------------------------------------------//
 
-#if defined(ESP32) && __has_include("ESP32-TWAI-CAN.hpp")
-
-//---------//
-//  ESP32  //
-//---------//
-
-// Given direct values for the CAN packet
 void CAN_sendPacket(uint32_t messageID, uint8_t data[], uint8_t dataLen) {
+#if defined(ESP32) && __has_include("ESP32-TWAI-CAN.hpp")  // ESP32
     CanFrame outMsg;
     outMsg.extd = 1;  // All REV CAN messages are extended
     outMsg.data_length_code = dataLen;
@@ -233,17 +220,7 @@ void CAN_sendPacket(uint32_t messageID, uint8_t data[], uint8_t dataLen) {
     for (uint8_t i = 0; i < dataLen; i++)
         outMsg.data[i] = data[i];
     ESP32Can.writeFrame(outMsg);
-}
-
-
-#elif defined(CORE_TEENSY) && __has_include("FlexCAN_T4.h")
-
-//----------//
-//  Teensy  //
-//----------//
-
-// Given direct values for the CAN packet
-void CAN_sendPacket(uint32_t messageID, uint8_t data[], uint8_t dataLen) {
+#elif defined(CORE_TEENSY) && __has_include("FlexCAN_T4.h")  // Teensy
     CAN_message_t outMsg;
     outMsg.flags.extended = 1;  // All REV CAN messages are extended
     outMsg.len = dataLen;
@@ -251,9 +228,8 @@ void CAN_sendPacket(uint32_t messageID, uint8_t data[], uint8_t dataLen) {
     for (uint8_t i = 0; i < dataLen; i++)
         outMsg.buf[i] = data[i];
     Can0.write(outMsg);
+#endif  // End MCU check
 }
 
-
-#endif  // End microcontroller check
 
 #endif  // End library check
