@@ -20,7 +20,7 @@ team-wide constants, just to name a few. Here are a few examples:
 * `parseInput(const String, std::vector<String>&)`: takes input from USB or UART and separates it into the vector, using commas as delimiters. Very useful for dealing with commands and data input from other mcu's.
 * `CAN_sendDutyCycle(uint8_t, AstraCAN&)`: Formats and sends a CAN packet to a REV motor controller with a duty cycle. All communication with REV motor controllers should reside in `AstraREVCAN.{h,cpp}`.
 * `isCalibrated(Adafruit_BNO055&)`: Attempts to check whether the BNO has been calibrated in EEPROM.
-* `COMMS_UART`: Macro for the UART interface used by each mcu.
+* `COMMS_UART`: Macro for the UART interface used by each MCU.
 * `SERIAL_BAUD`: Standard baudrate for USB Serial used by all of ASTRA's mcu's.
 
 ## Usage in PlatformIO
@@ -31,7 +31,7 @@ team-wide constants, just to name a few. Here are a few examples:
 
 **https://github.com/SHC-ASTRA/rover-Embedded-Lib**
 
- 2. Add the include statement for your project. Ex: `#include "project/CITADEL.h"`
+ 2. Add the include statement for your project. E.g., `#include "project/CITADEL.h"`
  3. Make sure to grab the correct dependencies for `/platformio.ini` from the project headers.
 
 ### Starting a new PlatformIO project
