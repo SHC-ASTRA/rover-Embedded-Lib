@@ -45,7 +45,7 @@ class AstraMotors {
      * @param SetInverted Whether or not to invert the motor's direction (used for right wheels)
      * @param SetGearBox Gearbox ratio attached to motor; e.g. for 64:1, use 64
      */
-    AstraMotors(int setMotorID, sparkMax_ctrlType setCtrlMode = sparkMax_ctrlType::kDutyCycle, bool SetInverted = false, int setGearBox = 1);
+    AstraMotors(int setMotorID = 0, sparkMax_ctrlType setCtrlMode = sparkMax_ctrlType::kDutyCycle, bool SetInverted = false, int setGearBox = 1);
     
     //---------------------------------------------//
     //  Getters
