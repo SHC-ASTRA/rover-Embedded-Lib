@@ -31,10 +31,12 @@ class AstraMotors {
     bool rotatingToPos;
     float targetPos;
 
+
    public:
 
+    // Keep public for now for testing
     motorStatus0 status0;
-    motorStatus1 status1;  // Keep public for now for testing
+    motorStatus1 status1;
     motorStatus2 status2;
     
     /**
@@ -46,7 +48,8 @@ class AstraMotors {
      * @param SetGearBox Gearbox ratio attached to motor; e.g. for 64:1, use 64
      */
     AstraMotors(int setMotorID = 0, sparkMax_ctrlType setCtrlMode = sparkMax_ctrlType::kDutyCycle, bool SetInverted = false, int setGearBox = 1);
-    
+
+
     //---------------------------------------------//
     //  Getters
     //---------------------------------------------//
@@ -73,66 +76,7 @@ class AstraMotors {
         return gearBox;
     }
 
-    //---------------------------------------------//
-    //  Setters
-    //---------------------------------------------//
-
-    // Gearbox ratio attached to motor; e.g. for 64:1, use 64
-    inline void setGearBox(int ratio) {
-        gearBox = ratio;
-    }
-
-    // Set the targetMotorSpeed variable
-    void setSpeed(float val);
-    void setDuty(float val);
-    inline void setCurrent(float val) {  // No acceleration for current control
-        if (controlMode != sparkMax_ctrlType::kCurrent)
-            return;
-        CAN_sendControl(motorID, sparkMax_ctrlType::kCurrent, val);
-    }
-
-    // Update the current speed to try and match targetMotorSpeed
-    void UpdateForAcceleration();
-
-    void parseStatus(uint32_t apiId, uint8_t frameIn[]);
-    void parseStatus0(uint8_t frameIn[]);
-    void parseStatus1(uint8_t frameIn[]);
-    void parseStatus2(uint8_t frameIn[]);
-
-    //---------------------------------------------//
-    //  Controlling physical motor
-    //---------------------------------------------//
-    
-    // Send the identify command to the motor
-    inline void identify() {
-        CAN_identifySparkMax(motorID);
-    }
-    // Enable either brake (true) or coast (false) idle mode
-    inline void setBrake(bool enable) {
-        CAN_setParameter(motorID, sparkMax_ConfigParameter::kIdleMode, sparkMax_ParameterType::kUint32, static_cast<uint32_t>(enable));
-    }
-    // Send the currently tracked duty cycle to the motor
-    inline void sendDuty() {
-        CAN_sendControl(motorID, sparkMax_ctrlType::kDutyCycle, currentDutyCycle);
-    }
-
-    inline void sendSpeed() {
-        CAN_sendControl(motorID, sparkMax_ctrlType::kVelocity, currentMotorSpeed);
-    }
-    
-    void sendDuty(float val);    // Send this duty cycle to the motor (bypasses acceleration)
-    void sendSpeed(float val);    // Send this speed to the motor (bypasses acceleration)
-    void accelerate();           // Run UpdateForAcceleration() and sendDuty()
-
-    void turnByDeg(float deg);     // Turn the motor by deg degrees
-    void turnToDeg(float deg);     // Turn the motor to deg degrees
-    
-    // Stop motor; does not activate brake mode
-    inline void stop() {
-        rotatingToPos = false;
-        sendDuty(0);
-    }
-
+    // Returns the direction in which the motor is spinning; either 0 (not moving), 1 (cw), or -1 (ccw)
     inline int direction() {
         if (controlMode == sparkMax_ctrlType::kDutyCycle) {
             if (currentDutyCycle == 0)
@@ -147,7 +91,69 @@ class AstraMotors {
         }
     }
 
+    // Whether or not the motor is currently turning to a position using the internal encoder feedback
+    // (from turnByDeg() or turnToDeg())
     inline bool isRotToPos() {
         return rotatingToPos;
+    }
+
+
+    //---------------------------------------------//
+    //  Setters
+    //---------------------------------------------//
+
+    void setDuty(float val);  // Set the targetDutyCycle variable; will be enacted via accelerate()
+    void setSpeed(float val);  // Set the targetMotorSpeed variable; will be enacted via accelerate()
+
+    void UpdateForAcceleration();  // Update the current speed to try and match targetMotorSpeed
+
+    void parseStatus(uint32_t apiId, uint8_t frameIn[]);  // Parse a status frame from 8-byte CAN data and REV API ID
+    void parseStatus0(uint8_t frameIn[]);
+    void parseStatus1(uint8_t frameIn[]);
+    void parseStatus2(uint8_t frameIn[]);
+
+
+    //---------------------------------------------//
+    //  Controlling physical motor
+    //---------------------------------------------//
+    
+    // Send the identify command to the SparkMax; makes it flash its LED purple and white
+    inline void identify() {
+        CAN_identifySparkMax(motorID);
+    }
+
+    // Set idle mode for the motor; either brake (true) or coast (false)
+    inline void setBrake(bool enable) {
+        CAN_setParameter(motorID, sparkMax_ConfigParameter::kIdleMode, sparkMax_ParameterType::kUint32, static_cast<uint32_t>(enable));
+    }
+
+    // Send the currently tracked duty cycle (currentDutyCycle) to the motor
+    inline void sendDuty() {
+        CAN_sendControl(motorID, sparkMax_ctrlType::kDutyCycle, currentDutyCycle);
+    }
+    // Send the currently tracked speed (velocity; currentMotorSpeed) to the motor
+    inline void sendSpeed() {
+        CAN_sendControl(motorID, sparkMax_ctrlType::kVelocity, currentMotorSpeed);
+    }
+    
+    void sendDuty(float val);   // Send this duty cycle to the motor (bypasses acceleration)
+    void sendSpeed(float val);  // Send this speed to the motor (bypasses acceleration)
+
+    // No acceleration for current control
+    inline void sendCurrent(float val) {
+        if (controlMode != sparkMax_ctrlType::kCurrent)
+            return;
+        CAN_sendControl(motorID, sparkMax_ctrlType::kCurrent, val);
+    }
+
+    void accelerate();          // Run UpdateForAcceleration() and sendDuty()
+
+    void turnByDeg(float deg);  // Turn the motor by deg degrees
+    void turnToDeg(float deg);  // Turn the motor to deg degrees
+    
+    // Stop motor; does not activate brake mode
+    inline void stop() {
+        rotatingToPos = false;
+        sendDuty(0);
     }
 };
