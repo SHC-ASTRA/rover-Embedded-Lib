@@ -5,7 +5,7 @@
  * 
  */
 
-#if __has_include("Adafruit_BNO055.h") && __has_include("Adafruit_BMP3XX.h") && __has_include("SparkFun_u-blox_GNSS_Arduino_Library.h") && __has_include("AS5047P.h") && __has_include("utility/imumaths.h")
+#if __has_include("Adafruit_BNO055.h") && __has_include("Adafruit_BMP3XX.h") && __has_include("SparkFun_u-blox_GNSS_Arduino_Library.h") && __has_include("utility/imumaths.h")
 
 #include "AstraSensors.h"
 

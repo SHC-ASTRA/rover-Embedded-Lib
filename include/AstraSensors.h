@@ -7,16 +7,11 @@
 #pragma once
 
 // This is beautiful I love this so much
-#if !__has_include(                                                                           \
-    "AS5047P.h") ||                                                                           \
-    !__has_include("Adafruit_BNO055.h") ||                                                    \
+#if !__has_include("Adafruit_BNO055.h") ||                                                    \
                    !__has_include("Adafruit_Sensor.h") ||                                     \
                                   !__has_include("SparkFun_u-blox_GNSS_Arduino_Library.h") || \
                                                  !__has_include("Adafruit_BMP3XX.h")
 
-#    if !__has_include("AS5047P.h")
-#        error Missing library! Please add the following line to lib_deps in platformio.ini:  jonas-merkle/AS5047P
-#    endif
 #    if !__has_include("Adafruit_BNO055.h")
 #        error Missing library! Please add the following line to lib_deps in platformio.ini:  adafruit/Adafruit BNO055
 #    endif
@@ -32,7 +27,6 @@
 
 #else
 
-#    include <AS5047P.h>          // jonas-merkle/AS5047P
 #    include <Adafruit_BNO055.h>  // adafruit/Adafruit BNO055
 #    include <Adafruit_Sensor.h>  // adafruit/Adafruit Unified Sensor
 #    include <EEPROM.h>
