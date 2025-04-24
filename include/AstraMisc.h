@@ -87,13 +87,14 @@ void parseInput(const String input, std::vector<String>& args) {
     // lastIndex=index, so lastIndex starts at -1, and with lastIndex+1, first search begins at 0
 
     // if empty input for some reason, don't do anything
-    if (input.length() == 0)
+    if (input.length() == 0) {
+        args.push_back("ERR_NOINPUT");  // Prevent MCU crash from attempting to access args[0]
         return;
+    }
 
     // Protection against infinite loop
     unsigned count = 0;
-    while (count++,
-           count < 200 /*arbitrary limit on number of delims because while(true) is scary*/) {
+    while (count++, count < 200 /*arbitrary limit on number of delims because while(true) is scary*/) {
         lastIndex = index;
         // using lastIndex+1 instead of input = input.substring to reduce memory impact
         index = input.indexOf(CMD_DELIM, lastIndex + 1);
@@ -122,6 +123,7 @@ void parseInput(const String input, std::vector<String>& args) {
  * @author David Sharpe, for ASTRA
  * @deprecated Use function without delim parameter
  */
+[[deprecated("Use function without `delim` parameter")]]
 void parseInput(const String input, std::vector<String>& args, const char delim) {
     // Modified from
     // https://forum.arduino.cc/t/how-to-split-a-string-with-space-and-store-the-items-in-array/888813/9
