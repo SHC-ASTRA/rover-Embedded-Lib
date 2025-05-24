@@ -118,9 +118,11 @@ enum CanCmdId : uint8_t {
  * @return true on valid MCU name;
  * @return false otherwise
  */
-bool mcuIdFromString(const String& str, McuId* mcuID) {
+bool mcuIdFromString(String str, McuId* mcuID) {
     if (str.length() == 0)
         return false;
+
+    str.toLowerCase();  // Make it case-insensitive
     
     if (str == "broadcast")
         *mcuID = McuId::MCU_BROADCAST;
@@ -211,6 +213,7 @@ class VicCanFrame {
      */
     void parseData(std::vector<double>& outData) const {
         outData.clear();
+        outData.reserve(4);
 
         // The idea behind this method of encoding data into a can frame is that there is no
         // type noercion--the data is stored bit-by-bit in data[8] as if it was one cohesive
@@ -269,6 +272,7 @@ class VicCanFrame {
                (static_cast<uint16_t>(data[7]) << 0);
             outData.push_back(static_cast<double>(*reinterpret_cast<int16_t*>(&udata)));
         }
+        // TODO: this does not do what it is supposed to do, unless the 8 ints should be unsigned
         else if (dataType == CanDataType::DT_8i8) {  // 8 ints
             for (int i = 0; i < 8; i++) {
                 outData.push_back(static_cast<double>(data[i]));
@@ -537,11 +541,17 @@ class VicCanController {
             return;
         }
 
+        if (args[2].toInt() < 0 || args[2].toInt() > 63) {
+            Serial.println("Error: Invalid command ID");
+            return;
+        }
+
         VicCanFrame outVicFrame;
 
         outVicFrame.cmdId = args[2].toInt();
 
         // Interpret MCU ID either from number or name
+        // TODO: remove the ability to send it as a number bc who tf is gonna do that
         if (args[1].toInt() != 0) {  // MCU ID given as number
             outVicFrame.mcuId = static_cast<McuId>(args[1].toInt());
         }
@@ -560,6 +570,10 @@ class VicCanController {
             else if (args.size() - 3 == 2) {
                 outVicFrame.dataType = CanDataType::DT_2f32;
                 encodeData(outVicFrame.data, args[3].toFloat(), args[4].toFloat());
+            }
+            else if (args.size() - 3 == 3) {
+                outVicFrame.dataType = CanDataType::DT_4i16;
+                encodeData(outVicFrame.data, args[3].toInt(), args[4].toInt(), args[5].toInt(), 0);
             }
             else if (args.size() - 3 == 4) {
                 outVicFrame.dataType = CanDataType::DT_4i16;
