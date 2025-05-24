@@ -296,7 +296,6 @@ class VicCanFrame {
                 res += data;
             }
         }
-        res += '\n';
         return res;
     }
 
@@ -489,6 +488,10 @@ class VicCanController {
      */
     inline void parseData(std::vector<double>& outData) {
         inVicCanFrame.parseData(outData);
+    }
+
+    inline void printFrame(Print *interface) {
+        interface->println(inVicCanFrame.toStr());
     }
 
 
