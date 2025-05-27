@@ -550,13 +550,9 @@ class VicCanController {
 
         outVicFrame.cmdId = args[2].toInt();
 
-        // Interpret MCU ID either from number or name
-        // TODO: remove the ability to send it as a number bc who tf is gonna do that
-        if (args[1].toInt() != 0) {  // MCU ID given as number
-            outVicFrame.mcuId = static_cast<McuId>(args[1].toInt());
-        }
-        else if (!mcuIdFromString(args[1], &outVicFrame.mcuId)) {  // MCU name given as string
-            Serial.println("Error: Invalid MCU name");  // Invalid MCU name triggers error
+        // Interpret MCU ID string
+        if (!mcuIdFromString(args[1], &outVicFrame.mcuId)) {  // Returns false if invalid MCU name
+            Serial.println("Error: Invalid MCU name");
             return;
         }
 
