@@ -215,7 +215,7 @@ void AstraMotors::turnByDeg(float deg) {
 #endif
 
     if (controlMode == sparkMax_ctrlType::kDutyCycle) {
-        const float dutyCycle = 0.15;  // Arbitrary for now
+        const float dutyCycle = 0.5;  // Arbitrary for now
         if (deg < 0)
             sendDuty(dutyCycle);
         else
